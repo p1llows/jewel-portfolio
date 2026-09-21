@@ -1,0 +1,27 @@
+"use client";
+
+import { Navigation } from "@/components/layout/Navigation";
+import { usePathname } from "next/navigation";
+
+export function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  
+  // Determine active page from pathname
+  const getActivePage = () => {
+    if (pathname === "/") return "home";
+    if (pathname.startsWith("/work")) return "work";
+    if (pathname.startsWith("/experience")) return "experience";
+    if (pathname.startsWith("/about")) return "about";
+    if (pathname.startsWith("/stack")) return "stack";
+    if (pathname.startsWith("/contact")) return "contact";
+    if (pathname.startsWith("/github")) return "github";
+    return "home";
+  };
+
+  return (
+    <div className="flex min-h-screen">
+      <Navigation activePage={getActivePage()} />
+      <main className="flex-1 ml-64">{children}</main>
+    </div>
+  );
+}

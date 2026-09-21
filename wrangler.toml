@@ -1,0 +1,4 @@
+name = "jewel-portfolio"
+compatibility_date = "2024-01-01"
+build_command = "npm run build"
+publish_directory = ".next"
