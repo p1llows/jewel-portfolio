@@ -2,26 +2,28 @@
 export const PORTRAIT_CONFIG = {
   // Particle system
   particleCount: {
-    desktop: 8000,
-    mobile: 3000,
+    desktop: 10000,
+    mobile: 4000,
   },
-  particleSize: 12,
-  
+  fontSize: 10,
+
   // Image processing
-  samplingResolution: 6, // Pixels between samples
-  backgroundThreshold: 190, // Brightness threshold for background
-  backgroundTolerance: 30, // Tolerance for bright areas that might be subject
-  
-  // Physics
-  springStrength: 0.05,
-  damping: 0.85,
-  mouseRadius: 1.5,
+  samplingResolution: 3, // Fine sampling step (3px) for sharp facial feature details
+  backgroundThreshold: 220, // Luminance threshold for background removal (0-255)
+
+  // Physics & Stability
+  springStrength: 0.1,
+  damping: 0.78,
+  mouseRadius: 100, // Distance in canvas pixels
   mouseForce: 0.5,
-  
+  maxVelocity: 8.0, // Safety cap to prevent infinite force accumulation
+
   // Glyph settings
   useBinaryGlyphs: true,
-  glyphScale: 1,
 } as const;
 
 // Debug mode - set to true during development to see preprocessing steps
 export const DEBUG_MODE = false;
+
+
+

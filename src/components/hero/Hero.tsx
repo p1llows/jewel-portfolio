@@ -45,59 +45,75 @@ export function Hero() {
   }, []);
 
   return (
-    <section ref={heroRef} className="relative py-24 md:py-32">
-      <div className="container mx-auto px-8">
-        <div className="relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="mb-4 text-xs font-mono text-secondary">
-              01 / HOME
+    <section ref={heroRef} className="relative py-16 md:py-28 min-h-[85vh] flex items-center overflow-hidden">
+      <div className="container mx-auto px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Column: Text & CTAs */}
+          <div className="lg:col-span-7 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="mb-4 text-xs font-mono text-secondary tracking-wider flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-foreground" />
+                01 / HOME
+              </div>
+
+              <h1 className="mb-2 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-muted hero-title">
+                HELLO, I AM
+              </h1>
+
+              <h2 className="mb-6 text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-foreground hero-subtitle">
+                JEWEL
+                <br />
+                RAMIREZ
+              </h2>
+
+              <p className="mb-6 text-xl md:text-2xl font-mono text-secondary max-w-2xl hero-description">
+                &lt;Full-Stack Developer /&gt;
+              </p>
+
+              <p className="mb-10 text-base md:text-lg text-secondary max-w-2xl leading-relaxed hero-description">
+                I build high-performance web applications, resilient backend APIs, seamless integrations, and modern interactive digital experiences.
+              </p>
+
+              <div className="flex flex-wrap gap-4 hero-buttons">
+                <motion.a
+                  href="/work"
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="px-8 py-3.5 bg-foreground text-background font-semibold rounded shadow transition-all"
+                >
+                  VIEW WORK
+                </motion.a>
+                <motion.a
+                  href="/contact"
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="px-8 py-3.5 border border-border rounded font-medium hover:bg-surface transition-all text-foreground"
+                >
+                  CONTACT ME
+                </motion.a>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Column: Interactive Binary Particle Portrait */}
+          <div className="lg:col-span-5 relative z-20 flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-[580px] h-[520px] sm:h-[620px] lg:h-[700px]">
+              <div className="absolute -top-6 left-2 right-2 flex items-center justify-between text-[11px] font-mono text-muted z-10 pointer-events-none">
+                <span className="flex items-center gap-1.5 text-secondary">
+                  <span className="w-1.5 h-1.5 rounded-full bg-secondary opacity-75" />
+                  BINARY_MATRIX_PORTRAIT
+                </span>
+                <span>[HOVER_TO_DISRUPT]</span>
+              </div>
+              
+              <BinaryPortrait src="/images/portrait-source.jpg" />
             </div>
-
-            <h1 className="mb-4 text-5xl md:text-7xl font-bold tracking-tight hero-title">
-              HELLO, I AM
-            </h1>
-
-            <h2 className="mb-6 text-6xl md:text-8xl font-bold tracking-tighter hero-subtitle">
-              JEWEL
-              <br />
-              RAMIREZ
-            </h2>
-
-            <p className="mb-8 text-xl md:text-2xl text-secondary max-w-2xl hero-description">
-              Full-Stack Developer
-            </p>
-
-            <p className="mb-12 text-lg md:text-xl text-muted max-w-3xl leading-relaxed hero-description">
-              I build modern web applications, APIs, integrations, and digital
-              experiences.
-            </p>
-
-            <div className="flex flex-wrap gap-4 hero-buttons">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-foreground text-background font-medium rounded"
-              >
-                VIEW WORK
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 border border-border rounded hover:bg-surface"
-              >
-                CONTACT
-              </motion.button>
-            </div>
-          </motion.div>
+          </div>
         </div>
-      </div>
-
-      <div className="absolute right-20 top-1/2 -translate-y-1/2 z-0 pointer-events-none w-[60%] h-[70%] opacity-20">
-        <BinaryPortrait src="/images/portrait-source.jpg" />
       </div>
     </section>
   );
