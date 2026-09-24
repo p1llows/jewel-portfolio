@@ -1,5 +1,3 @@
-import { Project } from "@/data/projects";
-
 export const caseStudyData: Record<string, CaseStudy> = {
   resolve: {
     title: "RESOLVE",

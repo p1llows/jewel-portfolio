@@ -12,7 +12,7 @@ export function VisitorCounter() {
         const response = await fetch("/api/visits");
         const data = await response.json();
         setCount(data.count);
-      } catch (err) {
+      } catch {
         // Fallback to localStorage
         const stored = localStorage.getItem("visitCount");
         if (stored) {

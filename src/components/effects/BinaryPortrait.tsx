@@ -296,7 +296,12 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
         let repelX = 0;
         let repelY = 0;
 
-        if (mouse.active && !isNaN(mouse.x) && !isNaN(mouse.y)) {
+        // Check prefers-reduced-motion preference for accessibility
+        const prefersReducedMotion =
+          typeof window !== "undefined" &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!prefersReducedMotion && mouse.active && !isNaN(mouse.x) && !isNaN(mouse.y)) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const distSq = dx * dx + dy * dy;
