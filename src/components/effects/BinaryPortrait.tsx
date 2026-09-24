@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useTheme } from "@/app/theme-provider";
 
 interface CanvasParticle {
   normX: number; // 0..1 normalized position relative to image
@@ -25,6 +26,19 @@ interface BinaryPortraitProps {
 }
 
 export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
+  let currentTheme: "light" | "dark" = "light";
+  try {
+    const context = useTheme();
+    currentTheme = context.theme;
+  } catch {
+    // Fallback if rendered outside ThemeProvider
+  }
+
+  const themeRef = useRef<"light" | "dark">(currentTheme);
+  useEffect(() => {
+    themeRef.current = currentTheme;
+  }, [currentTheme]);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
@@ -137,6 +151,9 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
       silhouetteCanvasRef.current = silCanvas;
     }
 
+    // Sort particles by size so font changes only happen 3 times per frame instead of 10,000 times!
+    particles.sort((a, b) => a.size - b.size);
+
     return particles;
   }, []);
 
@@ -216,9 +233,10 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
     if (!ctx) return;
 
     isRunningRef.current = true;
-    const mouseRadius = 100;
-    const springStrength = 0.14;
-    const damping = 0.72;
+    const mouseRadius = 110;
+    const mouseRadiusSq = mouseRadius * mouseRadius;
+    const springStrength = 0.11;
+    const damping = 0.80;
 
     let lastW = 0;
     let lastH = 0;
@@ -260,19 +278,16 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
       const scale = Math.min(availableWidth / imgW, availableHeight / imgH);
       const renderW = imgW * scale;
       const renderH = imgH * scale;
-      const offsetX = (rect.width - renderW) / 2;
-      const offsetY = (rect.height - renderH) / 2;
 
-      // 1. Render subject-only dark silhouette backdrop (fills gap whitespace strictly inside head & body, outside remains 100% transparent!)
-      if (silhouetteCanvasRef.current) {
-        ctx.save();
-        ctx.drawImage(silhouetteCanvasRef.current, offsetX, offsetY, renderW, renderH);
-        ctx.restore();
-      }
+      // Pre-calculate per-particle backing cell dimensions (step = 3px)
+      const cellW = (3 / imgW) * renderW * 1.15;
+      const cellH = (3 / imgH) * renderH * 1.15;
 
-      // 2. Render Binary Characters ('0' and '1') over the subject silhouette
+      // Render Binary Characters ('0' and '1') over the canvas
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
+
+      let lastFont = "";
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
@@ -284,13 +299,14 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
         if (mouse.active && !isNaN(mouse.x) && !isNaN(mouse.y)) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
-          const dist = Math.hypot(dx, dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (dist < mouseRadius && dist > 0.001) {
-            // Smooth quadratic falloff displacement cap (35px max push)
-            const force = Math.pow((mouseRadius - dist) / mouseRadius, 2);
-            repelX = (dx / dist) * force * 35;
-            repelY = (dy / dist) * force * 35;
+          if (distSq < mouseRadiusSq && distSq > 0.001) {
+            const dist = Math.sqrt(distSq);
+            const force = (mouseRadius - dist) / mouseRadius;
+            const push = force * force * 35;
+            repelX = (dx / dist) * push;
+            repelY = (dy / dist) * push;
           }
         }
 
@@ -313,7 +329,24 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
           p.vy = 0;
         }
 
-        // High-Definition Binary Particle Tone Mapping (Exact approved tone mapping from screenshot)
+        // Smooth quadratic fade for backing shape
+        const dx = p.x - p.targetX;
+        const dy = p.y - p.targetY;
+        const distSq = dx * dx + dy * dy;
+
+        if (distSq < 576) {
+          const distRatio = Math.sqrt(distSq) / 24;
+          const fade = (1 - distRatio) * (1 - distRatio);
+          const alpha = 0.92 * fade;
+
+          if (alpha > 0.015) {
+            ctx.fillStyle = "#111111";
+            ctx.globalAlpha = alpha;
+            ctx.fillRect(p.x - cellW / 2, p.y - cellH / 2, cellW, cellH);
+          }
+        }
+
+        // High-Definition Binary Particle Tone Mapping
         let fillColor: string;
         let fillAlpha: number;
 
@@ -331,10 +364,16 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
           fillAlpha = 0.98;
         }
 
+        // Cache canvas font setter (only set when font size changes)
+        const fontStr = `bold ${p.size}px monospace`;
+        if (lastFont !== fontStr) {
+          ctx.font = fontStr;
+          lastFont = fontStr;
+        }
+
         // Render particle glyph
         ctx.fillStyle = fillColor;
         ctx.globalAlpha = fillAlpha;
-        ctx.font = `bold ${p.size}px monospace`;
         ctx.fillText(p.char, p.x, p.y);
       }
 

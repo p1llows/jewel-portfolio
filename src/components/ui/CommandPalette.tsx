@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useTheme } from "@/app/theme-provider";
 import { navigationItems } from "@/data/navigation";
 
@@ -12,60 +12,57 @@ interface CommandPaletteProps {
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [actions, setActions] = useState<CommandItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { theme, toggleTheme } = useTheme();
 
-  // Command items
-  const navItems: CommandItem[] = navigationItems.map((item) => ({
-    id: `nav-${item.id}`,
-    label: item.label,
-    value: item.label,
-    action: () => {
-      window.location.href = item.href;
-    },
-    section: "Navigation",
-  }));
+  // Command items derived with useMemo (prevents infinite re-render loop)
+  const actions: CommandItem[] = useMemo(() => {
+    const navItems: CommandItem[] = navigationItems.map((item) => ({
+      id: `nav-${item.id}`,
+      label: item.label,
+      value: item.label,
+      action: () => {
+        window.location.href = item.href;
+      },
+      section: "Navigation",
+    }));
 
-  const themeAction: CommandItem = {
-    id: "toggle-theme",
-    label: `Toggle ${theme === "light" ? "Dark" : "Light"} Mode`,
-    value: `Toggle ${theme === "light" ? "Dark" : "Light"} Mode`,
-    action: () => {
-      toggleTheme();
-      onClose();
-    },
-    section: "Actions",
-  };
+    const themeAction: CommandItem = {
+      id: "toggle-theme",
+      label: `Toggle ${theme === "light" ? "Dark" : "Light"} Mode`,
+      value: `Toggle ${theme === "light" ? "Dark" : "Light"} Mode`,
+      action: () => {
+        toggleTheme();
+        onClose();
+      },
+      section: "Actions",
+    };
 
-  const githubAction: CommandItem = {
-    id: "github",
-    label: "Open GitHub",
-    value: "Open GitHub",
-    action: () => {
-      window.open("https://github.com/p1llows", "_blank");
-    },
-    section: "Actions",
-  };
+    const githubAction: CommandItem = {
+      id: "github",
+      label: "Open GitHub",
+      value: "Open GitHub",
+      action: () => {
+        window.open("https://github.com/p1llows", "_blank");
+      },
+      section: "Actions",
+    };
 
-  const allItems = [...navItems, themeAction, githubAction];
+    const allItems = [...navItems, themeAction, githubAction];
 
-  // Filter items based on query
-  useEffect(() => {
-    if (!query) {
-      setActions(allItems);
-      setSelectedIndex(0);
-      return;
-    }
+    if (!query) return allItems;
 
-    const filtered = allItems.filter((item) =>
+    return allItems.filter((item) =>
       item.label.toLowerCase().includes(query.toLowerCase())
     );
-    setActions(filtered);
+  }, [query, theme, toggleTheme, onClose]);
+
+  // Reset selected index when query changes
+  useEffect(() => {
     setSelectedIndex(0);
-  }, [query, allItems]);
+  }, [query]);
 
   // Keyboard navigation
   useEffect(() => {
