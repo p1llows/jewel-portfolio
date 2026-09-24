@@ -423,9 +423,10 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchMove}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleMouseLeave}
-      className={`relative w-full h-full min-h-[450px] overflow-hidden select-none cursor-pointer bg-transparent ${className}`}
+      className={`relative w-full h-full min-h-[320px] sm:min-h-[450px] overflow-hidden select-none cursor-pointer bg-transparent ${className}`}
     >
       {hasError && (
         <div className="flex items-center justify-center w-full h-full text-sm font-mono text-muted">

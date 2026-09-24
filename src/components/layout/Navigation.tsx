@@ -8,14 +8,16 @@ import { CommandPaletteTrigger } from "@/components/ui/CommandPaletteTrigger";
 
 export function Navigation({ activePage = "home" }: { activePage?: string }) {
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 border-r border-border bg-surface p-6 hidden md:block">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">JEWEL</h1>
-        <p className="text-sm text-secondary">RAMIREZ</p>
+    <aside className="fixed left-0 top-0 h-screen w-64 border-r border-border bg-surface p-6 flex flex-col justify-between hidden md:flex z-30 select-none">
+      {/* Top Brand Header */}
+      <div>
+        <h1 className="text-2xl font-black tracking-tight text-foreground">JEWEL</h1>
+        <p className="text-[11px] font-mono text-secondary tracking-widest uppercase">RAMIREZ</p>
       </div>
 
-      <nav>
-        <ul className="space-y-1">
+      {/* Center Navigation Links */}
+      <nav className="my-auto py-6">
+        <ul className="space-y-1.5">
           {navigationItems.map((item) => (
             <NavLink
               key={item.id}
@@ -27,27 +29,38 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
         </ul>
       </nav>
 
-      <div className="mt-auto pt-8 border-t border-border">
-        <div className="mb-4">
-          <span className="block text-xs text-secondary mb-1">STATUS</span>
-          <span className="text-sm font-bold">AVAILABLE</span>
+      {/* Bottom Docked Tools & Status */}
+      <div className="pt-5 border-t border-border flex flex-col gap-4">
+        {/* Live Status Indicator */}
+        <div className="rounded-md border border-border/60 bg-background/40 p-2.5">
+          <span className="block text-[10px] font-mono text-secondary tracking-wider uppercase mb-1">
+            STATUS
+          </span>
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="text-xs font-bold tracking-wide text-foreground">
+              AVAILABLE FOR WORK
+            </span>
+          </div>
         </div>
 
-        <div className="mb-4">
+        {/* Theme & Visitor Stats */}
+        <div className="flex items-center justify-between">
           <ThemeToggle />
-        </div>
-
-        <div className="mb-6">
           <VisitorCounter />
         </div>
 
-        <div className="mt-4">
-          <p className="text-[10px] text-muted">© 2026</p>
+        {/* Search Trigger */}
+        <div>
+          <CommandPaletteTrigger />
         </div>
 
-        {/* Command palette trigger (hidden on desktop, visible via / key) */}
-        <div className="mt-6 hidden md:block">
-          <CommandPaletteTrigger />
+        {/* Copyright */}
+        <div className="text-[10px] font-mono text-muted flex items-center justify-between">
+          <span>© 2026 JEWEL RAMIREZ</span>
         </div>
       </div>
     </aside>

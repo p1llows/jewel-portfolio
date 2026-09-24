@@ -23,11 +23,16 @@ export function CommandPaletteTrigger() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="hidden md:flex items-center gap-2 rounded border border-border bg-surface px-3 py-2 text-xs text-secondary hover:text-foreground transition-colors"
+        className="w-full flex items-center justify-between rounded-md border border-border bg-background/50 px-3 py-2 text-xs text-secondary hover:text-foreground hover:bg-secondary/10 transition-colors"
         aria-label="Open command palette"
       >
-        <span className="font-mono">/</span>
-        <span className="text-[10px]">Search</span>
+        <span className="flex items-center gap-2">
+          <span className="font-mono text-xs text-foreground font-semibold">/</span>
+          <span>Search...</span>
+        </span>
+        <kbd className="font-mono text-[10px] text-muted px-1.5 py-0.5 rounded border border-border bg-surface">
+          ⌘K
+        </kbd>
       </button>
 
       <CommandPalette isOpen={isOpen} onClose={() => setIsOpen(false)} />

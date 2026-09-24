@@ -45,9 +45,9 @@ export function Hero() {
   }, []);
 
   return (
-    <section ref={heroRef} className="relative py-16 md:py-28 min-h-[85vh] flex items-center overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <section ref={heroRef} className="relative py-12 sm:py-16 md:py-24 lg:py-28 min-h-[85vh] flex items-center overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Text & CTAs */}
           <div className="lg:col-span-7 relative z-10">
             <motion.div
@@ -100,16 +100,8 @@ export function Hero() {
           </div>
 
           {/* Right Column: Interactive Binary Particle Portrait */}
-          <div className="lg:col-span-5 relative z-20 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[580px] h-[520px] sm:h-[620px] lg:h-[700px]">
-              <div className="absolute -top-6 left-2 right-2 flex items-center justify-between text-[11px] font-mono text-muted z-10 pointer-events-none">
-                <span className="flex items-center gap-1.5 text-secondary">
-                  <span className="w-1.5 h-1.5 rounded-full bg-secondary opacity-75" />
-                  BINARY_MATRIX_PORTRAIT
-                </span>
-                <span>[HOVER_TO_DISRUPT]</span>
-              </div>
-              
+          <div className="lg:col-span-5 relative z-20 flex justify-center lg:justify-end mt-4 lg:-mt-10">
+            <div className="relative w-full max-w-[340px] sm:max-w-[480px] md:max-w-[560px] lg:max-w-[700px] h-[360px] sm:h-[500px] md:h-[600px] lg:h-[720px] xl:h-[760px]">
               <BinaryPortrait src="/images/portrait-source.jpg" />
             </div>
           </div>
