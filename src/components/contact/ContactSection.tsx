@@ -37,32 +37,43 @@ export function ContactSection() {
           <div>
             <h3 className="mb-2 text-sm font-bold">EMAIL</h3>
             <a
-              href="mailto:hello@jewelramirez.dev"
+              href="mailto:jewelramirez.dev@gmail.com"
               className="text-sm text-secondary hover:text-foreground transition-colors"
             >
-              hello@jewelramirez.dev
-            </a>
-          </div>
-          <div>
-            <h3 className="mb-2 text-sm font-bold">TELEGRAM</h3>
-            <a
-              href="https://t.me/p1llows"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-secondary hover:text-foreground transition-colors"
-            >
-              @p1llows
+              jewelramirez.dev@gmail.com
             </a>
           </div>
           <div>
             <h3 className="mb-2 text-sm font-bold">LINKEDIN</h3>
             <a
-              href="https://linkedin.com/in/jewelramirez"
+              href="https://linkedin.com/in/jewel-r"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-secondary hover:text-foreground transition-colors"
             >
-              linkedin.com/in/jewelramirez
+              linkedin.com/in/jewel-r
+            </a>
+          </div>
+          <div>
+            <h3 className="mb-2 text-sm font-bold">FACEBOOK</h3>
+            <a
+              href="https://www.facebook.com/jewellr.r"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-secondary hover:text-foreground transition-colors"
+            >
+              facebook.com/jewellr.r
+            </a>
+          </div>
+          <div>
+            <h3 className="mb-2 text-sm font-bold">DISCORD</h3>
+            <a
+              href="https://discord.com/users/1541353877750677534"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-secondary hover:text-foreground transition-colors"
+            >
+              discord.com/users/1541353877750677534
             </a>
           </div>
         </div>
