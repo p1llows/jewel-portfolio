@@ -8,7 +8,8 @@
   --foreground-color: #171717;
   --secondary-color: #555555;
   --muted-color: #888888;
-  --border-color: #D2D2CE;
+  --border-color-rgb: 180 180 175;
+  --border-color: #B4B4AF;
 }
 
 [data-theme="dark"] {
@@ -17,7 +18,8 @@
   --foreground-color: #F1F1ED;
   --secondary-color: #A6A6A0;
   --muted-color: #70706C;
-  --border-color: #30302D;
+  --border-color-rgb: 85 85 80;
+  --border-color: #555550;
 }
 
 body {

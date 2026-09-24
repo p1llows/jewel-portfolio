@@ -36,7 +36,7 @@ module.exports = {
         border: {
           light: "#D2D2CE",
           dark: "#30302D",
-          DEFAULT: "var(--border-color)",
+          DEFAULT: "rgb(var(--border-color-rgb) / <alpha-value>)",
         },
       },
       fontFamily: {
