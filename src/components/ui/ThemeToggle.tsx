@@ -14,33 +14,34 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button
-        aria-label="Toggle theme"
-        className="flex items-center gap-2 px-3 py-2 rounded bg-surface text-xs text-secondary transition-colors"
-      >
-        <span className="w-3 h-3 rounded-full bg-secondary/40 animate-pulse" />
-        <span>THEME</span>
-      </button>
+      <div className="flex items-center gap-2 px-2.5 py-1.5 text-xs font-mono text-muted">
+        <span className="w-3.5 h-3.5 rounded-full bg-border animate-pulse" />
+        <span>...</span>
+      </div>
     );
   }
 
+  const isDark = theme === "dark";
+
   return (
     <button
-      onClick={toggleTheme}
+      onClick={(e) => toggleTheme(e)}
       aria-label="Toggle theme"
-      className="flex items-center gap-2 px-3 py-2 rounded bg-surface hover:bg-secondary text-xs text-secondary hover:text-foreground transition-colors"
+      className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-background/80 text-xs font-mono text-secondary hover:text-foreground transition-all duration-200 group active:scale-95 select-none"
     >
-      {theme === "light" ? (
+      {isDark ? (
         <>
-          <Moon className="w-3 h-3" />
-          <span>DARK</span>
+          <Moon className="w-3.5 h-3.5 text-secondary group-hover:text-foreground transition-colors" />
+          <span className="tracking-wider font-semibold">DARK</span>
         </>
       ) : (
         <>
-          <Sun className="w-3 h-3" />
-          <span>LIGHT</span>
+          <Sun className="w-3.5 h-3.5 text-secondary group-hover:text-foreground transition-colors" />
+          <span className="tracking-wider font-semibold">LIGHT</span>
         </>
       )}
     </button>
   );
 }
+
+

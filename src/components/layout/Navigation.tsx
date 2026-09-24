@@ -30,16 +30,16 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
       </nav>
 
       {/* Bottom Docked Tools & Status */}
-      <div className="pt-5 border-t border-border flex flex-col gap-4">
+      <div className="pt-4 border-t border-border flex flex-col gap-3.5">
         {/* Live Status Indicator */}
-        <div className="rounded-md border border-border/60 bg-background/40 p-2.5">
-          <span className="block text-[10px] font-mono text-secondary tracking-wider uppercase mb-1">
+        <div className="rounded-lg border border-border bg-background/50 p-3 shadow-sm transition-all hover:border-emerald-500/40">
+          <span className="block text-[10px] font-mono text-secondary tracking-wider uppercase mb-1.5 font-medium">
             STATUS
           </span>
           <div className="flex items-center gap-2">
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
             </span>
             <span className="text-xs font-bold tracking-wide text-foreground">
               AVAILABLE FOR WORK
@@ -48,7 +48,7 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
         </div>
 
         {/* Theme & Visitor Stats */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2 px-0.5">
           <ThemeToggle />
           <VisitorCounter />
         </div>
@@ -59,8 +59,8 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
         </div>
 
         {/* Copyright */}
-        <div className="text-[10px] font-mono text-muted flex items-center justify-between">
-          <span>© 2026 JEWEL RAMIREZ</span>
+        <div className="text-[10px] font-mono text-muted flex items-center justify-between pt-1">
+
         </div>
       </div>
     </aside>
