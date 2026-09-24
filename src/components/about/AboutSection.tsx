@@ -8,36 +8,29 @@ export function AboutSection() {
 
       <div className="max-w-2xl text-lg text-muted leading-relaxed">
         <p className="mb-6">
-          Developer focused on building useful software, clean interfaces, and
-          reliable systems.
+          Web Developer based in Baguio City, Philippines. Computer Science graduate from Don Mariano Marcos Memorial State University with a passion for building clean aesthetic interfaces, high-density systems, and resilient backend software.
         </p>
         <p>
-          I enjoy working across the stack — from frontend experiences to APIs,
-          databases, integrations, and infrastructure.
+          I enjoy working across the stack — from interactive frontend web applications with React, Next.js, and TypeScript, to backend APIs with PHP, Laravel, Node.js, and database design.
         </p>
       </div>
 
       <div className="mt-16 grid grid-cols-2 gap-8 md:grid-cols-4">
         <div>
           <div className="mb-2 text-xs font-mono text-secondary">LOCATION</div>
-          <div className="text-sm">Manila, PH</div>
+          <div className="text-sm font-medium text-foreground">Baguio City, Philippines</div>
+        </div>
+        <div>
+          <div className="mb-2 text-xs font-mono text-secondary">DEGREE</div>
+          <div className="text-sm font-medium text-foreground">BS Computer Science</div>
+        </div>
+        <div>
+          <div className="mb-2 text-xs font-mono text-secondary">CERTIFICATION</div>
+          <div className="text-sm font-medium text-foreground">ITPEC IP Passport Passer</div>
         </div>
         <div>
           <div className="mb-2 text-xs font-mono text-secondary">AVAILABILITY</div>
-          <div className="text-sm text-foreground">OPEN TO WORK</div>
-        </div>
-        <div>
-          <div className="mb-2 text-xs font-mono text-secondary">EMAIL</div>
-          <a
-            href="mailto:hello@jewelramirez.dev"
-            className="text-sm text-secondary hover:text-foreground transition-colors"
-          >
-            hello@jewelramirez.dev
-          </a>
-        </div>
-        <div>
-          <div className="mb-2 text-xs font-mono text-secondary">PHONE</div>
-          <div className="text-sm text-secondary">+63 912 345 6789</div>
+          <div className="text-sm font-medium text-emerald-500">AVAILABLE FOR WORK</div>
         </div>
       </div>
     </section>
