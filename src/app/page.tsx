@@ -10,12 +10,13 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <WorkSection />
-      <ExperienceSection />
-      <AboutSection />
-      <StackSection />
+      <WorkSection isPreview={true} />
+      <ExperienceSection isPreview={true} />
+      <AboutSection isPreview={true} />
+      <StackSection isPreview={true} />
       <GitHubSection />
-      <ContactSection />
+      <ContactSection isPreview={true} />
     </>
   );
 }
+

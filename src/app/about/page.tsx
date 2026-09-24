@@ -1,5 +1,6 @@
 import { AboutSection } from "@/components/about/AboutSection";
 
 export default function AboutPage() {
-  return <AboutSection />;
+  return <AboutSection isPreview={false} />;
 }
+
