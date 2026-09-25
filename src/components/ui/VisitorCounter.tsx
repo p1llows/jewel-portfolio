@@ -29,12 +29,11 @@ export function VisitorCounter() {
   }, []);
 
   return (
-    <div className="flex flex-col items-end text-right font-mono select-none">
-      <span className="text-[10px] tracking-wider text-secondary flex items-center gap-1 uppercase font-medium">
-        <Eye className="w-3 h-3 text-muted" />
+    <div className="flex flex-col font-mono select-none">
+      <span className="text-[10px] font-mono text-foreground font-bold tracking-wider uppercase mb-2">
         VISITS
       </span>
-      <span className="text-xs font-bold text-foreground font-mono tracking-tight mt-0.5">
+      <span className="text-xs font-bold text-foreground tracking-tight">
         {loading ? "..." : count.toLocaleString()}
       </span>
     </div>
