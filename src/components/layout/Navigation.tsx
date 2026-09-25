@@ -123,38 +123,28 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
         </div>
 
         {/* Bottom Docked Tools & Status */}
-        <div className="pt-6 border-t border-border flex flex-col gap-5">
-
+        <div className="pt-3 border-t border-border flex flex-col gap-3">
           {/* Live Status Indicator */}
-          <div className="px-3">
-            <span className="block text-[10px] font-mono text-foreground font-bold tracking-wider uppercase mb-2">
+          <div className="pb-3 px-3 border-b border-border/60">
+            <span className="block text-[10px] font-mono text-muted tracking-wider uppercase mb-1 font-medium">
               STATUS
             </span>
             <div className="flex items-center gap-2">
-              <span className="relative flex h-1.5 w-1.5">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
               </span>
-              <span className="text-xs font-mono font-bold tracking-tight text-foreground uppercase">
+              <span className="text-xs font-mono font-semibold tracking-wider text-foreground">
                 AVAILABLE FOR WORK
               </span>
             </div>
           </div>
 
-          {/* Theme Toggle */}
-          <div className="px-3">
-            <span className="block text-[10px] font-mono text-foreground font-bold tracking-wider uppercase mb-2">
-              THEME
-            </span>
+          {/* Theme & Visitor Stats */}
+          <div className="flex items-center justify-between gap-2 px-0.5 pt-0.5">
             <ThemeToggle />
-          </div>
-
-          {/* Visitor Stats */}
-          <div className="px-3">
             <VisitorCounter />
           </div>
-
-          <div className="w-full border-b border-border my-1" />
 
           {/* Search Trigger */}
           <div>
