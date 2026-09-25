@@ -74,145 +74,146 @@ export function TechIcon({ name, className = "w-4 h-4" }: TechIconProps) {
   switch (normalizedName) {
     case "html":
     case "html5":
-      return <SiHtml5 className={`${className} text-[#E34F26]`} />;
+      return <SiHtml5 className={className} />;
     case "css":
     case "css3":
-      return <SiCss className={`${className} text-[#1572B6]`} />;
+      return <SiCss className={className} />;
     case "javascript":
     case "js":
-      return <SiJavascript className={`${className} text-[#F7DF1E]`} />;
+      return <SiJavascript className={className} />;
     case "react":
-      return <SiReact className={`${className} text-[#61DAFB]`} />;
+      return <SiReact className={className} />;
     case "vue":
     case "vue.js":
-      return <SiVuedotjs className={`${className} text-[#4FC08D]`} />;
+      return <SiVuedotjs className={className} />;
     case "next.js":
     case "nextjs":
-      return <SiNextdotjs className={`${className} text-foreground`} />;
+      return <SiNextdotjs className={className} />;
     case "typescript":
     case "ts":
-      return <SiTypescript className={`${className} text-[#3178C6]`} />;
+      return <SiTypescript className={className} />;
     case "tailwind css":
     case "tailwindcss":
-      return <SiTailwindcss className={`${className} text-[#06B6D4]`} />;
+      return <SiTailwindcss className={className} />;
     case "quasar":
-      return <SiQuasar className={`${className} text-[#1976D2]`} />;
+      return <SiQuasar className={className} />;
     case "vite":
-      return <SiVite className={`${className} text-[#646CFF]`} />;
+      return <SiVite className={className} />;
     case "node.js":
     case "nodejs":
-      return <SiNodedotjs className={`${className} text-[#339933]`} />;
+      return <SiNodedotjs className={className} />;
     case "php":
-      return <SiPhp className={`${className} text-[#777BB4]`} />;
+      return <SiPhp className={className} />;
     case "laravel":
-      return <SiLaravel className={`${className} text-[#FF2D20]`} />;
+      return <SiLaravel className={className} />;
     case "express.js":
     case "express":
-      return <SiExpress className={`${className} text-foreground`} />;
+      return <SiExpress className={className} />;
     case "rest apis":
     case "rest api":
-      return <Globe className={`${className} text-[#38BDF8]`} />;
+      return <Globe className={className} />;
     case "mysql":
-      return <SiMysql className={`${className} text-[#4479A1]`} />;
+      return <SiMysql className={className} />;
     case "postgresql":
     case "postgres":
-      return <SiPostgresql className={`${className} text-[#4169E1]`} />;
+      return <SiPostgresql className={className} />;
     case "mongodb":
-      return <SiMongodb className={`${className} text-[#47A248]`} />;
+      return <SiMongodb className={className} />;
     case "mariadb":
-      return <SiMariadb className={`${className} text-[#003545]`} />;
+      return <SiMariadb className={className} />;
     case "git":
-      return <SiGit className={`${className} text-[#F05032]`} />;
+      return <SiGit className={className} />;
     case "github":
-      return <SiGithub className={`${className} text-foreground`} />;
+      return <SiGithub className={className} />;
     case "vs code":
     case "vscode":
-      return <VscVscode className={`${className} text-[#007ACC]`} />;
+      return <VscVscode className={className} />;
     case "figma":
-      return <SiFigma className={`${className} text-[#F24E1E]`} />;
+      return <SiFigma className={className} />;
     case "docker":
-      return <SiDocker className={`${className} text-[#2496ED]`} />;
+      return <SiDocker className={className} />;
     case "ui/ux design":
     case "ui/ux":
-      return <Layout className={`${className} text-[#A855F7]`} />;
+      return <Layout className={className} />;
     case "wireframing":
-      return <Frame className={`${className} text-[#EC4899]`} />;
+      return <Frame className={className} />;
     case "prototyping":
-      return <Layers className={`${className} text-[#6366F1]`} />;
+      return <Layers className={className} />;
     case "responsive design":
-      return <Monitor className={`${className} text-[#10B981]`} />;
+      return <Monitor className={className} />;
     case "chart.js":
-      return <SiChartdotjs className={`${className} text-[#FF6384]`} />;
+      return <SiChartdotjs className={className} />;
     case "local llm integration":
     case "llm":
-      return <Cpu className={`${className} text-[#10B981]`} />;
+      return <Cpu className={className} />;
     case "sql":
-      return <Database className={`${className} text-[#F59E0B]`} />;
+      return <Database className={className} />;
     case "basic python":
     case "python":
-      return <SiPython className={`${className} text-[#3776AB]`} />;
+      return <SiPython className={className} />;
     case "redis":
-      return <SiRedis className={`${className} text-[#DC382D]`} />;
+      return <SiRedis className={className} />;
     case "lm studio":
-      return <Bot className={`${className} text-[#A855F7]`} />;
+      return <Bot className={className} />;
     case "ci/cd":
     case "cicd":
-      return <Workflow className={`${className} text-[#38BDF8]`} />;
+      return <Workflow className={className} />;
     case "vercel":
-      return <SiVercel className={`${className} text-foreground`} />;
+      return <SiVercel className={className} />;
     case "cloudflare pages":
     case "cloudflare":
-      return <SiCloudflare className={`${className} text-[#F38020]`} />;
+      return <SiCloudflare className={className} />;
     case "supabase":
-      return <SiSupabase className={`${className} text-[#3ECF8E]`} />;
+      return <SiSupabase className={className} />;
     case "firebase":
-      return <SiFirebase className={`${className} text-[#FFCA28]`} />;
+      return <SiFirebase className={className} />;
     case "netlify":
-      return <SiNetlify className={`${className} text-[#00C7B7]`} />;
+      return <SiNetlify className={className} />;
     case "github actions":
     case "github action":
-      return <SiGithubactions className={`${className} text-[#2088FF]`} />;
+      return <SiGithubactions className={className} />;
     case "aws s3":
     case "aws":
     case "s3":
-      return <FaAws className={`${className} text-[#FF9900]`} />;
+      return <FaAws className={className} />;
     case "google workspace":
-      return <SiGoogle className={`${className} text-[#4285F4]`} />;
+      return <SiGoogle className={className} />;
     case "google cloud":
     case "gcp":
-      return <SiGooglecloud className={`${className} text-[#4285F4]`} />;
+      return <SiGooglecloud className={className} />;
     case "playwright":
-      return <TestTube className={`${className} text-[#45BA4B]`} />;
+      return <TestTube className={className} />;
     case "postman":
-      return <SiPostman className={`${className} text-[#FF6C37]`} />;
+      return <SiPostman className={className} />;
     case "nestjs":
     case "nest.js":
-      return <SiNestjs className={`${className} text-[#E0234E]`} />;
+      return <SiNestjs className={className} />;
     case "gitlab":
-      return <SiGitlab className={`${className} text-[#FC6D26]`} />;
+      return <SiGitlab className={className} />;
     case "shadcn":
     case "shadcn/ui":
     case "shadcn ui":
-      return <SiShadcnui className={`${className} text-foreground`} />;
+      return <SiShadcnui className={className} />;
     case "mui":
     case "material ui":
     case "material-ui":
-      return <SiMui className={`${className} text-[#007FFF]`} />;
+      return <SiMui className={className} />;
     case "kubernetes":
     case "k8s":
-      return <SiKubernetes className={`${className} text-[#326CE5]`} />;
+      return <SiKubernetes className={className} />;
     case "npm":
-      return <SiNpm className={`${className} text-[#CB3837]`} />;
+      return <SiNpm className={className} />;
     case "nginx":
-      return <SiNginx className={`${className} text-[#009639]`} />;
+      return <SiNginx className={className} />;
     case "gsap":
-      return <SiGsap className={`${className} text-[#88CE02]`} />;
+      return <SiGsap className={className} />;
     case "framer motion":
     case "framer":
-      return <SiFramer className={`${className} text-[#0055FF]`} />;
+      return <SiFramer className={className} />;
     case "webgl":
-      return <SiWebgl className={`${className} text-[#990000]`} />;
+      return <SiWebgl className={className} />;
     default:
-      return <Code2 className={`${className} text-secondary`} />;
+      return <Code2 className={className} />;
   }
 }
+
