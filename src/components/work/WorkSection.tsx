@@ -56,7 +56,7 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
         </h2>
       </div>
 
-      {/* Section 1: Personal Projects (Symmetrical Featured + 2x2 Grid) */}
+      {/* Section 1: Personal Projects */}
       <div>
         <div className="mb-6 pb-2 border-b border-border/40 flex items-center justify-between">
           <h3 className="text-xs sm:text-sm font-mono tracking-wider text-secondary uppercase font-semibold">
@@ -69,13 +69,12 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
               key={project.id}
               project={project}
               index={index + 1}
-              className={index === 0 ? "md:col-span-2" : "md:col-span-1"}
             />
           ))}
         </div>
       </div>
 
-      {/* Section 2: Professional Projects (Full Width Symmetrical Showcase) */}
+      {/* Section 2: Professional Projects */}
       <div>
         <div className="mb-6 pb-2 border-b border-border/40 flex items-center justify-between">
           <h3 className="text-xs sm:text-sm font-mono tracking-wider text-secondary uppercase font-semibold">
@@ -88,7 +87,6 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
               key={project.id}
               project={project}
               index={index + 1}
-              className="md:col-span-2"
             />
           ))}
         </div>
