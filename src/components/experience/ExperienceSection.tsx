@@ -33,9 +33,11 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
             <div className="text-sm sm:text-base font-mono text-secondary font-semibold">
               {latestJob.role}
             </div>
-            <p className="text-sm text-secondary/80 leading-relaxed max-w-md">
-              Leading agentic software architecture, core UI systems, and scholarly research development.
-            </p>
+            {latestJob.description && (
+              <p className="text-sm text-secondary/80 leading-relaxed max-w-md">
+                {latestJob.description}
+              </p>
+            )}
 
             <div className="pt-2 sm:pt-4">
               <Link
@@ -77,61 +79,86 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
         </div>
       ) : (
         /* Dedicated Page Timeline View (/experience) */
-        <div className="relative border-l border-border/70 ml-3 sm:ml-4 pl-5 sm:pl-8 space-y-8 sm:space-y-10 max-w-4xl">
-          {experience.map((job) => (
-            <div key={job.id} className="relative group">
-              {/* Monochrome Timeline Node Marker */}
-              <div className="absolute -left-[1.65rem] sm:-left-[2.35rem] top-1">
-                {job.isCurrent ? (
-                  <span className="block h-3 w-3 rounded-full bg-foreground shadow-sm" />
-                ) : (
-                  <span className="block h-3 w-3 rounded-full border border-border bg-background shadow-sm" />
-                )}
-              </div>
+        <div className="relative max-w-5xl mx-auto mt-4 sm:mt-10">
+          {/* Central Line - Left on mobile, Center on desktop */}
+          <div className="absolute left-[15px] md:left-1/2 top-0 bottom-0 w-px bg-border/70 md:-translate-x-1/2" />
 
-              {/* Date Badge */}
-              <div className="text-xs font-mono text-secondary mb-1 tracking-wider uppercase">
-                {job.period}
-              </div>
+          <div className="space-y-8 sm:space-y-12">
+            {experience.map((job, index) => {
+              const isEven = index % 2 === 0;
 
-              {/* Role Header */}
-              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
-                {job.role}
-              </h3>
+              const CardContent = () => (
+                <div className="relative group">
+                  {/* Date Badge */}
+                  <div className="text-xs font-mono text-secondary mb-2 tracking-wider uppercase">
+                    {job.period}
+                  </div>
 
-              {/* Company Subtitle */}
-              <div className="text-sm font-semibold text-secondary mt-0.5 mb-2">
-                {job.company}
-              </div>
+                  {/* Role Header */}
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+                    {job.role}
+                  </h3>
 
-              {/* Sub-divider */}
-              <div className="w-full border-b border-border/40 mb-3" />
+                  {/* Company Subtitle */}
+                  <div className="text-sm font-semibold text-secondary mt-1 mb-3">
+                    {job.company}
+                  </div>
 
-              {/* Bullet Points */}
-              <ul className="space-y-2 text-sm text-secondary leading-relaxed max-w-2xl">
-                {job.bullets.map((bullet, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-secondary/50 shrink-0 mt-2" />
-                    <span>{bullet}</span>
-                  </li>
-                ))}
-              </ul>
+                  {/* Sub-divider */}
+                  <div className="w-full border-b border-border/40 mb-4" />
 
-              {/* Tech Badges */}
-              {job.technologies && (
-                <div className="flex flex-wrap gap-2 mt-4 pt-1">
-                  {job.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-0.5 rounded text-[11px] font-mono text-secondary bg-surface border border-border/60"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                  {/* Bullet Points */}
+                  <ul className="space-y-2.5 text-sm text-secondary leading-relaxed">
+                    {job.bullets.map((bullet, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-secondary/50 shrink-0 mt-2" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Tech Badges */}
+                  {job.technologies && (
+                    <div className="flex flex-wrap gap-2 mt-5 pt-1">
+                      {job.technologies.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2 py-0.5 rounded text-[11px] font-mono text-secondary bg-background border border-border/60"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          ))}
+              );
+
+              return (
+                <div key={job.id} className="relative flex flex-col md:flex-row justify-between items-center w-full">
+                  
+                  {/* Node marker */}
+                  <div className="absolute left-[15px] md:left-1/2 top-8 md:top-1/2 transform -translate-x-1/2 md:-translate-y-1/2 w-4 h-4 rounded-full border-2 border-foreground bg-background z-10 flex items-center justify-center">
+                    {job.isCurrent && <div className="w-1.5 h-1.5 rounded-full bg-foreground" />}
+                  </div>
+
+                  {/* Left side on Desktop */}
+                  <div className="hidden md:block w-[47%]">
+                    {isEven && <CardContent />}
+                  </div>
+
+                  {/* Right side on Desktop */}
+                  <div className="hidden md:block w-[47%]">
+                    {!isEven && <CardContent />}
+                  </div>
+
+                  {/* Mobile version (Always on right side of left-aligned line) */}
+                  <div className="md:hidden w-full pl-10 pr-2">
+                    <CardContent />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </section>
