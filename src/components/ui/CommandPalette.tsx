@@ -127,7 +127,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         ref={containerRef}
         className="relative w-full max-w-xl rounded-lg border border-border bg-surface shadow-2xl"
       >
-        <div className="flex items-center border-b border-border px-4 py-3">
+        <div className="flex items-center border-b border-border/60 px-4 py-3.5">
           <span className="text-xs font-mono text-secondary mr-2">/^</span>
           <input
             ref={inputRef}
@@ -135,46 +135,69 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search or run a command..."
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
+            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted text-foreground font-medium"
             aria-label="Command palette search"
           />
-          <div className="flex items-center gap-2 text-xs text-secondary">
+          <div className="flex items-center gap-2 text-xs text-secondary font-mono">
             <span className="hidden md:inline">↑↓</span>
-            <span>to navigate</span>
+            <span className="hidden md:inline">navigate</span>
             <span className="hidden md:inline">⏎</span>
-            <span className="hidden md:inline">to select</span>
-            <span className="ml-2 rounded border border-border px-1.5 py-0.5 text-[10px]">
+            <span className="hidden md:inline">select</span>
+            <span className="ml-2 rounded border border-border/80 px-1.5 py-0.5 text-[10px] text-foreground bg-background font-semibold">
               ESC
             </span>
-            <span>to close</span>
+            <span>close</span>
           </div>
         </div>
 
-        <div className="max-h-[60vh] overflow-y-auto py-2">
+        <div className="max-h-[60vh] overflow-y-auto p-2 space-y-1">
           {actions.length === 0 ? (
-            <div className="px-4 py-8 text-center text-muted">
+            <div className="px-4 py-8 text-center text-xs font-mono text-muted">
               No matches found
             </div>
           ) : (
-            actions.map((item, index) => (
-              <button
-                key={item.id}
-                onClick={item.action}
-                className={`w-full px-4 py-3 text-left text-sm transition-colors hover:bg-secondary hover:text-foreground ${
-                  index === selectedIndex ? "bg-secondary text-foreground" : ""
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{item.label}</span>
-                  <span className="text-xs font-mono text-secondary">{item.section}</span>
-                </div>
-              </button>
-            ))
+            actions.map((item, index) => {
+              const isSelected = index === selectedIndex;
+              return (
+                <button
+                  key={item.id}
+                  onClick={item.action}
+                  onMouseEnter={() => setSelectedIndex(index)}
+                  className={`w-full px-3.5 py-2.5 rounded-md text-left text-sm transition-colors duration-150 flex items-center justify-between group focus:outline-none ${
+                    isSelected
+                      ? "bg-foreground/10 text-foreground font-bold"
+                      : "text-secondary"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className={`flex items-center justify-center w-4 h-4 transition-opacity ${isSelected ? "opacity-100 text-foreground" : "opacity-0"}`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                      </svg>
+                    </span>
+                    <span className={`transition-colors ${isSelected ? "text-foreground font-bold" : "text-secondary"}`}>
+                      {item.label}
+                    </span>
+                  </div>
+                  <span
+                    className={`text-xs font-mono transition-colors ${
+                      isSelected ? "text-foreground/90 font-medium" : "text-secondary/70"
+                    }`}
+                  >
+                    {item.section}
+                  </span>
+                </button>
+              );
+            })
           )}
         </div>
 
-        <div className="border-t border-border px-4 py-2 text-center text-xs text-muted">
-          Press <span className="rounded border border-border px-1">Esc</span> to close
+        <div className="border-t border-border/60 px-4 py-2.5 text-center text-xs font-mono text-secondary flex items-center justify-between">
+          <span>{actions.length} COMMANDS AVAILABLE</span>
+          <div>
+            Press <span className="rounded border border-border/80 px-1.5 py-0.5 text-[10px] text-foreground bg-background font-semibold">Esc</span> to close
+          </div>
         </div>
       </div>
     </div>
