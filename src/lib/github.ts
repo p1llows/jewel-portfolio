@@ -210,10 +210,11 @@ function parseGitHubHtmlContributions(username: string, html: string): GitHubCon
   let currentWeekDays: ContributionDay[] = [];
 
   days.forEach((day) => {
+    // If we start a new week (weekday 0) and already have days, push current week
     if (currentWeekDays.length > 0 && day.weekday === 0) {
       weeks.push({
         firstDay: currentWeekDays[0].date,
-        contributionDays: currentWeekDays,
+        contributionDays: normalizeWeekDays(currentWeekDays),
       });
       currentWeekDays = [];
     }
@@ -223,7 +224,7 @@ function parseGitHubHtmlContributions(username: string, html: string): GitHubCon
   if (currentWeekDays.length > 0) {
     weeks.push({
       firstDay: currentWeekDays[0].date,
-      contributionDays: currentWeekDays,
+      contributionDays: normalizeWeekDays(currentWeekDays),
     });
   }
 
@@ -238,6 +239,29 @@ function parseGitHubHtmlContributions(username: string, html: string): GitHubCon
     months,
     streaks,
   };
+}
+
+function normalizeWeekDays(weekDays: ContributionDay[]): ContributionDay[] {
+  if (weekDays.length === 7) return weekDays;
+
+  const padded: ContributionDay[] = [];
+  const dayMap = new Map<number, ContributionDay>();
+  weekDays.forEach((d) => dayMap.set(d.weekday, d));
+
+  for (let weekday = 0; weekday < 7; weekday++) {
+    if (dayMap.has(weekday)) {
+      padded.push(dayMap.get(weekday)!);
+    } else {
+      padded.push({
+        date: "",
+        count: 0,
+        intensity: 0,
+        weekday,
+      });
+    }
+  }
+
+  return padded;
 }
 
 function calculateMonthHeaders(weeks: ContributionWeek[]): ContributionMonthHeader[] {

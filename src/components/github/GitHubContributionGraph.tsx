@@ -16,10 +16,9 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
   useEffect(() => {
     async function loadData() {
       setLoading(true);
-      setError(null);
-
       try {
-        const res = await fetch("/api/github-contributions");
+        const url = username ? `/api/github-contributions?username=${username}` : "/api/github-contributions";
+        const res = await fetch(url);
         const json = await res.json();
 
         if (!json.success || !json.weeks || json.weeks.length === 0) {
@@ -35,7 +34,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
     }
 
     loadData();
-  }, []);
+  }, [username]);
 
   const getLevelBg = (level: number) => {
     switch (level) {
@@ -123,18 +122,18 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
       </div>
 
       {/* Contribution Calendar Heatmap Container */}
-      <div className="relative overflow-x-auto pb-2">
-        <div className="min-w-[700px]">
+      <div className="relative overflow-x-auto pb-2 scrollbar-thin">
+        <div className="min-w-[850px] select-none">
           {/* Month Headers aligned with Week columns */}
-          <div className="flex gap-2 mb-2 select-none">
+          <div className="flex gap-2 mb-2">
             <div className="w-6 shrink-0" />
-            <div className="flex gap-1 text-[10px] font-mono text-secondary h-4 relative">
+            <div className="flex gap-1 text-[10px] font-mono text-secondary h-4 relative flex-1">
               {data.weeks.map((_, weekIdx) => {
                 const month = data.months.find((m) => m.firstWeekIndex === weekIdx);
                 return (
-                  <div key={weekIdx} className="w-2.5 sm:w-3 shrink-0 relative">
+                  <div key={weekIdx} className="w-3 shrink-0 relative">
                     {month && (
-                      <span className="absolute left-0 top-0 whitespace-nowrap">
+                      <span className="absolute left-0 top-0 whitespace-nowrap z-10">
                         {month.name}
                       </span>
                     )}
@@ -164,17 +163,20 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
                   {week.contributionDays.map((day, dayIdx) => (
                     <div
                       key={dayIdx}
-                      tabIndex={0}
+                      tabIndex={day.date ? 0 : -1}
                       role="gridcell"
-                      aria-label={`${formatDate(day.date)}: ${day.count} contribution${day.count === 1 ? "" : "s"}`}
+                      aria-label={day.date ? `${formatDate(day.date)}: ${day.count} contribution${day.count === 1 ? "" : "s"}` : undefined}
                       onMouseEnter={(e) => {
+                        if (!day.date) return;
                         const rect = e.currentTarget.getBoundingClientRect();
                         setHoveredDay({ day, x: rect.left + rect.width / 2, y: rect.top });
                       }}
                       onMouseLeave={() => setHoveredDay(null)}
-                      className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-[2px] transition-transform hover:scale-125 hover:z-10 focus:outline-none focus:ring-1 focus:ring-foreground ${getLevelBg(
-                        day.intensity
-                      )}`}
+                      className={`w-3 h-3 aspect-square rounded-[2px] shrink-0 transition-transform ${
+                        day.date
+                          ? "hover:scale-125 hover:z-10 focus:outline-none focus:ring-1 focus:ring-foreground"
+                          : "opacity-0 pointer-events-none"
+                      } ${getLevelBg(day.intensity)}`}
                     />
                   ))}
                 </div>

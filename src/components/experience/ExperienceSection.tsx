@@ -9,35 +9,35 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
   const latestJob = experience[0];
 
   return (
-    <section className="w-full max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12 md:py-20">
+    <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
       {/* Header */}
-      <div className="mb-10 pb-4 border-b border-border/60">
+      <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60">
         <div className="text-xs font-mono text-secondary tracking-widest uppercase mb-2">
           03 / EXPERIENCE
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
           {isPreview ? "EXPERIENCE HIGHLIGHT" : "EXPERIENCE & HISTORY"}
         </h2>
       </div>
 
       {isPreview ? (
         /* Homepage Preview Mode (Full-width 2-column layout) */
-        <div className="grid gap-8 lg:grid-cols-12 items-start">
-          <div className="lg:col-span-5 space-y-4">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-12 items-start">
+          <div className="lg:col-span-5 space-y-3 sm:space-y-4">
             <div className="text-xs font-mono text-secondary tracking-wider uppercase">
               {latestJob.period}
             </div>
-            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
               {latestJob.company}
             </h3>
-            <div className="text-base font-mono text-secondary font-semibold">
+            <div className="text-sm sm:text-base font-mono text-secondary font-semibold">
               {latestJob.role}
             </div>
             <p className="text-sm text-secondary/80 leading-relaxed max-w-md">
               Leading agentic software architecture, core UI systems, and scholarly research development.
             </p>
 
-            <div className="pt-4">
+            <div className="pt-2 sm:pt-4">
               <Link
                 href="/experience"
                 className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
@@ -48,11 +48,11 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
             </div>
           </div>
 
-          <div className="lg:col-span-7 rounded-lg border border-border/60 bg-surface/40 p-6 space-y-6">
+          <div className="lg:col-span-7 rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-6 space-y-4 sm:space-y-6">
             <div className="text-xs font-mono text-secondary tracking-wider uppercase border-b border-border/40 pb-3">
               KEY RESPONSIBILITIES & DELIVERABLES
             </div>
-            <ul className="space-y-3 text-sm text-secondary leading-relaxed">
+            <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-secondary leading-relaxed">
               {latestJob.bullets.map((bullet, idx) => (
                 <li key={idx} className="flex items-start gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-secondary/50 shrink-0 mt-2" />
@@ -62,11 +62,11 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
             </ul>
 
             {latestJob.technologies && (
-              <div className="flex flex-wrap gap-2 pt-3 border-t border-border/40">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 border-t border-border/40">
                 {latestJob.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="px-2.5 py-1 rounded text-xs font-mono text-secondary bg-background border border-border/60"
+                    className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-[11px] sm:text-xs font-mono text-secondary bg-background border border-border/60"
                   >
                     {tech}
                   </span>
@@ -77,11 +77,11 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
         </div>
       ) : (
         /* Dedicated Page Timeline View (/experience) */
-        <div className="relative border-l border-border/70 ml-2 pl-6 sm:pl-8 space-y-10 max-w-4xl">
+        <div className="relative border-l border-border/70 ml-3 sm:ml-4 pl-5 sm:pl-8 space-y-8 sm:space-y-10 max-w-4xl">
           {experience.map((job) => (
             <div key={job.id} className="relative group">
               {/* Monochrome Timeline Node Marker */}
-              <div className="absolute -left-[1.8rem] sm:-left-[2.3rem] top-1">
+              <div className="absolute -left-[1.65rem] sm:-left-[2.35rem] top-1">
                 {job.isCurrent ? (
                   <span className="block h-3 w-3 rounded-full bg-foreground shadow-sm" />
                 ) : (

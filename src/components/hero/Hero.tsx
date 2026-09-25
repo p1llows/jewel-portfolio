@@ -61,30 +61,30 @@ export function Hero() {
                 01 / HOME
               </div>
 
-              <h1 className="mb-2 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-muted hero-title">
+              <h1 className="mb-2 text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-muted hero-title">
                 HELLO, I AM
               </h1>
 
-              <h2 className="mb-6 text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-foreground hero-subtitle">
+              <h2 className="mb-6 text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-foreground hero-subtitle">
                 JEWEL
                 <br />
                 RAMIREZ
               </h2>
 
-              <p className="mb-6 text-xl md:text-2xl font-mono text-secondary max-w-2xl hero-description">
+              <p className="mb-4 sm:mb-6 text-lg sm:text-xl md:text-2xl font-mono text-secondary max-w-2xl hero-description">
                 &lt;Full-Stack Developer /&gt;
               </p>
 
-              <p className="mb-10 text-base md:text-lg text-secondary max-w-2xl leading-relaxed hero-description">
+              <p className="mb-8 sm:mb-10 text-sm sm:text-base md:text-lg text-secondary max-w-2xl leading-relaxed hero-description">
                 I build high-performance web applications, resilient backend APIs, seamless integrations, and modern interactive digital experiences.
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 hero-buttons">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 hero-buttons">
                 <motion.a
                   href="/work"
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
-                  className="px-8 py-3.5 bg-foreground text-background font-semibold rounded shadow transition-all"
+                  className="w-full sm:w-auto text-center px-6 sm:px-8 py-3.5 bg-foreground text-background font-semibold rounded shadow transition-all"
                 >
                   VIEW WORK
                 </motion.a>
@@ -96,7 +96,7 @@ export function Hero() {
                   }}
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
-                  className="px-8 py-3.5 border border-border rounded font-medium hover:bg-surface transition-all text-foreground flex items-center gap-2"
+                  className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 border border-border rounded font-medium hover:bg-surface transition-all text-foreground flex items-center gap-2"
                 >
                   <FileText className="w-4 h-4" />
                   RESUME
@@ -104,7 +104,7 @@ export function Hero() {
               </div>
 
               {/* Grayscale Social Links Icons */}
-              <div className="mt-8 flex items-center gap-4 hero-buttons">
+              <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-3 sm:gap-4 hero-buttons">
                 <motion.a
                   href="https://github.com/p1llows"
                   target="_blank"

@@ -5,11 +5,12 @@ interface NavLinkProps {
   href: string;
   label: string;
   isActive: boolean;
+  onClick?: () => void;
 }
 
-export function NavLink({ href, label, isActive }: NavLinkProps) {
+export function NavLink({ href, label, isActive, onClick }: NavLinkProps) {
   return (
-    <li className="relative">
+    <li className="relative" onClick={onClick}>
       {/* Primary Left Bar Indicator */}
       {isActive && (
         <span className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-foreground rounded-r-full shadow-sm" />

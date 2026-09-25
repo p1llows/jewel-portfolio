@@ -10,15 +10,15 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
   const displayProjects = isPreview ? projects.slice(0, 2) : projects;
 
   return (
-    <section className="w-full max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12 md:py-20">
-      <div className="mb-10 pb-4 border-b border-border/60">
+    <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
+      <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60">
         <div className="text-xs font-mono text-secondary tracking-widest uppercase mb-2">02 / WORK</div>
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
           {isPreview ? "SELECTED PROJECTS" : "ALL PROJECTS"}
         </h2>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+      <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
         {displayProjects.map((project, index) => (
           <ProjectCard
             key={project.id}
