@@ -20,10 +20,10 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
           {!isPreview && (
             <>
               <p className="text-sm sm:text-base md:text-lg text-secondary leading-relaxed mt-4">
-                I work across the stack — React, Next.js, and TypeScript on the frontend; PHP, Laravel, and Node.js on the backend. Lately I've been focused on AI-assisted development: agents, skills, and harnesses, and how they change the way apps and websites get built.
+                I work across the stack — React, Next.js, and TypeScript on the frontend; PHP, Laravel, and Node.js on the backend. Lately I&apos;ve been focused on AI-assisted development: agents, skills, and harnesses, and how they change the way apps and websites get built.
               </p>
               <p className="text-sm sm:text-base md:text-lg text-secondary leading-relaxed mt-4">
-                Outside of work, I build things because an idea won't leave me alone — like philnits-prep, a review tool for the same ITPEC IT Passport exam I'm certified in.
+                Outside of work, I build things because an idea won&apos;t leave me alone — like philnits-prep, a review tool for the same ITPEC IT Passport exam I&apos;m certified in.
               </p>
             </>
           )}

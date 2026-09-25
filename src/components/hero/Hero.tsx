@@ -46,9 +46,9 @@ export function Hero() {
   }, []);
 
   return (
-    <section ref={heroRef} className="relative py-12 sm:py-16 md:py-24 lg:py-28 min-h-[85vh] flex items-center overflow-hidden">
+    <section ref={heroRef} className="relative py-4 sm:py-6 lg:py-8 xl:py-10 min-h-[calc(100vh-4rem)] md:min-h-screen flex items-center overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
           {/* Left Column: Text & CTAs */}
           <div className="lg:col-span-7 relative z-10">
             <motion.div
@@ -56,26 +56,26 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="mb-4 text-xs font-mono text-secondary tracking-wider flex items-center gap-2">
+              <div className="mb-3 sm:mb-4 text-xs font-mono text-secondary tracking-wider flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-foreground" />
                 01 / HOME
               </div>
 
-              <h1 className="mb-2 text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-muted hero-title">
+              <h1 className="mb-1 sm:mb-2 text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-muted hero-title">
                 HELLO, I AM
               </h1>
 
-              <h2 className="mb-6 text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-foreground hero-subtitle">
+              <h2 className="mb-4 sm:mb-6 text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter text-foreground hero-subtitle leading-[0.95]">
                 JEWEL
                 <br />
                 RAMIREZ
               </h2>
 
-              <p className="mb-4 sm:mb-6 text-lg sm:text-xl md:text-2xl font-mono text-secondary max-w-2xl hero-description">
+              <p className="mb-3 sm:mb-4 text-base sm:text-lg md:text-xl font-mono text-secondary max-w-2xl hero-description">
                 &lt;Full-Stack Developer /&gt;
               </p>
 
-              <p className="mb-8 sm:mb-10 text-sm sm:text-base md:text-lg text-secondary max-w-2xl leading-relaxed hero-description">
+              <p className="mb-6 sm:mb-8 text-xs sm:text-sm md:text-base lg:text-lg text-secondary max-w-2xl leading-relaxed hero-description">
                 I build high-performance web applications, resilient backend APIs, seamless integrations, and modern interactive digital experiences.
               </p>
 
@@ -84,7 +84,7 @@ export function Hero() {
                   href="/work"
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
-                  className="w-full sm:w-auto text-center px-6 sm:px-8 py-3.5 bg-foreground text-background font-semibold rounded shadow transition-all"
+                  className="w-full sm:w-auto text-center px-6 sm:px-8 py-3 bg-foreground text-background font-semibold rounded shadow transition-all"
                 >
                   VIEW WORK
                 </motion.a>
@@ -96,7 +96,7 @@ export function Hero() {
                   }}
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
-                  className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 border border-border rounded font-medium hover:bg-surface transition-all text-foreground flex items-center gap-2"
+                  className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3 border border-border rounded font-medium hover:bg-surface transition-all text-foreground flex items-center gap-2"
                 >
                   <FileText className="w-4 h-4" />
                   RESUME
@@ -104,7 +104,7 @@ export function Hero() {
               </div>
 
               {/* Grayscale Social Links Icons */}
-              <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-3 sm:gap-4 hero-buttons">
+              <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3.5 hero-buttons">
                 <motion.a
                   href="https://github.com/p1llows"
                   target="_blank"
@@ -165,8 +165,8 @@ export function Hero() {
           </div>
 
           {/* Right Column: Interactive Binary Particle Portrait */}
-          <div className="lg:col-span-5 relative z-20 flex justify-center lg:justify-end mt-4 lg:-mt-10">
-            <div className="relative w-full max-w-[340px] sm:max-w-[480px] md:max-w-[560px] lg:max-w-[700px] h-[360px] sm:h-[500px] md:h-[600px] lg:h-[720px] xl:h-[760px]">
+          <div className="lg:col-span-5 relative z-20 flex justify-center lg:justify-end mt-4 lg:-mt-12 xl:-mt-16">
+            <div className="relative w-full max-w-[340px] sm:max-w-[480px] md:max-w-[560px] lg:max-w-[660px] xl:max-w-[740px] h-[360px] sm:h-[500px] md:h-[580px] lg:h-[680px] xl:h-[740px] min-h-[340px]">
               <BinaryPortrait src="/images/portrait-source.jpg" />
             </div>
           </div>

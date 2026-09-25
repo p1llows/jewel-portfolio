@@ -3,16 +3,28 @@ import { Project } from "@/data/projects";
 interface ProjectCardProps {
   project: Project;
   index: number;
+  className?: string;
 }
 
-export function ProjectCard({ project, index }: ProjectCardProps) {
+export function ProjectCard({ project, index, className = "" }: ProjectCardProps) {
   return (
-    <div className="group rounded-lg border border-border/60 bg-surface/40 p-6 transition-all duration-200 hover:border-foreground/30 hover:bg-surface/70 flex flex-col justify-between">
+    <div className={`group rounded-lg border border-border/60 bg-surface/40 p-6 transition-all duration-200 hover:border-foreground/30 hover:bg-surface/70 flex flex-col justify-between ${className}`}>
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-mono text-secondary">
-            {index.toString().padStart(2, "0")}
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-secondary">
+              {index.toString().padStart(2, "0")}
+            </span>
+            {project.category === "professional" ? (
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium uppercase tracking-wider bg-surface text-secondary border border-border/60">
+                {project.company || "Professional"}
+              </span>
+            ) : (
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-surface text-secondary border border-border/40">
+                Personal
+              </span>
+            )}
+          </div>
           <span className="text-[11px] font-mono uppercase tracking-wider text-secondary/80">
             {project.subtitle}
           </span>
@@ -38,26 +50,34 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-4 pt-4 border-t border-border/40 text-xs font-mono">
+      <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-border/40 text-xs font-mono">
+        <a
+          href={`/work/${project.id}`}
+          className="text-foreground font-semibold hover:text-secondary transition-colors"
+        >
+          CASE STUDY →
+        </a>
         {project.previewUrl && (
           <a
             href={project.previewUrl}
-            className="text-foreground font-semibold hover:text-secondary transition-colors"
+            className="text-secondary hover:text-foreground transition-colors ml-auto"
             target="_blank"
             rel="noopener noreferrer"
           >
-            PROJECT PREVIEW ↗
+            PREVIEW ↗
           </a>
         )}
-        <a
-          href={project.githubUrl || "#"}
-          className="group/link flex items-center gap-1 text-secondary hover:text-foreground transition-colors ml-auto"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span>VIEW REPO</span>
-          <span className="group-hover/link:translate-x-0.5 transition-transform">→</span>
-        </a>
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            className="group/link flex items-center gap-1 text-secondary hover:text-foreground transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>REPO</span>
+            <span className="group-hover/link:translate-x-0.5 transition-transform">↗</span>
+          </a>
+        )}
       </div>
     </div>
   );

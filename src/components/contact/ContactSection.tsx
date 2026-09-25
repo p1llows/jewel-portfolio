@@ -17,14 +17,14 @@ export function ContactSection({ isPreview = false }: ContactSectionProps) {
         <div className="lg:col-span-5 space-y-6 sm:space-y-8 pr-0 lg:pr-4 pt-2">
           <div>
             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground mb-5 uppercase">
-              HAVE A PROJECT? LET'S TALK.
+              HAVE A PROJECT? LET&apos;S TALK.
             </h3>
             <div className="border-l-2 border-border/80 pl-4 sm:pl-5 py-1 space-y-4">
               <p className="text-sm sm:text-base md:text-lg text-secondary leading-relaxed">
                 I help turn ideas into working software — web apps, internal tools, systems, integrations, you name it. Currently taking on freelance and contract work.
               </p>
               <p className="text-sm sm:text-base md:text-lg text-secondary leading-relaxed">
-                Tell me what you're building and I'll tell you how I can help.
+                Tell me what you&apos;re building and I&apos;ll tell you how I can help.
               </p>
             </div>
           </div>
