@@ -1,128 +1,152 @@
-# Jewel Ramirez Portfolio v2
+# Jewel Ramirez — Portfolio v2
 
-A modern developer portfolio built with Next.js, TypeScript, and Tailwind CSS, deployed on Cloudflare Pages.
+A modern developer portfolio built with Next.js 14, TypeScript, Tailwind CSS, WebGL, and Framer Motion. Deployed on Cloudflare Pages.
 
-## Tech Stack
+---
+
+## 🚀 Tech Stack
 
 - **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
 - **Styling:** Tailwind CSS v3
-- **Animation:** Framer Motion, GSAP
-- **3D/WebGL:** Three.js
-- **Icons:** Lucide Icons
-- **Backend/Database:** Supabase (visitor counter API ready)
+- **Animations:** Framer Motion, GSAP
+- **3D / Canvas:** Interactive Binary Particle Engine (Canvas 2D) & Three.js WebGL
+- **Icons:** Lucide Icons & React Icons (Simple Icons)
+- **API Integrations:** GitHub GraphQL API & Public HTML Scraper Fallback
+- **Database / Analytics:** Visitor Counter API (`/api/visits`), Supabase integration ready
 - **Deployment:** Cloudflare Pages
 
-## Setup
+---
 
-```bash
-npm install
-npm run dev
-```
+## 🛠️ Environment Setup
 
-## Build
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/p1llows/jewel-portfolio.git
+   cd jewel-portfolio
+   ```
+
+2. **Configure Environment Variables:**
+   Copy `.env.example` to `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Open `.env.local` and set your GitHub Personal Access Token (for fetching GitHub activity via GraphQL):
+   ```env
+   GITHUB_TOKEN=your_github_personal_access_token
+   NEXT_PUBLIC_GITHUB_USERNAME=p1llows
+   ```
+
+3. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+4. **Run Development Server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 📦 Build & Verification
+
+To verify production builds:
 
 ```bash
 npm run build
 ```
 
-## Deploy to Cloudflare Pages
+To run the production server locally:
 
-1. Push to GitHub
-2. Connect repository to Cloudflare Pages
-3. Build command: `npm run build`
-4. Output directory: `.next`
-
-## Project Structure
-
-```
-src/
-├── app/                  # Next.js App Router pages
-│   ├── layout.tsx       # Root layout with theme provider
-│   ├── page.tsx         # Homepage
-│   ├── work/            # Work section pages
-│   ├── experience/      # Experience section pages
-│   ├── about/           # About section pages
-│   ├── stack/           # Stack section pages
-│   └── contact/         # Contact section pages
-├── components/          # React components
-│   ├── layout/          # Navigation and layout
-│   ├── hero/            # Hero section
-│   ├── work/            # Work-related components
-│   ├── experience/      # Experience-related components
-│   ├── about/           # About-related components
-│   ├── stack/           # Stack-related components
-│   ├── github/          # GitHub-related components
-│   ├── contact/         # Contact-related components
-│   ├── effects/         # WebGL and animation effects
-│   └── ui/              # Reusable UI components
-├── data/                # Content data files
-├── lib/                 # Utility functions
-└── types/               # TypeScript type definitions
+```bash
+npm run start
 ```
 
-## Design System
+---
 
-- **Colors:** Monochrome palette (light/dark mode)
-- **Typography:** Geist (primary), Space Grotesk (fallback), JetBrains Mono (technical metadata)
-- **Theme:** Light/dark mode with localStorage persistence
+## 🌐 Deploy to Cloudflare Pages
 
-## Features Implemented
+1. Push your changes to GitHub.
+2. Connect your repository to **Cloudflare Pages**.
+3. **Build settings:**
+   - Framework preset: `Next.js (Static HTML Export)` or `Next.js`
+   - Build command: `npm run build`
+   - Output directory: `.next` or `out`
+4. Add environment variables (`GITHUB_TOKEN`, `NEXT_PUBLIC_GITHUB_USERNAME`) under **Settings > Environment Variables**.
 
-### ✅ Phase 1: Foundation
-- Next.js 14 App Router
-- TypeScript
-- Tailwind CSS v3
-- ESLint
-- Cloudflare Pages export config
-- Project structure
+---
 
-### ✅ Phase 2: Homepage Skeleton
-- Hero section with introduction
-- Navigation with sidebar
-- Work section with project cards
-- Experience section
-- About section
-- Stack section
-- GitHub section
-- Contact section
-- All routes: `/`, `/work`, `/experience`, `/about`, `/stack`, `/contact`, `/github`
+## 📂 Project Structure
 
-### ✅ Phase 3: Binary Portrait & Animations
-- Three.js WebGL binary particle portrait
-- Interactive mouse repulsion
-- Responsive particle count
-- GSAP hero entrance animations
-- Light/dark theme toggle
-
-### ✅ Phase 4: Backend
-- Visitor counter API (`/api/visits`)
-- LocalStorage fallback for development
-- Ready for Supabase integration
-
-## Configuration
-
-### Cloudflare Pages
-
-Environment variables needed for production:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_KEY=your-service-key
+```
+jewel-portfolio/
+├── public/
+│   └── images/
+│       └── portrait-source.jpg  # Source image for Binary Portrait
+├── src/
+│   ├── app/                      # Next.js App Router pages & APIs
+│   │   ├── about/               # About page route
+│   │   ├── api/                 # API Routes (visits, github-contributions)
+│   │   ├── contact/             # Contact page route
+│   │   ├── experience/          # Experience page route
+│   │   ├── github/              # GitHub activity route
+│   │   ├── stack/               # Tech Stack route
+│   │   ├── work/                # Projects portfolio
+│   │   │   └── [slug]/          # Detailed Case Study pages
+│   │   ├── globals.css          # Global Tailwind CSS & design variables
+│   │   ├── layout.tsx           # Root layout with ThemeProvider & AppLayout
+│   │   └── page.tsx             # Main Homepage
+│   ├── components/              # Modular UI & Section Components
+│   │   ├── about/               # About section components
+│   │   ├── contact/             # Contact form & social channels
+│   │   ├── effects/             # Interactive Binary Canvas Engine
+│   │   ├── experience/          # Interactive experience timeline
+│   │   ├── github/              # GitHub contribution graph & profile cards
+│   │   ├── hero/                # Hero section & GSAP entrance animations
+│   │   ├── layout/              # Responsive Navbar, Desktop Sidebar & Mobile Drawer
+│   │   ├── navigation/          # NavLink components
+│   │   ├── stack/               # Tech icon matrix & stack categories
+│   │   ├── ui/                  # Theme toggle, Visitor counter, Command Palette
+│   │   └── work/                # Project cards & case study layouts
+│   ├── data/                    # Structured content (projects, experience, stack, case studies)
+│   ├── lib/                     # GitHub GraphQL client, utils & helper functions
+│   └── types/                   # TypeScript interfaces & types
+├── .env.example                 # Environment variables template
+├── tailwind.config.ts           # Tailwind CSS configuration
+└── tsconfig.json                # TypeScript configuration
 ```
 
-### Portrait Image
+---
 
-Place your portrait image at:
-```
-public/images/portrait-source.jpg
-```
+## 🎨 Design System
 
-The binary portrait will automatically generate particles from this image.
+- **Monochrome Theme:** Custom high-contrast light and dark palette with persistent state in `localStorage`.
+- **Typography:** Modern monospace (`JetBrains Mono`) for metadata and clean sans-serif for content.
+- **Responsive Layout:** 
+  - Desktop: Fixed sidebar navigation with docked status indicator and tools.
+  - Mobile & Tablet (`< 768px`): Glassmorphic top navigation header with animated slide-over drawer menu.
 
-## Next Steps
+---
 
-- Command palette (`Cmd/Ctrl+K`)
-- Case studies pages (`/work/[slug]`)
-- SEO metadata
-- Accessibility improvements
-- Mobile navigation improvements
+## ✨ Features Implemented
+
+### ✅ Core & Layout
+- Full Next.js 14 App Router integration with TypeScript.
+- Complete responsive design across mobile (`< 480px`), tablet (`768px`), laptop, and desktop viewports.
+- Responsive mobile header bar & slide-over glassmorphic drawer menu.
+
+### ✅ Interactive Features & Animations
+- **Binary Particle Engine (`BinaryPortrait`):** 2D canvas sampling engine rendering real-time binary characters with mouse/touch repulsion physics and theme-aware lighting.
+- **GSAP Hero Entrance:** Staggered sequence for hero text and CTA buttons.
+- **Command Palette (`Cmd/Ctrl+K`):** Global search modal for instant page navigation and quick actions.
+
+### ✅ GitHub Contribution Heatmap
+- Live 1-year contribution calendar powered by GitHub's **GraphQL API**.
+- Robust HTML scraper fallback parser with week padding (`0..6` Sunday–Saturday) for complete visual accuracy.
+- Normalized cell dimensions (`w-3 h-3`) and month header alignment across all devices.
+
+### ✅ Case Studies & Content
+- Individual case study pages (`/work/[slug]`) generated statically via `generateStaticParams`.
+- Visitor counter API with local fallback storage (`/api/visits`).
