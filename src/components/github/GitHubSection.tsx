@@ -38,9 +38,6 @@ export function GitHubSection() {
                 <span className="font-mono text-xs text-secondary uppercase">HANDLE:</span>
                 <span className="font-mono text-sm font-bold text-foreground">@p1llows</span>
               </div>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-500 bg-emerald-500/10 border border-emerald-500/30">
-                ACTIVE
-              </span>
             </div>
 
             <p className="text-sm text-secondary leading-relaxed">
@@ -48,8 +45,6 @@ export function GitHubSection() {
             </p>
 
             <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-secondary pt-3 border-t border-border/40">
-              <span>IDENTITY: p1llows</span>
-              <span>·</span>
               <span>REPOS: PUBLIC & RESEARCH</span>
             </div>
           </div>
