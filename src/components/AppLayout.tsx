@@ -13,6 +13,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     if (pathname.startsWith("/experience")) return "experience";
     if (pathname.startsWith("/about")) return "about";
     if (pathname.startsWith("/stack")) return "stack";
+    if (pathname.startsWith("/certifications")) return "certifications";
     if (pathname.startsWith("/contact")) return "contact";
     if (pathname.startsWith("/github")) return "github";
     return "home";

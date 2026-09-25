@@ -3,6 +3,7 @@ import { WorkSection } from "@/components/work/WorkSection";
 import { ExperienceSection } from "@/components/experience/ExperienceSection";
 import { AboutSection } from "@/components/about/AboutSection";
 import { StackSection } from "@/components/stack/StackSection";
+import { CertificationsSection } from "@/components/certifications/CertificationsSection";
 import { GitHubSection } from "@/components/github/GitHubSection";
 import { ContactSection } from "@/components/contact/ContactSection";
 
@@ -14,6 +15,7 @@ export default function Home() {
       <ExperienceSection isPreview={true} />
       <AboutSection isPreview={true} />
       <StackSection isPreview={true} />
+      <CertificationsSection isPreview={true} />
       <GitHubSection />
       <ContactSection isPreview={true} />
     </>
