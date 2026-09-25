@@ -129,7 +129,7 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
             <span className="block text-[10px] font-mono text-muted tracking-wider uppercase mb-1 font-medium">
               STATUS
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-0.5">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
@@ -141,7 +141,7 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
           </div>
 
           {/* Theme & Visitor Stats */}
-          <div className="flex items-center justify-between gap-2 px-0.5 pt-0.5">
+          <div className="flex items-center justify-between gap-2 pt-0.5">
             <ThemeToggle />
             <VisitorCounter />
           </div>

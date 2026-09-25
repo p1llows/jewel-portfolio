@@ -28,10 +28,10 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
               {latestJob.period}
             </div>
             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-              {latestJob.company}
+              {latestJob.role}
             </h3>
             <div className="text-sm sm:text-base font-mono text-secondary font-semibold">
-              {latestJob.role}
+              {latestJob.company}
             </div>
             {latestJob.description && (
               <p className="text-sm text-secondary/80 leading-relaxed max-w-md">
