@@ -42,9 +42,13 @@ import {
   SiKubernetes,
   SiNpm,
   SiNginx,
-  SiGsap,
+  SiGreensock,
   SiFramer,
   SiWebgl,
+  SiLivewire,
+  SiAlpinedotjs,
+  SiTelegram,
+  SiReactrouter,
 } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
 import { FaAws } from "react-icons/fa6";
@@ -61,6 +65,7 @@ import {
   Workflow,
   Bot,
   TestTube,
+  Palette,
 } from "lucide-react";
 
 interface TechIconProps {
@@ -206,12 +211,29 @@ export function TechIcon({ name, className = "w-4 h-4" }: TechIconProps) {
     case "nginx":
       return <SiNginx className={className} />;
     case "gsap":
-      return <SiGsap className={className} />;
+    case "greensock":
+      return <SiGreensock className={className} />;
     case "framer motion":
     case "framer":
       return <SiFramer className={className} />;
     case "webgl":
       return <SiWebgl className={className} />;
+    case "livewire":
+      return <SiLivewire className={className} />;
+    case "alpine.js":
+    case "alpine":
+    case "alpinejs":
+      return <SiAlpinedotjs className={className} />;
+    case "telegram":
+      return <SiTelegram className={className} />;
+    case "react router":
+    case "react-router":
+      return <SiReactrouter className={className} />;
+    case "canvas api":
+    case "canvas":
+      return <Palette className={className} />;
+    case "filament":
+      return <Layers className={className} />;
     default:
       return <Code2 className={className} />;
   }

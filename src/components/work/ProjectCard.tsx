@@ -1,4 +1,5 @@
 import { Project } from "@/data/projects";
+import { TechIcon } from "@/components/stack/TechIcon";
 
 interface ProjectCardProps {
   project: Project;
@@ -38,14 +39,16 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
           {project.description}
         </p>
 
-        <div className="flex flex-wrap gap-1.5 mb-6">
+        <div className="flex flex-wrap items-center gap-2 mb-6">
           {project.technologies.map((tech) => (
-            <span
+            <div
               key={tech}
-              className="px-2 py-0.5 rounded text-[11px] font-mono text-secondary bg-background border border-border/50"
+              title={tech}
+              aria-label={tech}
+              className="p-1.5 rounded-md bg-background border border-border/50 text-secondary hover:text-foreground hover:border-foreground/40 transition-colors flex items-center justify-center"
             >
-              {tech}
-            </span>
+              <TechIcon name={tech} className="w-4 h-4" />
+            </div>
           ))}
         </div>
       </div>
