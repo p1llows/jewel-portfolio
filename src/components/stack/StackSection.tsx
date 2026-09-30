@@ -44,7 +44,7 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
                 {row1Techs.map((tech) => (
                   <div
                     key={`${i}-${tech}`}
-                    className="inline-flex items-center gap-2.5 sm:gap-3 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl text-sm sm:text-base md:text-lg font-mono text-secondary hover:text-foreground hover:bg-surface/60 border border-transparent hover:border-border/40 transition-all duration-150 group/tech cursor-default"
+                    className="inline-flex items-center gap-2.5 sm:gap-3 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl text-sm sm:text-base md:text-lg font-mono text-secondary hover:text-foreground hover:bg-surface/60 transition-all duration-150 group/tech cursor-default"
                   >
                     <TechIcon
                       name={tech}
@@ -64,7 +64,7 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
                 {row2Techs.map((tech) => (
                   <div
                     key={`${i}-${tech}`}
-                    className="inline-flex items-center gap-2.5 sm:gap-3 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl text-sm sm:text-base md:text-lg font-mono text-secondary hover:text-foreground hover:bg-surface/60 border border-transparent hover:border-border/40 transition-all duration-150 group/tech cursor-default"
+                    className="inline-flex items-center gap-2.5 sm:gap-3 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl text-sm sm:text-base md:text-lg font-mono text-secondary hover:text-foreground hover:bg-surface/60 transition-all duration-150 group/tech cursor-default"
                   >
                     <TechIcon
                       name={tech}
