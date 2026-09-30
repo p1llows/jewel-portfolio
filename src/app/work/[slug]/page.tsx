@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { caseStudyData } from "@/data/caseStudies";
+import { TechIcon } from "@/components/stack/TechIcon";
 
 interface CaseStudyPageProps {
   params: {
@@ -74,12 +75,13 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
 
           <section>
             <h2 className="text-xl sm:text-2xl font-bold mb-3 text-foreground">Technology</h2>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-4 sm:gap-6">
               {caseStudy.technology.split(", ").map((tech) => (
                 <span
                   key={tech}
-                  className="rounded border border-border/60 bg-surface px-3 py-1 text-xs sm:text-sm font-mono text-secondary"
+                  className="flex items-center gap-2 text-base sm:text-lg text-secondary"
                 >
+                  <TechIcon name={tech} className="w-5 h-5" />
                   {tech}
                 </span>
               ))}
