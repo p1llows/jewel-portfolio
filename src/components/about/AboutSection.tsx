@@ -78,9 +78,9 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
                 { title: "Manga & Anime", desc: "Shonen action through and through — Black Clover, Haikyuu, Blue Lock. Currently reading Kagurabachi." },
                 { title: "Cafe Hopping", desc: "Always hunting for a good spot to work — good coffee, good vibe, good wifi. Order's a Spanish latte." },
               ].map((hobby, idx) => (
-                <div key={idx} className="group rounded-lg border border-border/60 bg-surface/20 p-5 transition-all hover:bg-surface/60 hover:border-foreground/30">
-                  <div className="text-sm font-bold text-foreground mb-2 group-hover:translate-x-1 transition-transform">{hobby.title}</div>
-                  <p className="text-xs text-secondary leading-relaxed">{hobby.desc}</p>
+                <div key={idx} className="group rounded-lg border border-border/60 bg-surface/20 p-5 sm:p-6 transition-all hover:bg-surface/60 hover:border-foreground/30">
+                  <div className="text-base sm:text-lg font-bold text-foreground mb-2 group-hover:translate-x-1 transition-transform">{hobby.title}</div>
+                  <p className="text-sm sm:text-base text-secondary leading-relaxed">{hobby.desc}</p>
                 </div>
               ))}
             </div>
