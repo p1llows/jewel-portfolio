@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { experience } from "@/data/experience";
+import { motion } from "framer-motion";
 
 interface ExperienceSectionProps {
   isPreview?: boolean;
@@ -88,7 +91,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
               const isEven = index % 2 === 0;
 
               const CardContent = () => (
-                <div className="relative group">
+                <div className="relative p-5 -mx-5 sm:p-6 sm:-mx-6 rounded-xl border border-transparent">
                   {/* Date Badge */}
                   <div className="text-xs font-mono text-secondary mb-2 tracking-wider uppercase">
                     {job.period}
@@ -137,23 +140,56 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                 <div key={job.id} className="relative flex flex-col md:flex-row justify-between items-center w-full">
                   
                   {/* Node marker */}
-                  <div className="absolute left-[15px] md:left-1/2 top-8 md:top-1/2 transform -translate-x-1/2 md:-translate-y-1/2 w-4 h-4 rounded-full border-2 border-foreground bg-background z-10 flex items-center justify-center">
-                    {job.isCurrent && <div className="w-1.5 h-1.5 rounded-full bg-foreground" />}
+                  <div className="absolute left-[15px] md:left-1/2 top-8 md:top-1/2 transform -translate-x-1/2 md:-translate-y-1/2 z-10 flex items-center justify-center">
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.4, delay: 0.1 }}
+                      className="w-4 h-4 rounded-full border-2 border-foreground bg-background flex items-center justify-center"
+                    >
+                      {job.isCurrent && <div className="w-1.5 h-1.5 rounded-full bg-foreground" />}
+                    </motion.div>
                   </div>
 
                   {/* Left side on Desktop */}
                   <div className="hidden md:block w-[47%]">
-                    {isEven && <CardContent />}
+                    {isEven && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                      >
+                        <CardContent />
+                      </motion.div>
+                    )}
                   </div>
 
                   {/* Right side on Desktop */}
                   <div className="hidden md:block w-[47%]">
-                    {!isEven && <CardContent />}
+                    {!isEven && (
+                      <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                      >
+                        <CardContent />
+                      </motion.div>
+                    )}
                   </div>
 
                   {/* Mobile version (Always on right side of left-aligned line) */}
                   <div className="md:hidden w-full pl-10 pr-2">
-                    <CardContent />
+                    <motion.div
+                      initial={{ opacity: 0, x: 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                      <CardContent />
+                    </motion.div>
                   </div>
                 </div>
               );
