@@ -63,7 +63,7 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
             {"// PERSONAL PROJECTS"} ({personalProjects.length})
           </h3>
         </div>
-        <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
+        <div className="grid gap-6 sm:gap-8 grid-cols-1">
           {personalProjects.map((project, index) => (
             <ProjectCard
               key={project.id}
@@ -81,7 +81,7 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
             {"// PROFESSIONAL & EXPERIENCE PROJECTS"} ({professionalProjects.length})
           </h3>
         </div>
-        <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
+        <div className="grid gap-6 sm:gap-8 grid-cols-1">
           {professionalProjects.map((project, index) => (
             <ProjectCard
               key={project.id}
