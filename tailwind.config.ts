@@ -43,6 +43,16 @@ module.exports = {
         sans: ["Geist", "Space Grotesk", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
       },
+      animation: {
+        marquee: "marquee 80s linear infinite",
+        "marquee-fast": "marquee 40s linear infinite",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translate3d(0, 0, 0)" },
+          "100%": { transform: "translate3d(-50%, 0, 0)" },
+        },
+      },
     },
   },
   plugins: [],
