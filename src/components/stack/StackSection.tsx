@@ -5,11 +5,20 @@ import Link from "next/link";
 import { stackCategories } from "@/data/stack";
 import { TechIcon } from "@/components/stack/TechIcon";
 
-const techGroups = [
-  ["PHP", "Laravel", "React", "Docker", "Git"],
-  ["TypeScript", "Next.js", "MySQL", "Redis", "GitHub"],
-  ["JavaScript", "Tailwind CSS", "Python", "MariaDB", "Figma"],
-];
+const allUniqueTechs = Array.from(new Set(stackCategories.flatMap((c) => c.items)))
+  .filter((tech) => !tech.includes(" ") && tech !== "Wireframing" && tech !== "Prototyping");
+
+const techGroups: string[][] = [];
+
+for (let i = 0; i < allUniqueTechs.length; i += 5) {
+  const chunk = allUniqueTechs.slice(i, i + 5);
+  // Pad the last group with items from the beginning if it doesn't have exactly 5 elements
+  if (chunk.length < 5) {
+    const needed = 5 - chunk.length;
+    chunk.push(...allUniqueTechs.slice(0, needed));
+  }
+  techGroups.push(chunk);
+}
 
 interface StackSectionProps {
   isPreview?: boolean;
@@ -61,7 +70,8 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
               >
                 {techGroups.map((group, groupIndex) => {
                   const tech = group[slotIndex];
-                  const isActive = groupIndex === currentIndex;
+                  const activeIndex = currentIndex % techGroups.length;
+                  const isActive = groupIndex === activeIndex;
                   return (
                     <div
                       key={`${groupIndex}-${tech}`}
