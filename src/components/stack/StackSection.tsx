@@ -1,17 +1,34 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { stackCategories } from "@/data/stack";
 import { TechIcon } from "@/components/stack/TechIcon";
+
+const techGroups = [
+  ["PHP", "Laravel", "React", "Docker", "Git"],
+  ["TypeScript", "Next.js", "MySQL", "Redis", "GitHub"],
+  ["JavaScript", "Tailwind CSS", "Python", "MariaDB", "Figma"],
+];
 
 interface StackSectionProps {
   isPreview?: boolean;
 }
 
 export function StackSection({ isPreview = false }: StackSectionProps) {
-  const displayCategories = isPreview ? stackCategories.slice(0, 3) : stackCategories;
-  
-  const allTechs = Array.from(new Set(stackCategories.flatMap((c) => c.items))).slice(0, 35);
-  const row1Techs = allTechs.slice(0, Math.ceil(allTechs.length / 2));
-  const row2Techs = allTechs.slice(Math.ceil(allTechs.length / 2));
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    // Respect reduced motion preference
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mediaQuery.matches) return;
+
+    const intervalId = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % techGroups.length);
+    }, 2800); // ~2.8s per group
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
@@ -32,47 +49,37 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
       </div>
 
       {isPreview ? (
-        <div className="py-5 sm:py-7 overflow-hidden relative flex flex-col gap-4 sm:gap-6">
-          {/* Gradient edges for smooth fade */}
-          <div className="absolute inset-y-0 left-0 w-16 sm:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-16 sm:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-          
-          {/* Row 1 */}
-          <div className="flex animate-marquee hover:[animation-play-state:paused] whitespace-nowrap min-w-max items-center will-change-transform">
-            {[...Array(2)].map((_, i) => (
-              <div key={`r1-${i}`} className="flex gap-6 sm:gap-8 pr-6 sm:pr-8 items-center shrink-0">
-                {row1Techs.map((tech) => (
-                  <div
-                    key={`${i}-${tech}`}
-                    className="inline-flex items-center gap-2.5 sm:gap-3 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl text-sm sm:text-base md:text-lg font-mono text-secondary hover:text-foreground hover:bg-surface/60 transition-all duration-150 group/tech cursor-default"
-                  >
-                    <TechIcon
-                      name={tech}
-                      className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0 transition-transform group-hover/tech:scale-110"
-                    />
-                    <span>{tech}</span>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-
-          {/* Row 2 (Moves in opposite direction with the same speed) */}
-          <div className="flex animate-marquee hover:[animation-play-state:paused] whitespace-nowrap min-w-max items-center will-change-transform" style={{ animationDirection: 'reverse' }}>
-            {[...Array(2)].map((_, i) => (
-              <div key={`r2-${i}`} className="flex gap-6 sm:gap-8 pr-6 sm:pr-8 items-center shrink-0">
-                {row2Techs.map((tech) => (
-                  <div
-                    key={`${i}-${tech}`}
-                    className="inline-flex items-center gap-2.5 sm:gap-3 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl text-sm sm:text-base md:text-lg font-mono text-secondary hover:text-foreground hover:bg-surface/60 transition-all duration-150 group/tech cursor-default"
-                  >
-                    <TechIcon
-                      name={tech}
-                      className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0 transition-transform group-hover/tech:scale-110"
-                    />
-                    <span>{tech}</span>
-                  </div>
-                ))}
+        <div className="pt-10 sm:pt-14 md:pt-16 pb-2 sm:pb-4 md:pb-6 relative flex flex-col justify-center">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 sm:gap-4 md:gap-6 w-full max-w-5xl mx-auto">
+            {[0, 1, 2, 3, 4].map((slotIndex) => (
+              <div
+                key={slotIndex}
+                className={`relative flex items-center justify-center min-h-[5rem] sm:min-h-[6rem] md:min-h-[7rem]
+                  ${slotIndex >= 3 ? "hidden sm:flex" : ""}
+                  ${slotIndex >= 4 ? "hidden md:flex" : ""}
+                `}
+              >
+                {techGroups.map((group, groupIndex) => {
+                  const tech = group[slotIndex];
+                  const isActive = groupIndex === currentIndex;
+                  return (
+                    <div
+                      key={`${groupIndex}-${tech}`}
+                      className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ease-in-out
+                        ${isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"}
+                      `}
+                      aria-hidden={!isActive}
+                    >
+                      <div className="inline-flex items-center gap-3 sm:gap-4 md:gap-5 py-3 px-5 sm:py-4 sm:px-6 md:py-5 md:px-8 rounded-2xl text-base sm:text-lg md:text-xl lg:text-2xl font-mono text-secondary hover:text-foreground hover:bg-surface/60 transition-all duration-150 group/tech cursor-default">
+                        <TechIcon
+                          name={tech}
+                          className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 shrink-0 transition-transform group-hover/tech:scale-110"
+                        />
+                        <span className="whitespace-nowrap">{tech}</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             ))}
           </div>
