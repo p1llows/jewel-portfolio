@@ -57,12 +57,12 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
               </div>
 
               {/* Certificate Image Placeholder Container (Monochrome PRD theme) */}
-              <div className="h-44 sm:h-48 w-full rounded border border-border/50 bg-background/50 relative overflow-hidden mb-5 flex flex-col items-center justify-center p-4 transition-colors group-hover:border-border select-none">
+              <div className="h-44 sm:h-48 w-full rounded bg-surface/50 relative overflow-hidden mb-5 flex flex-col items-center justify-center p-4 transition-colors group-hover:bg-surface/80 select-none">
                 {/* Subtle Monochrome Tech Background Grid Lines */}
                 <div className="absolute inset-0 bg-[radial-gradient(#888888_1px,transparent_1px)] [background-size:12px_12px] opacity-10 dark:opacity-20 pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col items-center gap-2 text-center">
-                  <div className="p-3 rounded-md border border-border/70 bg-surface/80 text-foreground group-hover:scale-105 transition-transform duration-200 shadow-sm">
+                  <div className="p-3 rounded-full bg-surface text-foreground group-hover:scale-105 transition-transform duration-200 shadow-sm">
                     <Award className="w-6 h-6 text-foreground" />
                   </div>
                   <span className="text-[10px] font-mono text-muted uppercase tracking-widest mt-1">
@@ -89,7 +89,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
               {cert.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono text-secondary bg-background border border-border/50"
+                  className="px-2 py-0.5 rounded text-[11px] font-mono text-secondary bg-surface"
                 >
                   {tag}
                 </span>

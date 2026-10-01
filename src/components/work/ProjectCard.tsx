@@ -17,11 +17,11 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
               {index.toString().padStart(2, "0")}
             </span>
             {project.category === "professional" ? (
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium uppercase tracking-wider bg-surface text-secondary border border-border/60">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium uppercase tracking-wider bg-surface text-secondary">
                 {project.company || "Professional"}
               </span>
             ) : (
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-surface text-secondary border border-border/40">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-surface text-secondary">
                 Personal
               </span>
             )}
@@ -45,7 +45,7 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
               key={tech}
               title={tech}
               aria-label={tech}
-              className="p-1.5 rounded-md bg-background border border-border/50 text-secondary hover:text-foreground hover:border-foreground/40 transition-colors flex items-center justify-center"
+              className="p-1.5 rounded-md bg-surface text-secondary hover:text-foreground hover:bg-surface/80 transition-colors flex items-center justify-center"
             >
               <TechIcon name={tech} className="w-4 h-4" />
             </div>

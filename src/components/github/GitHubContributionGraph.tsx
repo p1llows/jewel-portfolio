@@ -110,11 +110,11 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
 
         {/* Streaks & Stats */}
         <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
-          <div className="px-3 py-1.5 rounded bg-background border border-border/50">
+          <div className="px-3 py-1.5 rounded bg-surface">
             <span className="text-secondary mr-1.5 uppercase text-[10px]">CURRENT STREAK:</span>
             <span className="font-bold text-foreground">{data.streaks.currentStreak} {data.streaks.currentStreak === 1 ? "day" : "days"}</span>
           </div>
-          <div className="px-3 py-1.5 rounded bg-background border border-border/50">
+          <div className="px-3 py-1.5 rounded bg-surface">
             <span className="text-secondary mr-1.5 uppercase text-[10px]">LONGEST STREAK:</span>
             <span className="font-bold text-foreground">{data.streaks.longestStreak} {data.streaks.longestStreak === 1 ? "day" : "days"}</span>
           </div>
