@@ -24,7 +24,7 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
       <div className="mb-8 sm:mb-12 border-b border-border/60 pb-6">
-        <div className="text-xs font-mono text-secondary mb-3 uppercase tracking-widest">
+        <div className="text-xs sm:text-sm font-mono font-semibold text-secondary mb-3 uppercase tracking-widest">
           02 / CASE STUDY
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight mb-3 text-foreground">

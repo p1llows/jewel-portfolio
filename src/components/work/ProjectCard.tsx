@@ -17,16 +17,16 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
               {index.toString().padStart(2, "0")}
             </span>
             {project.category === "professional" ? (
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium uppercase tracking-wider bg-surface text-secondary">
+              <span className="px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-wider bg-surface text-foreground/90">
                 {project.company || "Professional"}
               </span>
             ) : (
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-surface text-secondary">
+              <span className="px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-wider bg-surface text-foreground/90">
                 Personal
               </span>
             )}
           </div>
-          <span className="text-[11px] font-mono uppercase tracking-wider text-secondary/80">
+          <span className="text-xs font-mono font-medium tracking-normal text-secondary">
             {project.subtitle}
           </span>
         </div>

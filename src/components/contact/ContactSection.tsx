@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Mail, Linkedin, Facebook, MessageSquare, Send } from "lucide-react";
+import { Mail, Linkedin, Facebook } from "lucide-react";
 
 interface ContactSectionProps {
   isPreview?: boolean;
@@ -9,15 +8,15 @@ export function ContactSection({ isPreview = false }: ContactSectionProps) {
   return (
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
       <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60">
-        <div className="text-xs font-mono text-secondary tracking-widest uppercase mb-2">08 / CONTACT</div>
+        <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">08 / CONTACT</div>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">GET IN TOUCH</h2>
       </div>
 
       <div className="grid gap-10 sm:gap-12 lg:grid-cols-12 items-start">
         <div className="lg:col-span-5 space-y-6 sm:space-y-8 pr-0 lg:pr-4 pt-2">
           <div>
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground mb-5 uppercase">
-              HAVE A PROJECT? LET&apos;S TALK.
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground mb-5">
+              Have a project? Let&apos;s talk.
             </h3>
             <div className="border-l-2 border-border/80 pl-4 sm:pl-5 py-1 space-y-4">
               <p className="text-sm sm:text-base md:text-lg text-secondary leading-relaxed">

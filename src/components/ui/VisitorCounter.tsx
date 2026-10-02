@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Eye } from "lucide-react";
 
 export function VisitorCounter() {
   const [count, setCount] = useState<number>(0);
@@ -30,7 +29,7 @@ export function VisitorCounter() {
 
   return (
     <div className="flex flex-col items-end text-right font-mono select-none pr-2.5">
-      <span className="text-[10px] tracking-wider text-secondary flex items-center gap-1 uppercase font-medium">
+      <span className="text-xs tracking-wider text-secondary flex items-center gap-1 uppercase font-medium">
         VISITS
       </span>
       <span className="text-xs font-bold text-foreground font-mono tracking-tight mt-0.5">

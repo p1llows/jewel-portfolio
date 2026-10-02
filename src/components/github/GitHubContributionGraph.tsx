@@ -109,13 +109,14 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
         </div>
 
         {/* Streaks & Stats */}
-        <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
-          <div className="px-3 py-1.5 rounded bg-surface">
-            <span className="text-secondary mr-1.5 uppercase text-[10px]">CURRENT STREAK:</span>
+        <div className="flex flex-wrap items-center gap-4 text-xs font-mono">
+          <div className="flex items-center gap-1.5">
+            <span className="text-secondary font-medium">Current Streak:</span>
             <span className="font-bold text-foreground">{data.streaks.currentStreak} {data.streaks.currentStreak === 1 ? "day" : "days"}</span>
           </div>
-          <div className="px-3 py-1.5 rounded bg-surface">
-            <span className="text-secondary mr-1.5 uppercase text-[10px]">LONGEST STREAK:</span>
+          <span className="text-border/60 hidden sm:inline">•</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-secondary font-medium">Longest Streak:</span>
             <span className="font-bold text-foreground">{data.streaks.longestStreak} {data.streaks.longestStreak === 1 ? "day" : "days"}</span>
           </div>
         </div>
@@ -127,7 +128,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
           {/* Month Headers aligned with Week columns */}
           <div className="flex gap-2 mb-2">
             <div className="w-6 shrink-0" />
-            <div className="flex gap-1 text-[10px] font-mono text-secondary h-4 relative flex-1">
+            <div className="flex gap-1 text-xs font-mono text-secondary h-4 relative flex-1">
               {data.weeks.map((_, weekIdx) => {
                 const month = data.months.find((m) => m.firstWeekIndex === weekIdx);
                 return (
@@ -146,7 +147,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
           {/* Grid with Day Labels */}
           <div className="flex gap-2">
             {/* Day Labels Column */}
-            <div className="flex flex-col justify-between text-[10px] font-mono text-secondary py-0.5 select-none w-6 shrink-0">
+            <div className="flex flex-col justify-between text-xs font-mono text-secondary py-0.5 select-none w-7 shrink-0">
               <span></span>
               <span>Mon</span>
               <span></span>
@@ -185,7 +186,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
           </div>
 
           {/* Footer Legend */}
-          <div className="flex items-center justify-between text-[11px] font-mono text-secondary mt-5 pt-3 border-t border-border/30">
+          <div className="flex items-center justify-between text-xs font-mono text-secondary mt-5 pt-3 border-t border-border/30">
             <span>Learn how GitHub counts contributions</span>
             <div className="flex items-center gap-1.5">
               <span>Less</span>

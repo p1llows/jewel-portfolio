@@ -15,7 +15,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
       {/* Header */}
       <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60">
-        <div className="text-xs font-mono text-secondary tracking-widest uppercase mb-2">
+        <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">
           03 / EXPERIENCE
         </div>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
@@ -54,8 +54,8 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
           </div>
 
           <div className="lg:col-span-7 rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-6 space-y-4 sm:space-y-6">
-            <div className="text-xs font-mono text-secondary tracking-wider uppercase border-b border-border/40 pb-3">
-              KEY RESPONSIBILITIES & DELIVERABLES
+            <div className="text-xs font-mono font-medium text-secondary tracking-wide border-b border-border/40 pb-3">
+              Key Responsibilities & Deliverables
             </div>
             <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-secondary leading-relaxed">
               {latestJob.bullets.map((bullet, idx) => (
@@ -71,7 +71,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                 {latestJob.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-[11px] sm:text-xs font-mono text-secondary bg-surface"
+                    className="px-2.5 py-1 rounded text-xs font-mono text-secondary bg-surface"
                   >
                     {tech}
                   </span>
@@ -126,7 +126,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                       {job.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="px-2 py-0.5 rounded text-[11px] font-mono text-secondary bg-surface"
+                          className="px-2.5 py-1 rounded text-xs font-mono text-secondary bg-surface"
                         >
                           {tech}
                         </span>

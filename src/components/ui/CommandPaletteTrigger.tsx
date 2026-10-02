@@ -30,7 +30,7 @@ export function CommandPaletteTrigger() {
           <span className="font-mono text-xs text-foreground font-semibold">/</span>
           <span>Search...</span>
         </span>
-        <kbd className="font-mono text-[10px] text-muted px-1.5 py-0.5 rounded border border-border bg-surface">
+        <kbd className="font-mono text-xs text-secondary px-1.5 py-0.5 rounded border border-border bg-surface font-medium">
           ⌘K
         </kbd>
       </button>

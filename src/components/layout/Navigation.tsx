@@ -77,13 +77,13 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
           <div className="pt-6 border-t border-border flex flex-col gap-4 mt-8">
             {/* Live Status Indicator */}
             <div className="p-3 rounded-lg border border-border/60 bg-surface/50">
-              <span className="block text-[10px] font-mono text-muted tracking-wider uppercase mb-1 font-medium">
+              <span className="block text-xs font-mono text-secondary tracking-wider uppercase mb-1 font-medium">
                 STATUS
               </span>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
                 <span className="text-xs font-mono font-semibold tracking-wider text-foreground">
                   AVAILABLE FOR WORK
@@ -105,7 +105,7 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
         <div className="flex flex-col gap-6">
           <div className="px-3 pb-6 border-b border-border/60">
             <h1 className="text-2xl font-black tracking-tight text-foreground">JEWEL</h1>
-            <p className="text-[11px] font-mono text-secondary tracking-widest uppercase">RAMIREZ</p>
+            <p className="text-xs font-mono text-secondary tracking-widest uppercase">RAMIREZ</p>
           </div>
 
           <nav>
@@ -126,13 +126,13 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
         <div className="pt-3 border-t border-border flex flex-col gap-3">
           {/* Live Status Indicator */}
           <div className="pb-3 px-3 border-b border-border/60">
-            <span className="block text-[10px] font-mono text-muted tracking-wider uppercase mb-1 font-medium">
+            <span className="block text-xs font-mono text-secondary tracking-wider uppercase mb-1 font-medium">
               STATUS
             </span>
             <div className="flex items-center gap-2 px-0.5">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
               <span className="text-xs font-mono font-semibold tracking-wider text-foreground">
                 AVAILABLE FOR WORK

@@ -56,7 +56,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="mb-3 sm:mb-4 text-xs font-mono text-secondary tracking-wider flex items-center gap-2">
+              <div className="mb-3 sm:mb-4 text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-foreground" />
                 01 / HOME
               </div>

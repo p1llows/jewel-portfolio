@@ -14,7 +14,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
       {/* Page Section Header matching PRD design system */}
       <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60 flex items-end justify-between">
         <div>
-          <div className="text-xs font-mono text-secondary tracking-widest uppercase mb-2">
+          <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">
             06 / CERTIFICATIONS
           </div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
@@ -51,7 +51,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
                 <span className="text-xs font-mono text-secondary">
                   {(index + 1).toString().padStart(2, "0")}
                 </span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-secondary/80">
+                <span className="text-xs font-mono font-medium tracking-wider text-secondary">
                   {cert.year}
                 </span>
               </div>
@@ -65,7 +65,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
                   <div className="p-3 rounded-full bg-surface text-foreground group-hover:scale-105 transition-transform duration-200 shadow-sm">
                     <Award className="w-6 h-6 text-foreground" />
                   </div>
-                  <span className="text-[10px] font-mono text-muted uppercase tracking-widest mt-1">
+                  <span className="text-xs font-mono text-secondary uppercase tracking-widest mt-1">
                     CERTIFICATE PLACEHOLDER
                   </span>
                 </div>
@@ -89,7 +89,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
               {cert.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono text-secondary bg-surface"
+                  className="px-2.5 py-1 rounded text-xs font-mono text-secondary bg-surface"
                 >
                   {tag}
                 </span>

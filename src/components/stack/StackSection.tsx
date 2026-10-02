@@ -43,7 +43,7 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
       <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60 flex items-end justify-between">
         <div>
-          <div className="text-xs font-mono text-secondary tracking-widest uppercase mb-2">05 / STACK</div>
+          <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">05 / STACK</div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">TECH STACK</h2>
         </div>
         {isPreview && (
@@ -106,8 +106,8 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
                   <span>0{index + 1} /</span>
                   <span className="text-foreground">{category.title}</span>
                 </div>
-                <div className="text-[10px] font-mono text-muted uppercase">
-                  {category.items.length} TECHNOLOGIES
+                <div className="text-xs font-mono text-secondary uppercase tracking-wider">
+                  {category.items.length} Technologies
                 </div>
               </div>
 

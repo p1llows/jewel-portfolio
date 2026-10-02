@@ -8,7 +8,7 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
   return (
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
       <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60">
-        <div className="text-xs font-mono text-secondary tracking-widest uppercase mb-2">04 / ABOUT</div>
+        <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">04 / ABOUT</div>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">I AM JEWEL RAMIREZ.</h2>
       </div>
 
@@ -43,20 +43,26 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
 
         <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-5 transition-colors hover:border-foreground/30">
-            <div className="mb-1 text-[11px] font-mono text-secondary tracking-wider uppercase">LOCATION</div>
+            <div className="mb-1 text-xs font-mono text-secondary tracking-wider uppercase">LOCATION</div>
             <div className="text-sm font-semibold text-foreground">Baguio City, PH</div>
           </div>
           <div className="rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-5 transition-colors hover:border-foreground/30">
-            <div className="mb-1 text-[11px] font-mono text-secondary tracking-wider uppercase">DEGREE</div>
+            <div className="mb-1 text-xs font-mono text-secondary tracking-wider uppercase">DEGREE</div>
             <div className="text-sm font-semibold text-foreground">BS Computer Science</div>
           </div>
           <div className="rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-5 transition-colors hover:border-foreground/30">
-            <div className="mb-1 text-[11px] font-mono text-secondary tracking-wider uppercase">CERTIFICATION</div>
+            <div className="mb-1 text-xs font-mono text-secondary tracking-wider uppercase">CERTIFICATION</div>
             <div className="text-sm font-semibold text-foreground">ITPEC IP Passport</div>
           </div>
           <div className="rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-5 transition-colors hover:border-foreground/30">
-            <div className="mb-1 text-[11px] font-mono text-secondary tracking-wider uppercase">AVAILABILITY</div>
-            <div className="text-sm font-semibold text-emerald-500">AVAILABLE FOR WORK</div>
+            <div className="mb-1 text-xs font-mono text-secondary tracking-wider uppercase">AVAILABILITY</div>
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-sm font-semibold text-foreground">Available for Work</span>
+            </div>
           </div>
         </div>
       </div>
