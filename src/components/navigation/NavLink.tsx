@@ -13,11 +13,11 @@ export function NavLink({ href, label, isActive, onClick }: NavLinkProps) {
     <li className="relative" onClick={onClick}>
       {/* Primary Left Bar Indicator */}
       {isActive && (
-        <span className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-5 bg-foreground/70 rounded-r-full shadow-xs" />
+        <span className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-5 bg-foreground rounded-none" />
       )}
       <Link
         href={href}
-        className={`flex items-center justify-between py-2.5 px-3 rounded-md text-sm tracking-wide transition-all duration-200 ${
+        className={`flex items-center justify-between py-2.5 px-3 rounded-none text-sm tracking-wide transition-all duration-200 ${
           isActive
             ? "text-foreground font-bold bg-foreground/10 translate-x-1"
             : "text-secondary hover:text-foreground hover:translate-x-1"
@@ -26,7 +26,7 @@ export function NavLink({ href, label, isActive, onClick }: NavLinkProps) {
         <span className="flex items-center gap-2">
           {/* Secondary Minimal Dot Indicator */}
           {isActive && (
-            <span className="w-1.5 h-1.5 rounded-full bg-foreground/70 shrink-0" />
+            <span className="w-1.5 h-1.5 rounded-none bg-foreground shrink-0" />
           )}
           {label}
         </span>

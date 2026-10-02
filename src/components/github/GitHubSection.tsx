@@ -1,5 +1,6 @@
 import { GitHubContributionGraph } from "@/components/github/GitHubContributionGraph";
 import { Card } from "@/components/ui/Card";
+import { Github } from "lucide-react";
 
 export function GitHubSection() {
   return (
@@ -33,20 +34,29 @@ export function GitHubSection() {
             </div>
           </div>
 
-          <Card className="lg:col-span-7 p-4 sm:p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xs text-secondary">HANDLE:</span>
-                <span className="font-mono text-sm font-bold text-foreground">@p1llows</span>
+          <Card className="lg:col-span-7 flex flex-col justify-between overflow-hidden">
+            <div>
+              {/* Header Strip */}
+              <div className="bg-background border-b border-border px-4 sm:px-6 py-3.5 flex items-center justify-between">
+                <div className="flex items-center gap-2 font-mono text-xs">
+                  <span className="text-secondary">HANDLE:</span>
+                  <span className="font-bold text-foreground">@p1llows</span>
+                </div>
+                <Github className="w-4 h-4 text-secondary" />
+              </div>
+
+              {/* Body */}
+              <div className="p-4 sm:p-6">
+                <p className="text-xs sm:text-sm text-secondary leading-relaxed">
+                  Building software with Next.js, React, TypeScript, Three.js, Laravel, PHP, and Python. Open to technical collaborations and scholarly software development.
+                </p>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-secondary leading-relaxed">
-              Building software with Next.js, React, TypeScript, Three.js, Laravel, PHP, and Python. Open to technical collaborations and scholarly software development.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-secondary pt-3 border-t border-border">
+            {/* Footer Strip */}
+            <div className="px-4 sm:px-6 py-3 border-t border-border flex items-center justify-between font-mono text-xs text-secondary bg-surface">
               <span>REPOS: PUBLIC & RESEARCH</span>
+              <span className="hidden sm:inline-block text-muted">STATUS: ACTIVE</span>
             </div>
           </Card>
         </div>

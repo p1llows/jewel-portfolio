@@ -147,7 +147,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                   <ul className="space-y-2.5 text-xs sm:text-sm text-secondary leading-relaxed">
                     {job.bullets.map((bullet, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
-                        <span className="w-1.5 h-1.5 bg-secondary shrink-0 mt-2 rounded-none" />
+                        <span className="w-1.5 h-1.5 bg-foreground shrink-0 mt-2 rounded-none" />
                         <span>{bullet}</span>
                       </li>
                     ))}
@@ -172,9 +172,9 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true, margin: "-50px" }}
                       transition={{ duration: 0.4, delay: 0.1 }}
-                      className="w-4 h-4 rounded-full border-2 border-foreground bg-background flex items-center justify-center"
+                      className="w-3.5 h-3.5 rounded-none border-2 border-foreground bg-background flex items-center justify-center"
                     >
-                      {job.isCurrent && <div className="w-1.5 h-1.5 rounded-full bg-foreground" />}
+                      {job.isCurrent && <div className="w-1.5 h-1.5 rounded-none bg-foreground" />}
                     </motion.div>
                   </div>
 
