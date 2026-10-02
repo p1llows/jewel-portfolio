@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { experience } from "@/data/experience";
 import { motion } from "framer-motion";
+import { Card } from "@/components/ui/Card";
 
 interface ExperienceSectionProps {
   isPreview?: boolean;
@@ -53,87 +54,112 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
             </div>
           </div>
 
-          <div className="lg:col-span-7 rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-6 space-y-4 sm:space-y-6">
-            <div className="text-xs font-mono font-medium text-secondary tracking-wide border-b border-border/40 pb-3">
-              Key Responsibilities & Deliverables
-            </div>
-            <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-secondary leading-relaxed">
-              {latestJob.bullets.map((bullet, idx) => (
-                <li key={idx} className="flex items-start gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-secondary/50 shrink-0 mt-2" />
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
+          <Card className="lg:col-span-7 flex flex-col justify-between overflow-hidden">
+            <div>
+              {/* Header Strip */}
+              <div className="bg-background border-b border-border px-4 py-3 text-xs font-mono font-medium text-foreground tracking-wider uppercase">
+                KEY RESPONSIBILITIES & DELIVERABLES
+              </div>
 
-            {latestJob.technologies && (
-              <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 border-t border-border/40">
-                {latestJob.technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2.5 py-1 rounded text-xs font-mono text-secondary bg-surface"
+              {/* 5 Structured Rows */}
+              <div className="divide-y divide-border">
+                {[
+                  {
+                    lead: "Ticket comments and timeline:",
+                    detail: "threaded comments, internal notes, public replies, and permissions on Resolve.",
+                  },
+                  {
+                    lead: "REST API and docs:",
+                    detail: "ticket creation endpoints and API documentation.",
+                  },
+                  {
+                    lead: "Telegram integration:",
+                    detail: "ticket creation, comments, and external users from Telegram into Resolve.",
+                  },
+                  {
+                    lead: "Attachments:",
+                    detail: "pasted images, multi-file upload, and storage integration.",
+                  },
+                  {
+                    lead: "Production testing:",
+                    detail: "verified features live and reported workflow improvements.",
+                  },
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="grid grid-cols-[auto_1fr] gap-4 p-4 hover:bg-background transition-colors group/row"
                   >
-                    {tech}
-                  </span>
+                    <span className="font-mono text-xs text-muted group-hover/row:text-foreground font-medium">
+                      {(idx + 1).toString().padStart(2, "0")}
+                    </span>
+                    <div>
+                      <div className="text-[13px] font-medium text-foreground mb-0.5">
+                        {item.lead}
+                      </div>
+                      <div className="text-xs text-secondary leading-relaxed">
+                        {item.detail}
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
+            </div>
+
+            {/* Stack Line */}
+            {latestJob.technologies && (
+              <div className="p-4 border-t border-border flex flex-wrap items-center gap-1.5 font-mono text-xs text-secondary bg-surface">
+                {latestJob.technologies.join(" / ")}
+              </div>
             )}
-          </div>
+          </Card>
         </div>
       ) : (
         /* Dedicated Page Timeline View (/experience) */
         <div className="relative max-w-5xl mx-auto mt-4 sm:mt-10">
           {/* Central Line - Left on mobile, Center on desktop */}
-          <div className="absolute left-[15px] md:left-1/2 top-0 bottom-0 w-px bg-border/70 md:-translate-x-1/2" />
+          <div className="absolute left-[15px] md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-1/2" />
 
           <div className="space-y-8 sm:space-y-12">
             {experience.map((job, index) => {
               const isEven = index % 2 === 0;
 
               const CardContent = () => (
-                <div className="relative p-5 -mx-5 sm:p-6 sm:-mx-6 rounded-xl border border-transparent">
+                <Card className="p-5 sm:p-6">
                   {/* Date Badge */}
                   <div className="text-xs font-mono text-secondary mb-2 tracking-wider uppercase">
                     {job.period}
                   </div>
 
                   {/* Role Header */}
-                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+                  <h3 className="text-lg sm:text-xl font-medium tracking-tight text-foreground">
                     {job.role}
                   </h3>
 
                   {/* Company Subtitle */}
-                  <div className="text-sm font-semibold text-secondary mt-1 mb-3">
+                  <div className="text-sm font-medium text-secondary mt-1 mb-3">
                     {job.company}
                   </div>
 
                   {/* Sub-divider */}
-                  <div className="w-full border-b border-border/40 mb-4" />
+                  <div className="w-full border-b border-border mb-4" />
 
                   {/* Bullet Points */}
-                  <ul className="space-y-2.5 text-sm text-secondary leading-relaxed">
+                  <ul className="space-y-2.5 text-xs sm:text-sm text-secondary leading-relaxed">
                     {job.bullets.map((bullet, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-secondary/50 shrink-0 mt-2" />
+                        <span className="w-1.5 h-1.5 bg-secondary shrink-0 mt-2 rounded-none" />
                         <span>{bullet}</span>
                       </li>
                     ))}
                   </ul>
 
-                  {/* Tech Badges */}
+                  {/* Tech Line */}
                   {job.technologies && (
-                    <div className="flex flex-wrap gap-2 mt-5 pt-1">
-                      {job.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2.5 py-1 rounded text-xs font-mono text-secondary bg-surface"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                    <div className="flex flex-wrap items-center gap-1.5 mt-5 pt-3 border-t border-border text-xs font-mono text-secondary">
+                      {job.technologies.join(" / ")}
                     </div>
                   )}
-                </div>
+                </Card>
               );
 
               return (

@@ -1,4 +1,8 @@
+"use client";
+
+import Link from "next/link";
 import { Project } from "@/data/projects";
+import { Card, CardIndex } from "@/components/ui/Card";
 import { TechIcon } from "@/components/stack/TechIcon";
 
 interface ProjectCardProps {
@@ -8,44 +12,44 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index, className = "" }: ProjectCardProps) {
+  const categoryLabel = project.category === "professional" 
+    ? (project.company ? project.company.toUpperCase() : "PROFESSIONAL")
+    : "PERSONAL";
+
   return (
-    <div className={`group rounded-lg border border-border/60 bg-surface/40 p-6 transition-all duration-200 hover:border-foreground/30 hover:bg-surface/70 flex flex-col justify-between ${className}`}>
-      <div>
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-secondary">
-              {index.toString().padStart(2, "0")}
-            </span>
-            {project.category === "professional" ? (
-              <span className="px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-wider bg-surface text-foreground/90">
-                {project.company || "Professional"}
-              </span>
-            ) : (
-              <span className="px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-wider bg-surface text-foreground/90">
-                Personal
-              </span>
-            )}
-          </div>
-          <span className="text-xs font-mono font-medium tracking-normal text-secondary">
-            {project.subtitle}
+    <Card className={`p-5 sm:p-6 flex flex-col justify-between h-full ${className}`}>
+      <div className="flex flex-col flex-1">
+        {/* Header Row: Index (left), Tag as plain mono text in secondary (right) */}
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <CardIndex index={index} />
+          <span className="text-xs font-mono text-secondary tracking-wider">
+            {categoryLabel}
           </span>
         </div>
 
-        <h3 className="text-xl font-bold tracking-tight text-foreground group-hover:text-foreground transition-colors mb-2">
+        {/* Eyebrow: Short subtitle in mono secondary */}
+        <div className="text-xs font-mono text-secondary mb-2 tracking-normal">
+          {project.subtitle}
+        </div>
+
+        {/* Title: 18px, weight 500 */}
+        <h3 className="text-[18px] font-medium text-foreground tracking-tight mb-2">
           {project.title}
         </h3>
 
-        <p className="text-sm text-secondary leading-relaxed mb-6">
+        {/* Description: 12px, secondary, line-height ~1.6, max 2-3 lines */}
+        <p className="text-xs text-secondary leading-relaxed mb-4 line-clamp-3">
           {project.description}
         </p>
 
-        <div className="flex flex-wrap items-center gap-2 mb-6">
+        {/* Tech Icons Row: Tech icons with dashed top border */}
+        <div className="mt-auto pt-3 pb-3 border-t border-dashed border-border flex flex-wrap items-center gap-2.5">
           {project.technologies.map((tech) => (
             <div
               key={tech}
               title={tech}
               aria-label={tech}
-              className="p-1.5 rounded-md bg-surface text-secondary hover:text-foreground hover:bg-surface/80 transition-colors flex items-center justify-center"
+              className="text-secondary hover:text-foreground transition-colors flex items-center justify-center"
             >
               <TechIcon name={tech} className="w-4 h-4" />
             </div>
@@ -53,36 +57,37 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-border/40 text-xs font-mono">
-        <a
+      {/* Footer: solid top border, CASE STUDY on left (letter spacing widens on hover), PREVIEW/REPO in muted on right */}
+      <div className="pt-3 border-t border-border flex items-center justify-between text-xs font-mono">
+        <Link
           href={`/work/${project.id}`}
-          className="text-foreground font-semibold hover:text-secondary transition-colors"
+          className="text-foreground font-medium tracking-normal group-hover:tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
         >
           CASE STUDY →
-        </a>
-        {project.previewUrl && (
-          <a
-            href={project.previewUrl}
-            className="text-secondary hover:text-foreground transition-colors ml-auto"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            PREVIEW ↗
-          </a>
-        )}
-        {project.githubUrl && (
-          <a
-            href={project.githubUrl}
-            className="group/link flex items-center gap-1 text-secondary hover:text-foreground transition-colors"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>REPO</span>
-            <span className="group-hover/link:translate-x-0.5 transition-transform">↗</span>
-          </a>
-        )}
+        </Link>
+        <div className="flex items-center gap-3 text-muted">
+          {project.previewUrl && (
+            <a
+              href={project.previewUrl}
+              className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              PREVIEW ↗
+            </a>
+          )}
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              REPO ↗
+            </a>
+          )}
+        </div>
       </div>
-    </div>
+    </Card>
   );
 }
-

@@ -1,4 +1,5 @@
 import { GitHubContributionGraph } from "@/components/github/GitHubContributionGraph";
+import { Card } from "@/components/ui/Card";
 
 export function GitHubSection() {
   return (
@@ -32,22 +33,22 @@ export function GitHubSection() {
             </div>
           </div>
 
-          <div className="lg:col-span-7 rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-6 transition-all hover:border-foreground/30 space-y-4">
-            <div className="flex items-center justify-between border-b border-border/40 pb-3">
+          <Card className="lg:col-span-7 p-4 sm:p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-xs text-secondary uppercase">HANDLE:</span>
+                <span className="font-mono text-xs text-secondary">HANDLE:</span>
                 <span className="font-mono text-sm font-bold text-foreground">@p1llows</span>
               </div>
             </div>
 
-            <p className="text-sm text-secondary leading-relaxed">
+            <p className="text-xs sm:text-sm text-secondary leading-relaxed">
               Building software with Next.js, React, TypeScript, Three.js, Laravel, PHP, and Python. Open to technical collaborations and scholarly software development.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-secondary pt-3 border-t border-border/40">
+            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-secondary pt-3 border-t border-border">
               <span>REPOS: PUBLIC & RESEARCH</span>
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Contribution Graph Section */}

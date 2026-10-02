@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { GitHubContributionData, ContributionDay } from "@/types/github";
+import { Card } from "@/components/ui/Card";
 
 interface GitHubContributionGraphProps {
   username?: string;
@@ -36,18 +37,19 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
     loadData();
   }, [username]);
 
+  // Strict PRD monochrome grayscale color tokens for levels 0-4
   const getLevelBg = (level: number) => {
     switch (level) {
       case 1:
-        return "bg-[#cccccc] dark:bg-[#333333] border border-[#bbbbbb] dark:border-[#444444]";
+        return "bg-[#C4C4BF] dark:bg-[#3E3E3B]";
       case 2:
-        return "bg-[#999999] dark:bg-[#555555] border border-[#888888] dark:border-[#666666]";
+        return "bg-[#999994] dark:bg-[#5E5E5A]";
       case 3:
-        return "bg-[#555555] dark:bg-[#999999] border border-[#444444] dark:border-[#aaaaaa]";
+        return "bg-[#626260] dark:bg-[#8C8C87]";
       case 4:
-        return "bg-[#171717] dark:bg-[#f1f1ed] border border-[#000000] dark:border-[#ffffff]";
+        return "bg-foreground";
       default:
-        return "bg-[#e5e5e0] dark:bg-[#1f1f1f] border border-[#d2d2ce] dark:border-[#30302d]";
+        return "bg-border";
     }
   };
 
@@ -55,7 +57,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
     if (!dateStr) return "";
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", {
-      month: "long",
+      month: "short",
       day: "numeric",
       year: "numeric",
     });
@@ -64,22 +66,22 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
   // Loading State
   if (loading) {
     return (
-      <div className="w-full rounded-lg border border-border/60 bg-surface/40 p-6 sm:p-8 text-center font-mono">
+      <Card className="w-full p-6 sm:p-8 text-center font-mono">
         <div className="flex items-center justify-center gap-3">
-          <span className="w-2 h-2 rounded-full bg-foreground animate-ping" />
+          <span className="w-2 h-2 bg-foreground animate-ping rounded-none" />
           <span className="text-xs text-secondary tracking-widest uppercase">
             Loading GitHub activity...
           </span>
         </div>
-      </div>
+      </Card>
     );
   }
 
-  // Error State (No fake fallback rendered)
+  // Error State
   if (error || !data) {
     return (
-      <div className="w-full rounded-lg border border-border/60 bg-surface/40 p-6 sm:p-8 text-center font-mono">
-        <div className="text-xs text-red-500 dark:text-red-400 tracking-wider uppercase mb-2">
+      <Card className="w-full p-6 sm:p-8 text-center font-mono">
+        <div className="text-xs text-foreground tracking-wider uppercase mb-2">
           Unable to load GitHub activity.
         </div>
         <p className="text-xs text-secondary mb-4 max-w-sm mx-auto">
@@ -87,137 +89,157 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="px-3 py-1 text-[11px] font-mono rounded border border-border bg-surface hover:text-foreground transition-colors"
+          className="px-3 py-1 text-xs font-mono rounded-none border border-border bg-background text-foreground hover:bg-surface transition-colors"
         >
           RETRY
         </button>
-      </div>
+      </Card>
     );
   }
 
   return (
-    <div className="w-full rounded-lg border border-border/60 bg-surface/40 p-5 sm:p-6 font-sans space-y-6">
-      {/* Top Header & Summary Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-border/40">
-        <div>
-          <h3 className="text-sm font-semibold text-foreground tracking-tight">
-            <span className="font-bold text-base">{data.totalContributions}</span> contributions in the last year
-          </h3>
-          <p className="text-xs font-mono text-secondary">
-            USER: @{data.username}
-          </p>
+    <Card className="w-full font-mono overflow-hidden">
+      {/* Header Strip: HANDLE @p1llows (left) | VIEW PROFILE -> (right) */}
+      <div className="bg-background border-b border-border px-4 py-3 flex items-center justify-between text-xs">
+        <div className="font-medium text-foreground">
+          HANDLE: <span className="font-bold">@{data.username}</span>
         </div>
+        <a
+          href={`https://github.com/${data.username}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-secondary hover:text-foreground transition-colors font-medium"
+        >
+          VIEW PROFILE →
+        </a>
+      </div>
 
-        {/* Streaks & Stats */}
-        <div className="flex flex-wrap items-center gap-4 text-xs font-mono">
-          <div className="flex items-center gap-1.5">
-            <span className="text-secondary font-medium">Current Streak:</span>
-            <span className="font-bold text-foreground">{data.streaks.currentStreak} {data.streaks.currentStreak === 1 ? "day" : "days"}</span>
+      {/* Stats Row: 3 equal cells separated by vertical 1px hairlines */}
+      <div className="grid grid-cols-3 border-b border-border bg-background/40 divide-x divide-border text-center sm:text-left">
+        <div className="p-4 sm:p-5">
+          <div className="text-[11px] text-secondary uppercase tracking-wider mb-1 font-medium">
+            CONTRIBUTIONS
           </div>
-          <span className="text-border/60 hidden sm:inline">•</span>
-          <div className="flex items-center gap-1.5">
-            <span className="text-secondary font-medium">Longest Streak:</span>
-            <span className="font-bold text-foreground">{data.streaks.longestStreak} {data.streaks.longestStreak === 1 ? "day" : "days"}</span>
+          <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">
+            {data.totalContributions}
+          </div>
+        </div>
+        <div className="p-4 sm:p-5">
+          <div className="text-[11px] text-secondary uppercase tracking-wider mb-1 font-medium">
+            CURRENT STREAK
+          </div>
+          <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">
+            {data.streaks.currentStreak} {data.streaks.currentStreak === 1 ? "day" : "days"}
+          </div>
+        </div>
+        <div className="p-4 sm:p-5">
+          <div className="text-[11px] text-secondary uppercase tracking-wider mb-1 font-medium">
+            LONGEST STREAK
+          </div>
+          <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">
+            {data.streaks.longestStreak} {data.streaks.longestStreak === 1 ? "day" : "days"}
           </div>
         </div>
       </div>
 
-      {/* Contribution Calendar Heatmap Container */}
-      <div className="relative overflow-x-auto pb-2 scrollbar-thin">
-        <div className="min-w-[850px] select-none">
-          {/* Month Headers aligned with Week columns */}
-          <div className="flex gap-2 mb-2">
-            <div className="w-6 shrink-0" />
-            <div className="flex gap-1 text-xs font-mono text-secondary h-4 relative flex-1">
-              {data.weeks.map((_, weekIdx) => {
-                const month = data.months.find((m) => m.firstWeekIndex === weekIdx);
-                return (
-                  <div key={weekIdx} className="w-3 shrink-0 relative">
-                    {month && (
-                      <span className="absolute left-0 top-0 whitespace-nowrap z-10">
-                        {month.name}
-                      </span>
-                    )}
+      {/* Heatmap Section */}
+      <div className="p-4 sm:p-6 space-y-4">
+        <div className="relative overflow-x-auto pb-2 scrollbar-thin">
+          <div className="min-w-[820px] select-none">
+            {/* Month Headers aligned with Week columns */}
+            <div className="flex gap-2 mb-2">
+              <div className="w-6 shrink-0" />
+              <div className="flex gap-[2px] text-xs font-mono text-secondary h-4 relative flex-1">
+                {data.weeks.map((_, weekIdx) => {
+                  const month = data.months.find((m) => m.firstWeekIndex === weekIdx);
+                  return (
+                    <div key={weekIdx} className="w-3 shrink-0 relative">
+                      {month && (
+                        <span className="absolute left-0 top-0 whitespace-nowrap z-10">
+                          {month.name}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Grid with Day Labels */}
+            <div className="flex gap-2">
+              {/* Day Labels Column */}
+              <div className="flex flex-col justify-between text-xs font-mono text-secondary py-0.5 select-none w-6 shrink-0">
+                <span />
+                <span>Mon</span>
+                <span />
+                <span>Wed</span>
+                <span />
+                <span>Fri</span>
+                <span />
+              </div>
+
+              {/* Heatmap Grid (7 rows) */}
+              <div className="flex gap-[2px] flex-1">
+                {data.weeks.map((week, weekIdx) => (
+                  <div key={weekIdx} className="flex flex-col gap-[2px]">
+                    {week.contributionDays.map((day, dayIdx) => (
+                      <div
+                        key={dayIdx}
+                        tabIndex={day.date ? 0 : -1}
+                        role="gridcell"
+                        aria-label={day.date ? `${formatDate(day.date)}: ${day.count} contribution${day.count === 1 ? "" : "s"}` : undefined}
+                        onMouseEnter={(e) => {
+                          if (!day.date) return;
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setHoveredDay({ day, x: rect.left + rect.width / 2, y: rect.top });
+                        }}
+                        onMouseLeave={() => setHoveredDay(null)}
+                        className={`w-3 h-3 aspect-square rounded-none shrink-0 transition-all ${
+                          day.date
+                            ? "hover:outline hover:outline-1 hover:outline-foreground hover:z-10 focus:outline-none focus:ring-1 focus:ring-foreground"
+                            : "opacity-0 pointer-events-none"
+                        } ${getLevelBg(day.intensity)}`}
+                      />
+                    ))}
                   </div>
-                );
-              })}
+                ))}
+              </div>
+            </div>
+
+            {/* Footer Legend & Attribution */}
+            <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-muted mt-5 pt-3 border-t border-border">
+              <span>Learn how GitHub counts contributions</span>
+              <div className="flex items-center gap-1.5 text-secondary">
+                <span>Less</span>
+                <div className={`w-2.5 h-2.5 rounded-none ${getLevelBg(0)}`} />
+                <div className={`w-2.5 h-2.5 rounded-none ${getLevelBg(1)}`} />
+                <div className={`w-2.5 h-2.5 rounded-none ${getLevelBg(2)}`} />
+                <div className={`w-2.5 h-2.5 rounded-none ${getLevelBg(3)}`} />
+                <div className={`w-2.5 h-2.5 rounded-none ${getLevelBg(4)}`} />
+                <span>More</span>
+              </div>
             </div>
           </div>
 
-          {/* Grid with Day Labels */}
-          <div className="flex gap-2">
-            {/* Day Labels Column */}
-            <div className="flex flex-col justify-between text-xs font-mono text-secondary py-0.5 select-none w-7 shrink-0">
-              <span></span>
-              <span>Mon</span>
-              <span></span>
-              <span>Wed</span>
-              <span></span>
-              <span>Fri</span>
-              <span></span>
+          {/* Floating Tooltip */}
+          {hoveredDay && (
+            <div
+              style={{
+                position: "fixed",
+                left: `${hoveredDay.x}px`,
+                top: `${hoveredDay.y - 45}px`,
+                transform: "translateX(-50%)",
+              }}
+              className="z-50 pointer-events-none rounded-none bg-foreground text-background px-3 py-1.5 text-xs font-mono border border-border text-center shadow-none"
+            >
+              <div className="font-bold">{formatDate(hoveredDay.day.date)}</div>
+              <div className="text-[11px]">
+                {hoveredDay.day.count} contribution{hoveredDay.day.count === 1 ? "" : "s"}
+              </div>
             </div>
-
-            {/* Heatmap Grid */}
-            <div className="flex gap-1 flex-1">
-              {data.weeks.map((week, weekIdx) => (
-                <div key={weekIdx} className="flex flex-col gap-1">
-                  {week.contributionDays.map((day, dayIdx) => (
-                    <div
-                      key={dayIdx}
-                      tabIndex={day.date ? 0 : -1}
-                      role="gridcell"
-                      aria-label={day.date ? `${formatDate(day.date)}: ${day.count} contribution${day.count === 1 ? "" : "s"}` : undefined}
-                      onMouseEnter={(e) => {
-                        if (!day.date) return;
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        setHoveredDay({ day, x: rect.left + rect.width / 2, y: rect.top });
-                      }}
-                      onMouseLeave={() => setHoveredDay(null)}
-                      className={`w-3 h-3 aspect-square rounded-[2px] shrink-0 transition-transform ${
-                        day.date
-                          ? "hover:scale-125 hover:z-10 focus:outline-none focus:ring-1 focus:ring-foreground"
-                          : "opacity-0 pointer-events-none"
-                      } ${getLevelBg(day.intensity)}`}
-                    />
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Footer Legend */}
-          <div className="flex items-center justify-between text-xs font-mono text-secondary mt-5 pt-3 border-t border-border/30">
-            <span>Learn how GitHub counts contributions</span>
-            <div className="flex items-center gap-1.5">
-              <span>Less</span>
-              <div className={`w-2.5 h-2.5 rounded-[2px] ${getLevelBg(0)}`} />
-              <div className={`w-2.5 h-2.5 rounded-[2px] ${getLevelBg(1)}`} />
-              <div className={`w-2.5 h-2.5 rounded-[2px] ${getLevelBg(2)}`} />
-              <div className={`w-2.5 h-2.5 rounded-[2px] ${getLevelBg(3)}`} />
-              <div className={`w-2.5 h-2.5 rounded-[2px] ${getLevelBg(4)}`} />
-              <span>More</span>
-            </div>
-          </div>
+          )}
         </div>
-
-        {/* Floating Tooltip */}
-        {hoveredDay && (
-          <div
-            style={{
-              position: "fixed",
-              left: `${hoveredDay.x}px`,
-              top: `${hoveredDay.y - 45}px`,
-              transform: "translateX(-50%)",
-            }}
-            className="z-50 pointer-events-none rounded bg-foreground text-background px-3 py-1.5 text-xs font-mono shadow-md border border-border/40 text-center animate-in fade-in zoom-in-95 duration-100"
-          >
-            <div className="font-bold">{formatDate(hoveredDay.day.date)}</div>
-            <div className="text-[11px] opacity-90">
-              {hoveredDay.day.count} contribution{hoveredDay.day.count === 1 ? "" : "s"}
-            </div>
-          </div>
-        )}
       </div>
-    </div>
+    </Card>
   );
 }

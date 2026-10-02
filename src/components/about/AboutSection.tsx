@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { Card } from "@/components/ui/Card";
 
 interface AboutSectionProps {
   isPreview?: boolean;
@@ -7,7 +10,7 @@ interface AboutSectionProps {
 export function AboutSection({ isPreview = false }: AboutSectionProps) {
   return (
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
-      <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60">
+      <div className="mb-8 sm:mb-10 pb-4 border-b border-border">
         <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">04 / ABOUT</div>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">I AM JEWEL RAMIREZ.</h2>
       </div>
@@ -42,28 +45,25 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
         </div>
 
         <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div className="rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-5 transition-colors hover:border-foreground/30">
+          <Card className="p-4 sm:p-5">
             <div className="mb-1 text-xs font-mono text-secondary tracking-wider uppercase">LOCATION</div>
-            <div className="text-sm font-semibold text-foreground">Baguio City, PH</div>
-          </div>
-          <div className="rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-5 transition-colors hover:border-foreground/30">
+            <div className="text-sm font-medium text-foreground">Baguio City, PH</div>
+          </Card>
+          <Card className="p-4 sm:p-5">
             <div className="mb-1 text-xs font-mono text-secondary tracking-wider uppercase">DEGREE</div>
-            <div className="text-sm font-semibold text-foreground">BS Computer Science</div>
-          </div>
-          <div className="rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-5 transition-colors hover:border-foreground/30">
+            <div className="text-sm font-medium text-foreground">BS Computer Science</div>
+          </Card>
+          <Card className="p-4 sm:p-5">
             <div className="mb-1 text-xs font-mono text-secondary tracking-wider uppercase">CERTIFICATION</div>
-            <div className="text-sm font-semibold text-foreground">ITPEC IP Passport</div>
-          </div>
-          <div className="rounded-lg border border-border/60 bg-surface/40 p-4 sm:p-5 transition-colors hover:border-foreground/30">
+            <div className="text-sm font-medium text-foreground">ITPEC IP Passport</div>
+          </Card>
+          <Card className="p-4 sm:p-5">
             <div className="mb-1 text-xs font-mono text-secondary tracking-wider uppercase">AVAILABILITY</div>
             <div className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-              <span className="text-sm font-semibold text-foreground">Available for Work</span>
+              <span className="w-2 h-2 bg-foreground rounded-none shrink-0" />
+              <span className="text-sm font-medium text-foreground">Available for Work</span>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
 
@@ -71,7 +71,7 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
         <div className="mt-16 sm:mt-24 space-y-16 sm:space-y-20">
           {/* Hobbies Section */}
           <div>
-            <div className="mb-6 sm:mb-8 pb-4 border-b border-border/60 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="mb-6 sm:mb-8 pb-4 border-b border-border flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground uppercase">BEYOND THE CODE</h3>
                 <p className="text-xs font-mono text-secondary mt-1.5 tracking-widest uppercase">HOBBIES & INTERESTS</p>
@@ -84,17 +84,17 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
                 { title: "Manga & Anime", desc: "Shonen action through and through — Black Clover, Haikyuu, Blue Lock. Currently reading Kagurabachi." },
                 { title: "Cafe Hopping", desc: "Always hunting for a good spot to work — good coffee, good vibe, good wifi. Order's a Spanish latte." },
               ].map((hobby, idx) => (
-                <div key={idx} className="group rounded-lg border border-border/60 bg-surface/20 p-5 sm:p-6 transition-all hover:bg-surface/60 hover:border-foreground/30">
-                  <div className="text-base sm:text-lg font-bold text-foreground mb-2 group-hover:translate-x-1 transition-transform">{hobby.title}</div>
-                  <p className="text-sm sm:text-base text-secondary leading-relaxed">{hobby.desc}</p>
-                </div>
+                <Card key={idx} className="p-5 sm:p-6">
+                  <div className="text-base sm:text-lg font-medium text-foreground mb-2">{hobby.title}</div>
+                  <p className="text-xs sm:text-sm text-secondary leading-relaxed">{hobby.desc}</p>
+                </Card>
               ))}
             </div>
           </div>
 
           {/* Gallery Section */}
           <div>
-            <div className="mb-6 sm:mb-8 pb-4 border-b border-border/60 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="mb-6 sm:mb-8 pb-4 border-b border-border flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground uppercase">VISUAL DIARY</h3>
                 <p className="text-xs font-mono text-secondary mt-1.5 tracking-widest uppercase">LIFE IN PIXELS</p>
@@ -102,27 +102,18 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4 auto-rows-[120px] sm:auto-rows-[160px] md:auto-rows-[200px]">
-              {/* Replace these placeholder divs with actual next/image components later */}
-              <div className="col-span-2 row-span-2 rounded-lg bg-surface/40 border border-border/40 overflow-hidden relative group">
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                  <span className="text-xs font-mono tracking-wider font-semibold text-white">WORKSPACE</span>
-                </div>
-              </div>
-              <div className="rounded-lg bg-surface/40 border border-border/40 overflow-hidden relative group">
-                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                  <span className="text-[10px] font-mono tracking-wider text-white">TRAVEL</span>
-                </div>
-              </div>
-              <div className="rounded-lg bg-surface/40 border border-border/40 overflow-hidden relative group">
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                  <span className="text-[10px] font-mono tracking-wider text-white">KEYBOARD</span>
-                </div>
-              </div>
-              <div className="col-span-2 rounded-lg bg-surface/40 border border-border/40 overflow-hidden relative group">
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                  <span className="text-xs font-mono tracking-wider font-semibold text-white">COFFEE</span>
-                </div>
-              </div>
+              <Card className="col-span-2 row-span-2 overflow-hidden flex items-end p-4">
+                <span className="text-xs font-mono tracking-wider font-medium text-foreground">WORKSPACE</span>
+              </Card>
+              <Card className="overflow-hidden flex items-end p-4">
+                <span className="text-xs font-mono tracking-wider text-foreground">TRAVEL</span>
+              </Card>
+              <Card className="overflow-hidden flex items-end p-4">
+                <span className="text-xs font-mono tracking-wider text-foreground">KEYBOARD</span>
+              </Card>
+              <Card className="col-span-2 overflow-hidden flex items-end p-4">
+                <span className="text-xs font-mono tracking-wider font-medium text-foreground">COFFEE</span>
+              </Card>
             </div>
           </div>
         </div>
@@ -130,6 +121,3 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
     </section>
   );
 }
-
-
-

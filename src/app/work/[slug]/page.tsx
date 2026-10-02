@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { caseStudyData } from "@/data/caseStudies";
 import { TechIcon } from "@/components/stack/TechIcon";
+import { Card } from "@/components/ui/Card";
 
 interface CaseStudyPageProps {
   params: {
@@ -109,23 +110,23 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
         </div>
 
         <div className="lg:col-span-4 space-y-6">
-          <div className="rounded-lg border border-border/60 bg-surface/40 p-5 sm:p-6 space-y-3">
-            <h3 className="font-bold text-sm uppercase font-mono tracking-wider text-foreground">Project Details</h3>
-            <dl className="space-y-3 text-xs sm:text-sm font-mono">
-              <div className="flex justify-between border-b border-border/30 pb-2">
+          <Card className="p-5 sm:p-6 space-y-3">
+            <h3 className="font-medium text-xs uppercase font-mono tracking-wider text-foreground border-b border-border pb-2">Project Details</h3>
+            <dl className="space-y-3 text-xs font-mono">
+              <div className="flex justify-between border-b border-border pb-2">
                 <dt className="text-secondary">TYPE</dt>
-                <dd className="text-foreground font-semibold">Web Application</dd>
+                <dd className="text-foreground font-medium">Web Application</dd>
               </div>
-              <div className="flex justify-between border-b border-border/30 pb-2">
+              <div className="flex justify-between border-b border-border pb-2">
                 <dt className="text-secondary">TIMELINE</dt>
-                <dd className="text-foreground font-semibold">2026</dd>
+                <dd className="text-foreground font-medium">2026</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-secondary">STATUS</dt>
-                <dd className="text-emerald-500 font-semibold">COMPLETED</dd>
+                <dd className="text-foreground font-medium">COMPLETED</dd>
               </div>
             </dl>
-          </div>
+          </Card>
         </div>
       </div>
 

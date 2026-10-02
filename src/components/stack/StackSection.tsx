@@ -80,7 +80,7 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
                       `}
                       aria-hidden={!isActive}
                     >
-                      <div className="inline-flex items-center gap-3 sm:gap-4 md:gap-5 py-3 px-5 sm:py-4 sm:px-6 md:py-5 md:px-8 rounded-2xl text-base sm:text-lg md:text-xl lg:text-2xl font-mono text-secondary hover:text-foreground hover:bg-surface/60 transition-all duration-150 group/tech cursor-default">
+                      <div className="inline-flex items-center gap-3 sm:gap-4 md:gap-5 py-3 px-5 sm:py-4 sm:px-6 md:py-5 md:px-8 text-base sm:text-lg md:text-xl font-mono text-secondary hover:text-foreground transition-all duration-150 group/tech cursor-default">
                         <TechIcon
                           name={tech}
                           className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 shrink-0 transition-transform group-hover/tech:scale-110"
@@ -95,11 +95,11 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
           </div>
         </div>
       ) : (
-        <div className="border-t border-border/60 divide-y divide-border/40">
+        <div className="border-t border-border divide-y divide-border">
           {stackCategories.map((category, index) => (
             <div
               key={category.id}
-              className="py-5 sm:py-7 grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-8 items-start hover:bg-surface/30 transition-colors px-1 sm:px-4 rounded-lg group/row"
+              className="py-5 sm:py-7 grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-8 items-start hover:bg-surface/30 transition-colors px-1 sm:px-4 rounded-none group/row"
             >
               <div className="md:col-span-4 lg:col-span-3">
                 <div className="text-xs font-mono text-secondary uppercase tracking-widest font-semibold flex items-center gap-2 mb-1">
@@ -115,7 +115,7 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
                 {category.items.map((tech) => (
                   <div
                     key={tech}
-                    className="inline-flex items-center gap-2 py-1 px-2.5 sm:py-1.5 sm:px-3 rounded-md text-xs sm:text-sm font-mono text-secondary hover:text-foreground hover:bg-surface/60 border border-transparent hover:border-border/40 transition-all duration-150 group/tech cursor-default"
+                    className="inline-flex items-center gap-2 py-1 px-2.5 sm:py-1.5 sm:px-3 text-xs sm:text-sm font-mono text-secondary hover:text-foreground transition-all duration-150 group/tech cursor-default"
                   >
                     <TechIcon name={tech} className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform group-hover/tech:scale-110" />
                     <span className="whitespace-nowrap">{tech}</span>
