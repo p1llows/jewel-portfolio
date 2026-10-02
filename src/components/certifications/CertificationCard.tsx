@@ -48,8 +48,8 @@ export function CertificationCard({ cert, index, className = "", image }: Certif
             </span>
           </div>
 
-          {/* Title: 15px, weight 500 */}
-          <h3 className="text-[15px] font-medium text-foreground leading-snug mb-1">
+          {/* Title: text-base sm:text-lg font-medium */}
+          <h3 className="text-base sm:text-lg font-medium text-foreground leading-snug mb-1">
             {cert.title}
           </h3>
 

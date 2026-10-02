@@ -75,7 +75,7 @@ export function Hero() {
                 &lt;Full-Stack Developer /&gt;
               </p>
 
-              <p className="mb-6 sm:mb-8 text-xs sm:text-sm md:text-base lg:text-lg text-secondary max-w-2xl leading-relaxed hero-description">
+              <p className="mb-6 sm:mb-8 text-sm sm:text-base md:text-lg text-secondary max-w-2xl leading-relaxed hero-description">
                 I build high-performance web applications, resilient backend APIs, seamless integrations, and modern interactive digital experiences.
               </p>
 

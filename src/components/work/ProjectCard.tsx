@@ -32,13 +32,13 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
           {project.subtitle}
         </div>
 
-        {/* Title: 18px, weight 500 */}
-        <h3 className="text-[18px] font-medium text-foreground tracking-tight mb-2">
+        {/* Title: 18px-20px font-medium */}
+        <h3 className="text-lg sm:text-xl font-medium text-foreground tracking-tight mb-2">
           {project.title}
         </h3>
 
-        {/* Description: 12px, secondary, line-height ~1.6, max 2-3 lines */}
-        <p className="text-xs text-secondary leading-relaxed mb-4 line-clamp-3">
+        {/* Description: text-xs sm:text-sm leading-relaxed */}
+        <p className="text-xs sm:text-sm text-secondary leading-relaxed mb-6">
           {project.description}
         </p>
 

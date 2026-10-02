@@ -28,17 +28,17 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
         /* Homepage Preview Mode (Full-width 2-column layout) */
         <div className="grid gap-6 sm:gap-8 lg:grid-cols-12 items-start">
           <div className="lg:col-span-5 space-y-3 sm:space-y-4">
-            <div className="text-xs font-mono text-secondary tracking-wider uppercase">
+            <div className="text-xs sm:text-sm font-mono text-secondary tracking-wider uppercase">
               {latestJob.period}
             </div>
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground">
               {latestJob.role}
             </h3>
-            <div className="text-sm sm:text-base font-mono text-secondary font-semibold">
+            <div className="text-base sm:text-lg font-mono text-secondary font-medium">
               {latestJob.company}
             </div>
             {latestJob.description && (
-              <p className="text-sm text-secondary/80 leading-relaxed max-w-md">
+              <p className="text-sm sm:text-base md:text-lg text-secondary leading-relaxed max-w-lg">
                 {latestJob.description}
               </p>
             )}
@@ -46,7 +46,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
             <div className="pt-2 sm:pt-4">
               <Link
                 href="/experience"
-                className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
+                className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
               >
                 <span>SEE FULL EXPERIENCE</span>
                 <span className="transition-transform group-hover:translate-x-1">→</span>
@@ -93,10 +93,10 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                       {(idx + 1).toString().padStart(2, "0")}
                     </span>
                     <div>
-                      <div className="text-[13px] font-medium text-foreground mb-0.5">
+                      <div className="text-sm sm:text-base font-medium text-foreground mb-0.5">
                         {item.lead}
                       </div>
-                      <div className="text-xs text-secondary leading-relaxed">
+                      <div className="text-sm text-secondary leading-relaxed">
                         {item.detail}
                       </div>
                     </div>

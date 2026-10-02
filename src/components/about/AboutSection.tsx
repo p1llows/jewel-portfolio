@@ -86,7 +86,7 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
               ].map((hobby, idx) => (
                 <Card key={idx} className="p-5 sm:p-6">
                   <div className="text-base sm:text-lg font-medium text-foreground mb-2">{hobby.title}</div>
-                  <p className="text-xs sm:text-sm text-secondary leading-relaxed">{hobby.desc}</p>
+                  <p className="text-sm sm:text-base text-secondary leading-relaxed">{hobby.desc}</p>
                 </Card>
               ))}
             </div>

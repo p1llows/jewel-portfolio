@@ -36,7 +36,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
       </div>
 
       {/* Subtitle / Intro */}
-      <p className="text-xs sm:text-sm text-secondary leading-relaxed max-w-2xl mb-8 font-mono">
+      <p className="text-sm sm:text-base md:text-lg text-secondary leading-relaxed max-w-2xl mb-8">
         Professional credentials, verified examinations, and specialized training in Data Analysis, Python, SQL, AI, Prompt Engineering, and IT Resilience.
       </p>
 

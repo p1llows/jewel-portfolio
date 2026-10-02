@@ -16,7 +16,7 @@ export function GitHubSection() {
             <p className="text-xs font-mono font-medium text-secondary tracking-wide">
               Code / Experiments / Open Source
             </p>
-            <p className="text-sm sm:text-base text-secondary leading-relaxed max-w-md">
+            <p className="text-sm sm:text-base md:text-lg text-secondary leading-relaxed max-w-lg">
               Check out open-source repositories, developer tools, WebGL prototypes, and scholarly software projects hosted on GitHub.
             </p>
 
