@@ -7,24 +7,29 @@ export function VisitorCounter() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCount = async () => {
+    const recordOrFetchVisit = async () => {
       try {
-        const response = await fetch("/api/visits");
+        const hasVisited = sessionStorage.getItem("portfolio_has_visited");
+        const method = hasVisited ? "GET" : "POST";
+
+        const response = await fetch("/api/visits", { method });
         const data = await response.json();
+
+        if (!hasVisited) {
+          sessionStorage.setItem("portfolio_has_visited", "true");
+        }
+
         setCount(data.count || 12847);
+        localStorage.setItem("visitCount", String(data.count || 12847));
       } catch {
         const stored = localStorage.getItem("visitCount");
-        if (stored) {
-          setCount(parseInt(stored, 10));
-        } else {
-          setCount(12847);
-        }
+        setCount(stored ? parseInt(stored, 10) : 12847);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCount();
+    recordOrFetchVisit();
   }, []);
 
   return (
@@ -38,4 +43,3 @@ export function VisitorCounter() {
     </div>
   );
 }
-

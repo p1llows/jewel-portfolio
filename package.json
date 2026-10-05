@@ -10,6 +10,7 @@
     "generate-portrait": "ts-node --project tsconfig.scripts.json scripts/generate-portrait-data.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "canvas": "^3.2.3",
     "framer-motion": "^11.1.7",
     "gsap": "^3.12.5",
