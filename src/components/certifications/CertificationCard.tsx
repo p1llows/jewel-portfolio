@@ -7,68 +7,83 @@ interface CertificationCardProps {
   cert: Certification;
   index: number;
   className?: string;
-  image?: string;
 }
 
-export function CertificationCard({ cert, index, className = "", image }: CertificationCardProps) {
-  // Derive 2-letter monogram badge if no image provided
-  const getMonogram = (id: string, title: string) => {
-    if (id === "itpec-ip") return "IP";
-    if (id === "scrum-foundation") return "SF";
-    if (id === "nlp-intro") return "NL";
-    const words = title.split(" ").filter((w) => w.length > 0);
-    if (words.length >= 2) {
-      return (words[0][0] + words[1][0]).toUpperCase();
-    }
-    return title.slice(0, 2).toUpperCase();
-  };
-
-  const monogram = getMonogram(cert.id, cert.title);
-
+export function CertificationCard({ cert, index, className = "" }: CertificationCardProps) {
   return (
-    <Card className={`p-5 sm:p-6 flex items-start gap-4 ${className}`}>
-      {/* 54x54 Square Monogram Badge on Left */}
-      <div className="w-[54px] h-[54px] border border-border bg-background flex items-center justify-center font-mono text-sm font-semibold text-foreground group-hover:bg-foreground group-hover:text-background transition-colors shrink-0 rounded-none select-none">
-        {image ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={image} alt={cert.title} className="w-full h-full object-cover" />
-        ) : (
-          <span>{monogram}</span>
+    <Card className={`p-5 sm:p-6 flex flex-col justify-between h-full ${className}`}>
+      <div>
+        {/* Top Bar: Index + Logo on Left, Status Badge on Right */}
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <CardIndex index={index} />
+            {cert.logo && (
+              <div className="flex items-center shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={cert.logo}
+                  alt={cert.title}
+                  className="h-8 sm:h-10 md:h-12 w-auto max-w-[200px] sm:max-w-[260px] object-contain mix-blend-multiply grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Status Badge */}
+          {cert.status && (
+            <div className="text-right shrink-0">
+              <div className="inline-flex items-center gap-1.5 font-mono text-xs font-bold tracking-wider text-foreground">
+                <span className="w-2 h-2 bg-foreground inline-block shrink-0 rounded-none" />
+                <span>{cert.status}</span>
+              </div>
+              {cert.category && (
+                <div className="font-mono text-[10px] sm:text-xs text-secondary tracking-widest uppercase mt-0.5">
+                  {cert.category}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Title */}
+        <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground leading-snug mb-1">
+          {cert.title}
+        </h3>
+
+        {/* Subtitle / Issuer + Year */}
+        <div className="text-xs sm:text-sm font-mono text-secondary mb-2">
+          {cert.issuer} {cert.year && `• ${cert.year}`}
+        </div>
+
+        {/* Description */}
+        {cert.description && (
+          <p className="text-xs sm:text-sm text-secondary leading-relaxed max-w-3xl">
+            {cert.description}
+          </p>
         )}
       </div>
 
-      {/* Content on Right */}
-      <div className="flex-1 flex flex-col justify-between min-w-0">
-        <div>
-          {/* Header Line: Index + Year */}
-          <div className="flex items-center justify-between gap-2 mb-1.5">
-            <CardIndex index={index} />
-            <span className="text-xs font-mono text-secondary">
-              {cert.year}
+      {/* Footer / Verify Link */}
+      <div className="mt-4 pt-3 border-t border-border/40 flex items-center justify-end">
+        {cert.verifyUrl && cert.verifyUrl !== "#" ? (
+          <a
+            href={cert.verifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-mono font-medium tracking-wider uppercase text-foreground hover:underline inline-flex items-center gap-1 group/link"
+          >
+            <span>VERIFY</span>
+            <span className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5">
+              ↗
             </span>
-          </div>
-
-          {/* Title: text-base sm:text-lg font-medium */}
-          <h3 className="text-base sm:text-lg font-medium text-foreground leading-snug mb-1">
-            {cert.title}
-          </h3>
-
-          {/* ISSUER: line in mono */}
-          <div className="text-xs font-mono text-secondary mb-3">
-            ISSUER: <span className="text-foreground font-medium">{cert.issuer}</span>
-          </div>
-        </div>
-
-        {/* Footer: VERIFY link + tags in muted */}
-        <div className="pt-3 border-t border-border flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-          <span className="text-foreground font-medium hover:underline cursor-pointer">
+          </a>
+        ) : (
+          <span className="text-xs font-mono font-medium tracking-wider uppercase text-secondary/60 cursor-not-allowed">
             VERIFY ↗
           </span>
-          <div className="flex flex-wrap items-center gap-1.5 text-muted text-xs">
-            {cert.tags.join(" / ")}
-          </div>
-        </div>
+        )}
       </div>
     </Card>
   );
 }
+
