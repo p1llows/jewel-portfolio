@@ -69,8 +69,8 @@ export const projects: Project[] = [
     description: "Modern responsive portfolio inspired by premium developer portfolios, layout structures, and calm aesthetics.",
     technologies: ["React", "Tailwind CSS", "Framer Motion", "React Router"],
     category: "personal",
-    previewUrl: "https://jewelramirez.dev",
-    githubUrl: "https://github.com/p1llows/jewel-portfolio",
+    previewUrl: "https://jewelramirez.vercel.app",
+    githubUrl: "https://github.com/p1llows/jewel.ramirez",
   },
   {
     id: "dessert-diaries",
@@ -79,8 +79,8 @@ export const projects: Project[] = [
     description: "A Recipe Sharing Platform for sharing recipes and connecting with other food lovers.",
     technologies: ["MongoDB", "Express.js", "React", "Node.js"],
     category: "personal",
-    previewUrl: "https://jewelramirez.vercel.app/projects",
-    githubUrl: "https://github.com/p1llows",
+    previewUrl: "https://dessert-diaries.vercel.app",
+    githubUrl: "https://github.com/shainnaaa/dessert-diaries",
   },
   // Professional Projects (Work Experience)
   {

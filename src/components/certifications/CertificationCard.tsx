@@ -23,6 +23,8 @@ export function CertificationCard({ cert, index, className = "" }: Certification
                 <img
                   src={cert.logo}
                   alt={cert.title}
+                  width={200}
+                  height={48}
                   className="h-8 sm:h-10 md:h-12 w-auto max-w-[200px] sm:max-w-[260px] object-contain mix-blend-multiply grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
                 />
               </div>
