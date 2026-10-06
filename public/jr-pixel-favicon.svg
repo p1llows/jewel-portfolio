@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>JR Pixel Monogram Favicon</title>
+  <desc>Pixelated JR monogram for Jewel Ramirez portfolio</desc>
+
+  <style>
+    :root {
+      --bg: #f3f3f0;
+      --fg: #111111;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111111;
+        --fg: #f3f3f0;
+      }
+    }
+
+    .bg { fill: var(--bg); }
+    .pixel { fill: var(--fg); }
+  </style>
+
+  <!-- Rounded favicon tile -->
+  <rect class="bg" x="1" y="1" width="62" height="62" rx="12"/>
+
+  <!-- Pixelated J -->
+  <g class="pixel" shape-rendering="crispEdges">
+    <rect x="8"  y="9"  width="4" height="4"/>
+    <rect x="12" y="9"  width="12" height="4"/>
+    <rect x="20" y="13" width="4" height="27"/>
+    <rect x="16" y="36" width="8" height="8"/>
+    <rect x="12" y="40" width="8" height="4"/>
+    <rect x="8"  y="36" width="8" height="4"/>
+
+    <!-- J particle accents -->
+    <rect x="24" y="6" width="4" height="4"/>
+    <rect x="5"  y="32" width="4" height="4"/>
+    <rect x="20" y="44" width="4" height="4"/>
+  </g>
+
+  <!-- Pixelated R -->
+  <g class="pixel" shape-rendering="crispEdges">
+    <!-- stem -->
+    <rect x="29" y="13" width="5" height="35"/>
+
+    <!-- bowl -->
+    <rect x="34" y="9"  width="12" height="5"/>
+    <rect x="42" y="13" width="7" height="5"/>
+    <rect x="46" y="17" width="5" height="10"/>
+    <rect x="42" y="25" width="7" height="5"/>
+    <rect x="34" y="28" width="10" height="5"/>
+
+    <!-- diagonal leg -->
+    <rect x="42" y="30" width="6" height="5"/>
+    <rect x="46" y="34" width="6" height="5"/>
+    <rect x="50" y="38" width="6" height="5"/>
+    <rect x="54" y="42" width="5" height="6"/>
+
+    <!-- R particle accents -->
+    <rect x="51" y="14" width="4" height="4"/>
+    <rect x="56" y="46" width="4" height="4"/>
+    <rect x="27" y="49" width="4" height="4"/>
+  </g>
+</svg>

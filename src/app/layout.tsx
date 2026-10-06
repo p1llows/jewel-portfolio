@@ -7,6 +7,13 @@ export const metadata: Metadata = {
   title: "Jewel Ramirez — Full-Stack Developer",
   description: "Jewel Ramirez is a full-stack developer who builds modern web applications, APIs, integrations, and digital experiences.",
   metadataBase: new URL("https://jewelramirez.dev"),
+  icons: {
+    icon: [
+      { url: "/jr-pixel-favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/jr-pixel-favicon.svg",
+    apple: "/jr-pixel-favicon.svg",
+  },
   openGraph: {
     title: "Jewel Ramirez — Full-Stack Developer",
     description: "Building modern web applications, APIs, integrations, and digital experiences.",
