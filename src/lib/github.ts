@@ -173,44 +173,62 @@ function parseGitHubHtmlContributions(username: string, html: string): GitHubCon
   const countMatch = html.match(/([\d,]+)\s+contributions\s+in/i);
   const totalContributions = countMatch ? parseInt(countMatch[1].replace(/,/g, ""), 10) : 0;
 
-  const dayRegex = /<td[^>]*data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-level="(\d)"[^>]*>/g;
-  const days: ContributionDay[] = [];
-
-  let match;
-  while ((match = dayRegex.exec(html)) !== null) {
-    const date = match[1];
-    const level = parseInt(match[2], 10) as 0 | 1 | 2 | 3 | 4;
-
-    const snippet = html.substring(match.index, match.index + 350);
-    const tooltipMatch = snippet.match(/<tool-tip[^>]*>([^<]+)<\/tool-tip>/i);
-    let count: number = level > 0 ? level : 0;
-
-    if (tooltipMatch) {
-      const text = tooltipMatch[1];
-      if (text.toLowerCase().includes("no contribution")) {
-        count = 0;
-      } else {
-        const numMatch = text.match(/([\d,]+)\s+contribution/i);
-        if (numMatch) count = parseInt(numMatch[1].replace(/,/g, ""), 10);
-      }
-    }
-
-    const [year, month, dayNum] = date.split("-").map(Number);
-    const weekday = new Date(Date.UTC(year, month - 1, dayNum)).getUTCDay();
-
-    days.push({
-      date,
-      count,
-      intensity: calculateIntensity(count),
-      weekday,
-    });
+  // 1. Build a map of tooltip target ID -> tooltip text
+  const tooltipsByForId = new Map<string, string>();
+  const tooltipRegex = /<tool-tip[^>]*for="([^"]+)"[^>]*>([^<]+)<\/tool-tip>/gi;
+  let tMatch;
+  while ((tMatch = tooltipRegex.exec(html)) !== null) {
+    tooltipsByForId.set(tMatch[1], tMatch[2]);
   }
 
+  // 2. Extract all contribution days from <td> elements
+  const tdRegex = /<td[^>]*class="[^"]*ContributionCalendar-day[^"]*"[^>]*>/gi;
+  const rawDays: ContributionDay[] = [];
+  let match;
+
+  while ((match = tdRegex.exec(html)) !== null) {
+    const tag = match[0];
+    const dateM = tag.match(/data-date="([^"]+)"/);
+    const levelM = tag.match(/data-level="([^"]+)"/);
+    const idM = tag.match(/id="([^"]+)"/);
+
+    if (dateM) {
+      const date = dateM[1];
+      const level = levelM ? parseInt(levelM[1], 10) : 0;
+      const id = idM ? idM[1] : "";
+      const tooltipText = tooltipsByForId.get(id) || "";
+
+      let count = level > 0 ? level : 0;
+      if (tooltipText) {
+        if (tooltipText.toLowerCase().includes("no contribution")) {
+          count = 0;
+        } else {
+          const numMatch = tooltipText.match(/([\d,]+)\s+contribution/i);
+          if (numMatch) count = parseInt(numMatch[1].replace(/,/g, ""), 10);
+        }
+      }
+
+      const [year, month, dayNum] = date.split("-").map(Number);
+      const weekday = new Date(Date.UTC(year, month - 1, dayNum)).getUTCDay();
+
+      rawDays.push({
+        date,
+        count,
+        intensity: calculateIntensity(count),
+        weekday,
+      });
+    }
+  }
+
+  // 3. GitHub HTML renders table rows by weekday (Sunday <tr>, Monday <tr>...),
+  // so we MUST sort rawDays chronologically by date before building weeks.
+  rawDays.sort((a, b) => a.date.localeCompare(b.date));
+
+  // 4. Group chronologically sorted days into 7-day weeks starting on Sunday (weekday 0)
   const weeks: ContributionWeek[] = [];
   let currentWeekDays: ContributionDay[] = [];
 
-  days.forEach((day) => {
-    // If we start a new week (weekday 0) and already have days, push current week
+  rawDays.forEach((day) => {
     if (currentWeekDays.length > 0 && day.weekday === 0) {
       weeks.push({
         firstDay: currentWeekDays[0].date,
@@ -229,12 +247,12 @@ function parseGitHubHtmlContributions(username: string, html: string): GitHubCon
   }
 
   const months = calculateMonthHeaders(weeks);
-  const streaks = calculateStreaks(days);
+  const streaks = calculateStreaks(rawDays);
 
   return {
     success: true,
     username,
-    totalContributions: totalContributions || days.reduce((acc, d) => acc + d.count, 0),
+    totalContributions: totalContributions || rawDays.reduce((acc, d) => acc + d.count, 0),
     weeks,
     months,
     streaks,
