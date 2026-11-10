@@ -3,6 +3,13 @@
 import { useEffect, useState } from "react";
 import { GitHubContributionData, ContributionDay } from "@/types/github";
 import { Card } from "@/components/ui/Card";
+import { CountUp } from "@/components/motion/CountUp";
+import { useInViewOnce } from "@/lib/useInViewOnce";
+import {
+  fetchContributionsClient,
+  isCacheFresh,
+  readCachedContributions,
+} from "@/lib/githubClient";
 
 interface GitHubContributionGraphProps {
   username?: string;
@@ -13,28 +20,36 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [hoveredDay, setHoveredDay] = useState<{ day: ContributionDay; x: number; y: number } | null>(null);
+  // Heatmap columns wave in the first time the grid scrolls into view
+  const [gridRef, gridInView] = useInViewOnce<HTMLDivElement>();
 
   useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      try {
-        const url = username ? `/api/github-contributions?username=${username}` : "/api/github-contributions";
-        const res = await fetch(url);
-        const json = await res.json();
+    const handle = username || "p1llows";
+    const controller = new AbortController();
 
-        if (!json.success || !json.weeks || json.weeks.length === 0) {
-          throw new Error(json.error || "Unable to load GitHub activity.");
-        }
-
-        setData(json);
-      } catch (err) {
-        setError((err as Error).message || "Unable to load GitHub activity.");
-      } finally {
-        setLoading(false);
-      }
+    // Paint cached data immediately (stale-while-revalidate) so the graph never "loads" on repeat visits.
+    const cached = readCachedContributions(handle);
+    if (cached) {
+      setData(cached.data);
+      setLoading(false);
+      if (isCacheFresh(cached)) return;
     }
 
-    loadData();
+    fetchContributionsClient(handle, controller.signal)
+      .then((fresh) => {
+        setData(fresh);
+        setError(null);
+      })
+      .catch((err: Error) => {
+        if (err.name === "AbortError") return;
+        // Keep showing cached data if we have it; only surface an error when there's nothing to show.
+        if (!cached) setError(err.message || "Unable to load GitHub activity.");
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+
+    return () => controller.abort();
   }, [username]);
 
   // Strict PRD monochrome grayscale color tokens for levels 0-4
@@ -66,12 +81,21 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
   // Loading State
   if (loading) {
     return (
-      <Card className="w-full p-6 sm:p-8 text-center font-mono">
-        <div className="flex items-center justify-center gap-3">
-          <span className="w-2 h-2 bg-foreground animate-ping rounded-none" />
-          <span className="text-xs text-secondary tracking-widest uppercase">
-            Loading GitHub activity...
-          </span>
+      <Card className="w-full font-mono overflow-hidden" aria-busy="true" aria-live="polite">
+        <div className="bg-background border-b border-border px-4 py-3 text-xs text-secondary tracking-widest uppercase">
+          Loading GitHub activity...
+        </div>
+        {/* Skeleton matches final layout height so nothing jumps when data arrives */}
+        <div className="grid grid-cols-3 border-b border-border divide-x divide-border">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="p-4 sm:p-5">
+              <div className="h-2.5 w-16 bg-border animate-pulse mb-2" />
+              <div className="h-5 w-12 bg-border animate-pulse" />
+            </div>
+          ))}
+        </div>
+        <div className="p-4 sm:p-6 overflow-hidden">
+          <div className="h-[130px] w-full bg-border/60 animate-pulse" />
         </div>
       </Card>
     );
@@ -121,7 +145,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
             CONTRIBUTIONS
           </div>
           <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">
-            {data.totalContributions}
+            <CountUp value={data.totalContributions} />
           </div>
         </div>
         <div className="p-4 sm:p-5">
@@ -129,7 +153,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
             CURRENT STREAK
           </div>
           <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">
-            {data.streaks.currentStreak} {data.streaks.currentStreak === 1 ? "day" : "days"}
+            <CountUp value={data.streaks.currentStreak} /> {data.streaks.currentStreak === 1 ? "day" : "days"}
           </div>
         </div>
         <div className="p-4 sm:p-5">
@@ -137,7 +161,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
             LONGEST STREAK
           </div>
           <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">
-            {data.streaks.longestStreak} {data.streaks.longestStreak === 1 ? "day" : "days"}
+            <CountUp value={data.streaks.longestStreak} /> {data.streaks.longestStreak === 1 ? "day" : "days"}
           </div>
         </div>
       </div>
@@ -179,9 +203,17 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
               </div>
 
               {/* Heatmap Grid (7 rows) */}
-              <div className="flex gap-[2px] flex-1">
+              <div ref={gridRef} className="flex gap-[2px] flex-1">
                 {data.weeks.map((week, weekIdx) => (
-                  <div key={weekIdx} className="flex flex-col gap-[2px]">
+                  <div
+                    key={weekIdx}
+                    style={gridInView ? { animationDelay: `${weekIdx * 14}ms` } : undefined}
+                    className={`flex flex-col gap-[2px] origin-top ${
+                      gridInView
+                        ? "animate-cell-in motion-reduce:animate-none"
+                        : "opacity-0 motion-reduce:opacity-100"
+                    }`}
+                  >
                     {week.contributionDays.map((day, dayIdx) => (
                       <div
                         key={dayIdx}

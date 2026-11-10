@@ -220,11 +220,23 @@ function parseGitHubHtmlContributions(username: string, html: string): GitHubCon
     }
   }
 
-  // 3. GitHub HTML renders table rows by weekday (Sunday <tr>, Monday <tr>...),
+  return buildContributionData(username, rawDays, totalContributions);
+}
+
+/**
+ * Builds the full contribution payload from a flat list of days (any order).
+ * Shared by the server-side HTML fallback and the client-side live fetch.
+ */
+export function buildContributionData(
+  username: string,
+  rawDays: ContributionDay[],
+  totalContributions: number
+): GitHubContributionData {
+  // GitHub HTML renders table rows by weekday (Sunday <tr>, Monday <tr>...),
   // so we MUST sort rawDays chronologically by date before building weeks.
   rawDays.sort((a, b) => a.date.localeCompare(b.date));
 
-  // 4. Group chronologically sorted days into 7-day weeks starting on Sunday (weekday 0)
+  // Group chronologically sorted days into 7-day weeks starting on Sunday (weekday 0)
   const weeks: ContributionWeek[] = [];
   let currentWeekDays: ContributionDay[] = [];
 
