@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { caseStudyData } from "@/data/caseStudies";
 import { TechIcon } from "@/components/stack/TechIcon";
 import { Card } from "@/components/ui/Card";
-import { ArrowLink } from "@/components/ui/ArrowLink";
+import { CardAction, CardActionBar } from "@/components/ui/CardActions";
 
 interface CaseStudyPageProps {
   params: {
@@ -111,7 +111,8 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
         </div>
 
         <div className="lg:col-span-4 space-y-6">
-          <Card className="p-5 sm:p-6 space-y-3">
+          <Card className="p-0">
+            <div className="p-5 sm:p-6 space-y-3">
             <h3 className="font-medium text-xs uppercase font-mono tracking-wider text-foreground border-b border-border pb-2">Project Details</h3>
             <dl className="space-y-3 text-xs font-mono">
               <div className="flex justify-between border-b border-border pb-2">
@@ -127,14 +128,15 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
                 <dd className="text-foreground font-medium">COMPLETED</dd>
               </div>
             </dl>
+            </div>
+
+            <CardActionBar bleed={false}>
+              <CardAction href="/work" back primary>
+                BACK TO WORK
+              </CardAction>
+            </CardActionBar>
           </Card>
         </div>
-      </div>
-
-      <div className="mt-12 sm:mt-16 pt-6 border-t border-border/40">
-        <ArrowLink href="/work" direction="back">
-          BACK TO WORK
-        </ArrowLink>
       </div>
     </div>
   );
