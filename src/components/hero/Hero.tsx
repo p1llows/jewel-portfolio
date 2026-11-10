@@ -133,7 +133,7 @@ export function Hero() {
           {/* Right Column: Interactive Binary Particle Portrait */}
           <div className="lg:col-span-5 relative z-20 flex justify-center lg:justify-end mt-4 lg:-mt-12 xl:-mt-16">
             <div className="relative w-full max-w-[340px] sm:max-w-[480px] md:max-w-[560px] lg:max-w-[660px] xl:max-w-[740px] h-[360px] sm:h-[500px] md:h-[580px] lg:h-[680px] xl:h-[740px] min-h-[340px]">
-              <BinaryPortrait src="/images/portrait-source.jpg" />
+              <BinaryPortrait src="/images/portrait-source.jpg" zoom={1.45} />
             </div>
           </div>
         </div>

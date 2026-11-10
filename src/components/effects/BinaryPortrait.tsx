@@ -23,6 +23,8 @@ interface CanvasParticle {
   phase: number; // drift phase
   delay: number; // 0..1 scatter stagger
   arc: number; // -1..1 swirl direction/size of the flight path
+  thin: number; // 0..1 fixed random rank, used to thin the portrait on small screens
+  edge: number; // 0..1, 1 = fully inside the portrait, ->0 at the feathered left/right/bottom edges
   x: number; // current viewport x
   y: number; // current viewport y
   vx: number;
@@ -47,6 +49,15 @@ const BG_ALPHA = [0.2, 0.15, 0.11, 0.09] as const;
 // Background glyph colour = theme text colour
 const THEME_RGB = { light: [23, 23, 23], dark: [241, 241, 237] } as const;
 
+// Responsive sizing. The portrait is scaled to fit its box, so glyphs must scale with it or the same
+// 9-11px characters get packed ~2x tighter on a phone (dense, blobby) than on a desktop.
+const REF_SCALE = 1.4; // portrait fit-scale the glyph sizes were designed for (desktop)
+const MIN_FONT_FACTOR = 0.62; // never shrink glyphs below ~62% (keeps 0/1 legible)
+const MAX_FONT_FACTOR = 1.3;
+// The suit runs to the left/right/bottom edges of the photo, which reads as a hard rectangle.
+// Glyphs dissolve (thinned + dimmed) over this fraction of the image near those edges.
+const EDGE_FEATHER_SIDE = 0.17;
+const EDGE_FEATHER_BOTTOM = 0.24;
 const BG_STRIDE = 3; // only every Nth particle stays visible in background mode
 const SPRING = 0.11;
 const DAMPING = 0.8;
@@ -84,6 +95,16 @@ function colorTable(theme: "light" | "dark") {
   return table;
 }
 
+/**
+ * Scale at which the portrait is drawn: "fit" inside its box times `zoom`. Zoom may push the portrait a
+ * little past its column, but is capped (width <= 112% of the box) so it can't swamp the text on narrow screens.
+ */
+function portraitFit(width: number, height: number, imgW: number, imgH: number, zoom: number) {
+  const fit = Math.min((width - 20) / imgW, (height - 20) / imgH);
+  const widthCap = (width * 1.12) / imgW;
+  return Math.min(fit * zoom, Math.max(fit, widthCap));
+}
+
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const smooth = (v: number) => v * v * (3 - 2 * v);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -91,9 +112,14 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 interface BinaryPortraitProps {
   src: string;
   className?: string;
+  /** Multiplies the portrait's size (1 = fit the box exactly) */
+  zoom?: number;
 }
 
-export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
+export function BinaryPortrait({ src, className = "", zoom = 1 }: BinaryPortraitProps) {
+  const zoomRef = useRef(zoom);
+  zoomRef.current = zoom;
+
   let currentTheme: "light" | "dark" = "light";
   try {
     const context = useTheme();
@@ -157,6 +183,15 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
 
         const size = lum < 50 ? 11 : lum < 125 ? 10 : 9;
 
+        // Feather the photo's hard edges: random dithered dropout so it dissolves raggedly, not in a line
+        const nx = x / sampleWidth;
+        const ny = y / sampleHeight;
+        const edge = Math.min(
+          smooth(clamp01(Math.min(nx, 1 - nx) / EDGE_FEATHER_SIDE)),
+          smooth(clamp01((1 - ny) / EDGE_FEATHER_BOTTOM))
+        );
+        if (Math.random() > Math.pow(edge, 0.8)) continue;
+
         particles.push({
           normX: x / sampleWidth,
           normY: y / sampleHeight,
@@ -168,6 +203,8 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
           // The bottom of the portrait lets go first, so it dissolves upward like blown sand
           delay: 0.65 * (1 - y / sampleHeight) + 0.35 * Math.random(),
           arc: Math.random() * 2 - 1,
+          thin: Math.random(),
+          edge,
           x: 0,
           y: 0,
           vx: 0,
@@ -197,8 +234,7 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
     const { width: imgW, height: imgH } = imageSizeRef.current;
     if (imgW === 0 || imgH === 0 || width <= 0 || height <= 0) return;
 
-    const padding = 10;
-    const scale = Math.min((width - padding * 2) / imgW, (height - padding * 2) / imgH);
+    const scale = portraitFit(width, height, imgW, imgH, zoomRef.current);
     const renderW = imgW * scale;
     const renderH = imgH * scale;
     const offsetX = (width - renderW) / 2;
@@ -300,8 +336,20 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
       const ox = rect.left;
       const oy = rect.top;
       const { width: imgW, height: imgH } = imageSizeRef.current;
-      const portraitScale = Math.min((rect.width - 20) / imgW, (rect.height - 20) / imgH);
+      const portraitScale = portraitFit(rect.width, rect.height, imgW, imgH, zoomRef.current);
       const cell = 3 * portraitScale * 1.15;
+
+      // Glyph size follows the portrait's scale; below the legibility floor, thin the glyphs out
+      // instead of letting them overlap. Every BG_STRIDE-th glyph (the background set) is never thinned.
+      const rel = portraitScale / REF_SCALE;
+      const fontFactor = Math.min(MAX_FONT_FACTOR, Math.max(MIN_FONT_FACTOR, rel));
+      const density = rel >= MIN_FONT_FACTOR ? 1 : Math.max(1 / BG_STRIDE, (rel / MIN_FONT_FACTOR) ** 2);
+      const showFrac = clamp01((density - 1 / BG_STRIDE) * (BG_STRIDE / (BG_STRIDE - 1)));
+      const fonts: Record<number, string> = {
+        9: `bold ${(9 * fontFactor).toFixed(1)}px monospace`,
+        10: `bold ${(10 * fontFactor).toFixed(1)}px monospace`,
+        11: `bold ${(11 * fontFactor).toFixed(1)}px monospace`,
+      };
 
       const spring = SPRING;
 
@@ -395,12 +443,16 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
         // Skip drawing particles that are off-screen (e.g. the portrait scrolled out of view)
         if (p.x < -20 || p.x > vw + 20 || p.y < -20 || p.y > vh + 20) continue;
 
+        if (!keep && p.thin >= showFrac) continue; // thinned out on small screens
+
+        const edgeBase = 0.3 + 0.7 * p.edge;
+        const edgeMul = edgeBase + (1 - edgeBase) * m;
         const fade = keep ? 1 : 1 - m;
 
         // Dark backing cell (portrait only): fades with distance from home and as this glyph departs
         if (m < 0.98 && offSq < 576) {
           const f = 1 - Math.sqrt(offSq) / 24;
-          const alpha = 0.92 * f * f * (1 - m) * fade;
+          const alpha = 0.92 * f * f * (1 - m) * fade * edgeMul;
           if (alpha > 0.015) {
             ctx.fillStyle = "#111111";
             ctx.globalAlpha = alpha;
@@ -412,7 +464,7 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
         // Each glyph fades and changes colour with ITS OWN flight progress, dimming mid-flight
         // so scattering glyphs don't clutter the hero text.
         const dip = 1 - 0.55 * Math.sin(Math.PI * m);
-        const glyphAlpha = lerp(TONES[p.tone].alpha, BG_ALPHA[p.tone], m) * fade * dip;
+        const glyphAlpha = lerp(TONES[p.tone].alpha, BG_ALPHA[p.tone], m) * fade * dip * edgeMul;
         if (glyphAlpha < 0.01) continue;
 
         const level = Math.round(m * (LEVELS - 1));
@@ -423,7 +475,7 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
         }
         ctx.globalAlpha = glyphAlpha;
 
-        const fontStr = `bold ${p.size}px monospace`;
+        const fontStr = fonts[p.size];
         if (fontStr !== lastFont) {
           ctx.font = fontStr;
           lastFont = fontStr;
