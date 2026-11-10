@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { Project } from "@/data/projects";
 import { Card, CardIndex } from "@/components/ui/Card";
 import { TechIcon } from "@/components/stack/TechIcon";
+import { CardAction, CardActionBar } from "@/components/ui/CardActions";
 
 interface ProjectCardProps {
   project: Project;
@@ -57,37 +57,14 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
         </div>
       </div>
 
-      {/* Footer: solid top border, CASE STUDY on left (letter spacing widens on hover), PREVIEW/REPO in muted on right */}
-      <div className="pt-3 border-t border-border flex items-center justify-between text-xs font-mono">
-        <Link
-          href={`/work/${project.id}`}
-          className="text-foreground font-medium tracking-normal group-hover:tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
-        >
-          CASE STUDY →
-        </Link>
-        <div className="flex items-center gap-3 text-muted">
-          {project.previewUrl && (
-            <a
-              href={project.previewUrl}
-              className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              PREVIEW ↗
-            </a>
-          )}
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              REPO ↗
-            </a>
-          )}
-        </div>
-      </div>
+      {/* Flush action bar along the card's bottom edge (no nested boxes) */}
+      <CardActionBar>
+        <CardAction href={`/work/${project.id}`} primary>
+          CASE STUDY
+        </CardAction>
+        {project.previewUrl && <CardAction href={project.previewUrl} external>PREVIEW</CardAction>}
+        {project.githubUrl && <CardAction href={project.githubUrl} external>REPO</CardAction>}
+      </CardActionBar>
     </Card>
   );
 }

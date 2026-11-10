@@ -2,6 +2,7 @@
 
 import { Certification } from "@/data/certifications";
 import { Card, CardIndex } from "@/components/ui/Card";
+import { CardAction, CardActionBar } from "@/components/ui/CardActions";
 
 interface CertificationCardProps {
   cert: Certification;
@@ -65,26 +66,17 @@ export function CertificationCard({ cert, index, className = "" }: Certification
         )}
       </div>
 
-      {/* Footer / Verify Link */}
-      <div className="mt-4 pt-3 border-t border-border/40 flex items-center justify-end">
-        {cert.verifyUrl && cert.verifyUrl !== "#" ? (
-          <a
-            href={cert.verifyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-mono font-medium tracking-wider uppercase text-foreground hover:underline inline-flex items-center gap-1 group/link"
-          >
-            <span>VERIFY</span>
-            <span className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5">
-              ↗
-            </span>
-          </a>
-        ) : (
-          <span className="text-xs font-mono font-medium tracking-wider uppercase text-secondary/60 cursor-not-allowed">
-            VERIFY ↗
-          </span>
-        )}
-      </div>
+      {/* Flush action bar along the card's bottom edge (no nested boxes) */}
+      <CardActionBar>
+        <CardAction
+          href={cert.verifyUrl ?? "#"}
+          external
+          primary
+          disabled={!cert.verifyUrl || cert.verifyUrl === "#"}
+        >
+          VERIFY
+        </CardAction>
+      </CardActionBar>
     </Card>
   );
 }
