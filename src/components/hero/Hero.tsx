@@ -2,84 +2,50 @@
 
 import { BinaryPortrait } from "@/components/effects/BinaryPortrait";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { TypeText } from "@/components/motion/TypeText";
 import { FileText, Github, Linkedin, Mail, Facebook } from "lucide-react";
 
+// Staggered entrance. initial/animate render in the server HTML (no flash of unstyled text)
+// and run on the compositor (transform/opacity only).
+const ease = [0.22, 1, 0.36, 1] as const;
+const reveal = (delay: number, y = 24) => ({
+  initial: { opacity: 0, y },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease },
+});
+
 export function Hero() {
-  const heroRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const heroSection = heroRef.current;
-    if (!heroSection) return;
-
-    const tl = gsap.timeline({ delay: 0.3 });
-
-    tl.fromTo(
-      ".hero-title",
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
-    );
-
-    tl.fromTo(
-      ".hero-subtitle",
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-      "-=0.5"
-    );
-
-    tl.fromTo(
-      ".hero-description",
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, ease: "power1.out" },
-      "-=0.4"
-    );
-
-    tl.fromTo(
-      ".hero-buttons",
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.5, ease: "power1.out" },
-      "-=0.3"
-    );
-  }, []);
-
   return (
-    <section ref={heroRef} className="relative py-4 sm:py-6 lg:py-8 xl:py-10 min-h-[calc(100vh-4rem)] md:min-h-screen flex items-center overflow-hidden">
+    <section className="relative py-4 sm:py-6 lg:py-8 xl:py-10 min-h-[calc(100vh-4rem)] md:min-h-screen flex items-center overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
           {/* Left Column: Text & CTAs */}
           <div className="lg:col-span-7 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="mb-3 sm:mb-4 text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest flex items-center gap-2">
+            <div>
+              <motion.div {...reveal(0, 12)} className="mb-3 sm:mb-4 text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest flex items-center gap-2">
                 <span className="w-2 h-2 rounded-none bg-foreground" />
                 01 / HOME
-              </div>
+              </motion.div>
 
-              <h1 className="mb-1 sm:mb-2 text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-muted hero-title">
+              <motion.h1 {...reveal(0.1, 30)} className="mb-1 sm:mb-2 text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-muted">
                 HELLO, I AM
-              </h1>
+              </motion.h1>
 
-              <h2 className="mb-4 sm:mb-6 text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter text-foreground hero-subtitle leading-[0.95]">
+              <motion.h2 {...reveal(0.2, 36)} className="mb-4 sm:mb-6 text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter text-foreground leading-[0.95]">
                 JEWEL
                 <br />
                 RAMIREZ
-              </h2>
+              </motion.h2>
 
-              <p className="mb-3 sm:mb-4 text-base sm:text-lg md:text-xl font-mono text-secondary max-w-2xl hero-description">
-                &lt;Full-Stack Developer /&gt;
-              </p>
+              <motion.p {...reveal(0.35)} className="mb-3 sm:mb-4 text-base sm:text-lg md:text-xl font-mono text-secondary max-w-2xl">
+                <TypeText text="<Full-Stack Developer />" delay={1000} />
+              </motion.p>
 
-              <p className="mb-6 sm:mb-8 text-sm sm:text-base md:text-lg text-secondary max-w-2xl leading-relaxed hero-description">
+              <motion.p {...reveal(0.45)} className="mb-6 sm:mb-8 text-sm sm:text-base md:text-lg text-secondary max-w-2xl leading-relaxed">
                 I build high-performance web applications, resilient backend APIs, seamless integrations, and modern interactive digital experiences.
-              </p>
+              </motion.p>
 
-              <div className="flex flex-wrap items-center gap-3 sm:gap-4 hero-buttons">
+              <motion.div {...reveal(0.55)} className="flex flex-wrap items-center gap-3 sm:gap-4">
                 <motion.a
                   href="/work"
                   whileHover={{ scale: 1.04 }}
@@ -101,10 +67,10 @@ export function Hero() {
                   <FileText className="w-4 h-4" />
                   RESUME
                 </motion.a>
-              </div>
+              </motion.div>
 
               {/* Grayscale Social Links Icons */}
-              <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3.5 hero-buttons">
+              <motion.div {...reveal(0.65)} className="mt-5 sm:mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3.5">
                 <motion.a
                   href="https://github.com/p1llows"
                   target="_blank"
@@ -160,8 +126,8 @@ export function Hero() {
                     <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
                   </svg>
                 </motion.a>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
 
           {/* Right Column: Interactive Binary Particle Portrait */}

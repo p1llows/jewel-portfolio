@@ -4,6 +4,7 @@ import Link from "next/link";
 import { experience } from "@/data/experience";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/Card";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 
 interface ExperienceSectionProps {
   isPreview?: boolean;
@@ -15,18 +16,14 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
   return (
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
       {/* Header */}
-      <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60">
-        <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">
-          03 / EXPERIENCE
-        </div>
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-          {isPreview ? "EXPERIENCE HIGHLIGHT" : "EXPERIENCE & HISTORY"}
-        </h2>
-      </div>
+      <SectionHeader
+        label="03 / EXPERIENCE"
+        title={isPreview ? "EXPERIENCE HIGHLIGHT" : "EXPERIENCE & HISTORY"}
+      />
 
       {isPreview ? (
         /* Homepage Preview Mode (Full-width 2-column layout) */
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-12 items-start">
+        <div data-reveal className="grid gap-6 sm:gap-8 lg:grid-cols-12 items-start">
           <div className="lg:col-span-5 space-y-3 sm:space-y-4">
             <div className="text-xs sm:text-sm font-mono text-secondary tracking-wider uppercase">
               {latestJob.period}

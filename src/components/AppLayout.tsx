@@ -2,6 +2,7 @@
 
 import { Navigation } from "@/components/layout/Navigation";
 import { usePathname } from "next/navigation";
+import { ScrollRevealObserver } from "@/components/motion/ScrollRevealObserver";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -20,7 +21,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="flex flex-col md:flex-row min-h-screen text-foreground overflow-x-hidden">
+      <ScrollRevealObserver />
       <Navigation activePage={getActivePage()} />
       <main className="flex-1 ml-0 md:ml-64 w-full min-w-0 transition-all pt-16 md:pt-0">{children}</main>
     </div>

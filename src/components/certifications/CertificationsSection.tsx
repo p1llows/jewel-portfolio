@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { certificationsData } from "@/data/certifications";
 import { CertificationCard } from "@/components/certifications/CertificationCard";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 
 interface CertificationsSectionProps {
   isPreview?: boolean;
@@ -20,26 +21,23 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
       }`}
     >
       {/* Page Section Header */}
-      <div className="mb-6 sm:mb-8 pb-4 border-b border-border flex items-end justify-between">
-        <div>
-          <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">
-            06 / CERTIFICATIONS
-          </div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-            {isPreview ? "CERTIFICATIONS HIGHLIGHT" : "CERTIFICATIONS & CREDENTIALS"}
-          </h2>
-        </div>
-
-        {isPreview && (
-          <Link
-            href="/certifications"
-            className="hidden sm:inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-          >
-            <span>SEE FULL CERTIFICATIONS</span>
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
-        )}
-      </div>
+      <SectionHeader
+        label="06 / CERTIFICATIONS"
+        title={isPreview ? "CERTIFICATIONS HIGHLIGHT" : "CERTIFICATIONS & CREDENTIALS"}
+        className="mb-6 sm:mb-8"
+        strong
+        aside={
+          isPreview ? (
+            <Link
+              href="/certifications"
+              className="hidden sm:inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
+            >
+              <span>SEE FULL CERTIFICATIONS</span>
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </Link>
+          ) : undefined
+        }
+      />
 
       {/* Subtitle / Intro */}
       <p className="text-sm sm:text-base text-secondary leading-relaxed max-w-3xl mb-8">
@@ -48,6 +46,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
 
       {/* Certifications Container: 3 across in 1 row on home page preview, stacked on full page */}
       <div
+        data-reveal
         className={
           isPreview
             ? "grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 items-stretch"

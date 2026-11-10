@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import { ProjectCard } from "@/components/work/ProjectCard";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 
 interface WorkSectionProps {
   isPreview?: boolean;
@@ -15,16 +16,9 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
     const selectedProjects = projects.slice(0, 3);
     return (
       <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
-        <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60 flex items-end justify-between">
-          <div>
-            <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">02 / WORK</div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-              SELECTED PROJECTS
-            </h2>
-          </div>
-        </div>
+        <SectionHeader label="02 / WORK" title="SELECTED PROJECTS" />
 
-        <div className="grid gap-6 sm:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch">
+        <div data-reveal className="grid gap-6 sm:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch">
           {selectedProjects.map((project, index) => (
             <ProjectCard
               key={project.id}
@@ -49,12 +43,7 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20 space-y-12 sm:space-y-16">
-      <div className="pb-4 border-b border-border/60">
-        <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">02 / WORK</div>
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-          ALL PROJECTS & WORK
-        </h2>
-      </div>
+      <SectionHeader label="02 / WORK" title="ALL PROJECTS & WORK" className="" />
 
       {/* Section 1: Personal Projects */}
       <div>
@@ -63,7 +52,7 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
             {"// PERSONAL PROJECTS"} ({personalProjects.length})
           </h3>
         </div>
-        <div className="grid gap-6 sm:gap-8 grid-cols-1">
+        <div data-reveal className="grid gap-6 sm:gap-8 grid-cols-1">
           {personalProjects.map((project, index) => (
             <ProjectCard
               key={project.id}
@@ -81,7 +70,7 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
             {"// PROFESSIONAL & EXPERIENCE PROJECTS"} ({professionalProjects.length})
           </h3>
         </div>
-        <div className="grid gap-6 sm:gap-8 grid-cols-1">
+        <div data-reveal className="grid gap-6 sm:gap-8 grid-cols-1">
           {professionalProjects.map((project, index) => (
             <ProjectCard
               key={project.id}

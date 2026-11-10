@@ -47,6 +47,30 @@ body {
 }
 
 /* Theme Switch Radial Wave View Transition */
+/* ---- Scroll animations (driven by ScrollRevealObserver) ----
+   Only applied when JS is on and motion is allowed, so content is never hidden otherwise. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+  [data-draw] {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  [data-draw].is-in {
+    transform: scaleX(1);
+  }
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;

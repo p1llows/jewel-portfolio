@@ -1,18 +1,16 @@
 import { GitHubContributionGraph } from "@/components/github/GitHubContributionGraph";
 import { Card } from "@/components/ui/Card";
 import { Github } from "lucide-react";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 
 export function GitHubSection() {
   return (
     <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
-      <div className="mb-8 sm:mb-10 pb-4 border-b border-border/60">
-        <div className="text-xs sm:text-sm font-mono font-semibold text-secondary tracking-widest uppercase mb-2">07 / GITHUB</div>
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">GITHUB</h2>
-      </div>
+      <SectionHeader label="07 / GITHUB" title="GITHUB" />
 
       <div className="space-y-6 sm:space-y-8">
         {/* Profile Card & Info */}
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-12 items-start">
+        <div data-reveal className="grid gap-6 sm:gap-8 lg:grid-cols-12 items-start">
           <div className="lg:col-span-5 space-y-3 sm:space-y-4">
             <p className="text-xs font-mono font-medium text-secondary tracking-wide">
               Code / Experiments / Open Source
@@ -62,7 +60,7 @@ export function GitHubSection() {
         </div>
 
         {/* Contribution Graph Section */}
-        <div>
+        <div data-reveal="1">
           <GitHubContributionGraph username="p1llows" />
         </div>
       </div>

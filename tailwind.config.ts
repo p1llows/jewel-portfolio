@@ -46,8 +46,18 @@ module.exports = {
       animation: {
         marquee: "marquee 80s linear infinite",
         "marquee-fast": "marquee 40s linear infinite",
+        "cell-in": "cell-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both",
+        caret: "caret 1s steps(1) infinite",
       },
       keyframes: {
+        "cell-in": {
+          "0%": { opacity: "0", transform: "scaleY(0.15)" },
+          "100%": { opacity: "1", transform: "scaleY(1)" },
+        },
+        caret: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
         marquee: {
           "0%": { transform: "translate3d(0, 0, 0)" },
           "100%": { transform: "translate3d(-50%, 0, 0)" },
