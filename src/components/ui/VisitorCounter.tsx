@@ -1,35 +1,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getVisitCount } from "@/lib/visits";
 
 export function VisitorCounter() {
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+
     const recordOrFetchVisit = async () => {
+      let hasVisited = false;
       try {
-        const hasVisited = sessionStorage.getItem("portfolio_has_visited");
-        const method = hasVisited ? "GET" : "POST";
-
-        const response = await fetch("/api/visits", { method });
-        const data = await response.json();
-
-        if (!hasVisited) {
-          sessionStorage.setItem("portfolio_has_visited", "true");
-        }
-
-        setCount(data.count || 12847);
-        localStorage.setItem("visitCount", String(data.count || 12847));
+        hasVisited = !!sessionStorage.getItem("portfolio_has_visited");
       } catch {
-        const stored = localStorage.getItem("visitCount");
-        setCount(stored ? parseInt(stored, 10) : 12847);
-      } finally {
-        setLoading(false);
+        /* storage blocked — treat as a new visit */
       }
+
+      const total = await getVisitCount(!hasVisited);
+      if (cancelled) return;
+
+      try {
+        if (!hasVisited) sessionStorage.setItem("portfolio_has_visited", "true");
+        localStorage.setItem("visitCount", String(total));
+      } catch {
+        /* ignore */
+      }
+
+      setCount(total);
+      setLoading(false);
     };
 
+    // Show the last known number immediately, then update from the database
+    try {
+      const stored = localStorage.getItem("visitCount");
+      if (stored) {
+        setCount(parseInt(stored, 10));
+        setLoading(false);
+      }
+    } catch {
+      /* ignore */
+    }
+
     recordOrFetchVisit();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
