@@ -2,6 +2,7 @@ import { GitHubContributionGraph } from "@/components/github/GitHubContributionG
 import { Card } from "@/components/ui/Card";
 import { Github } from "lucide-react";
 import { SectionHeader } from "@/components/motion/SectionHeader";
+import { ArrowLink } from "@/components/ui/ArrowLink";
 
 export function GitHubSection() {
   return (
@@ -20,15 +21,7 @@ export function GitHubSection() {
             </p>
 
             <div className="pt-2">
-              <a
-                href="https://github.com/p1llows"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-              >
-                <span>VIEW GITHUB PROFILE</span>
-                <span className="transition-transform group-hover:translate-x-1">→</span>
-              </a>
+              <ArrowLink href="https://github.com/p1llows">VIEW GITHUB PROFILE</ArrowLink>
             </div>
           </div>
 

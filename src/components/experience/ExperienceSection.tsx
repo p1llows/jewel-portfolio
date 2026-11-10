@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { experience } from "@/data/experience";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/motion/SectionHeader";
+import { ArrowLink } from "@/components/ui/ArrowLink";
 
 interface ExperienceSectionProps {
   isPreview?: boolean;
@@ -41,13 +41,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
             )}
 
             <div className="pt-2 sm:pt-4">
-              <Link
-                href="/experience"
-                className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-              >
-                <span>SEE FULL EXPERIENCE</span>
-                <span className="transition-transform group-hover:translate-x-1">→</span>
-              </Link>
+              <ArrowLink href="/experience">SEE FULL EXPERIENCE</ArrowLink>
             </div>
           </div>
 

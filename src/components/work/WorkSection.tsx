@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { projects } from "@/data/projects";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { SectionHeader } from "@/components/motion/SectionHeader";
+import { ArrowLink } from "@/components/ui/ArrowLink";
 
 interface WorkSectionProps {
   isPreview?: boolean;
@@ -29,13 +29,7 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
         </div>
 
         <div className="mt-10 pt-4 border-t border-border/40">
-          <Link
-            href="/work"
-            className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-          >
-            <span>SEE ALL PROJECTS ({projects.length})</span>
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
+          <ArrowLink href="/work">SEE ALL PROJECTS ({projects.length})</ArrowLink>
         </div>
       </section>
     );

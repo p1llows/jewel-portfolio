@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { certificationsData } from "@/data/certifications";
 import { CertificationCard } from "@/components/certifications/CertificationCard";
 import { SectionHeader } from "@/components/motion/SectionHeader";
+import { ArrowLink } from "@/components/ui/ArrowLink";
 
 interface CertificationsSectionProps {
   isPreview?: boolean;
@@ -28,13 +28,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
         strong
         aside={
           isPreview ? (
-            <Link
-              href="/certifications"
-              className="hidden sm:inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-            >
-              <span>SEE FULL CERTIFICATIONS</span>
-              <span className="transition-transform group-hover:translate-x-1">→</span>
-            </Link>
+            <ArrowLink href="/certifications" className="hidden sm:inline-flex">SEE FULL CERTIFICATIONS</ArrowLink>
           ) : undefined
         }
       />
@@ -64,13 +58,7 @@ export function CertificationsSection({ isPreview = false }: CertificationsSecti
 
       {isPreview && (
         <div className="mt-8 pt-4 border-t border-border sm:hidden">
-          <Link
-            href="/certifications"
-            className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-          >
-            <span>SEE FULL CERTIFICATIONS</span>
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
+          <ArrowLink href="/certifications">SEE FULL CERTIFICATIONS</ArrowLink>
         </div>
       )}
     </section>

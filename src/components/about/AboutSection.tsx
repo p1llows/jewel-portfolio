@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/motion/SectionHeader";
+import { ArrowLink } from "@/components/ui/ArrowLink";
 
 interface AboutSectionProps {
   isPreview?: boolean;
@@ -31,13 +31,7 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
 
           {isPreview && (
             <div className="pt-2 sm:pt-4">
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-              >
-                <span>SEE FULL ABOUT</span>
-                <span className="transition-transform group-hover:translate-x-1">→</span>
-              </Link>
+              <ArrowLink href="/about">SEE FULL ABOUT</ArrowLink>
             </div>
           )}
         </div>

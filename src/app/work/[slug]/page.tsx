@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { caseStudyData } from "@/data/caseStudies";
 import { TechIcon } from "@/components/stack/TechIcon";
 import { Card } from "@/components/ui/Card";
+import { ArrowLink } from "@/components/ui/ArrowLink";
 
 interface CaseStudyPageProps {
   params: {
@@ -131,12 +132,9 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
       </div>
 
       <div className="mt-12 sm:mt-16 pt-6 border-t border-border/40">
-        <a
-          href="/work"
-          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-secondary hover:text-foreground transition-colors"
-        >
-          <span>← BACK TO WORK</span>
-        </a>
+        <ArrowLink href="/work" direction="back">
+          BACK TO WORK
+        </ArrowLink>
       </div>
     </div>
   );

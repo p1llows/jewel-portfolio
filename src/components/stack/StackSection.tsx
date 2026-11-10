@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { stackCategories } from "@/data/stack";
 import { TechIcon } from "@/components/stack/TechIcon";
 import { StackExplorer } from "@/components/stack/StackExplorer";
 import { SectionHeader } from "@/components/motion/SectionHeader";
+import { ArrowLink } from "@/components/ui/ArrowLink";
 
 const allUniqueTechs = Array.from(new Set(stackCategories.flatMap((c) => c.items)))
   .filter((tech) => !tech.includes(" ") && tech !== "Wireframing" && tech !== "Prototyping");
@@ -51,13 +51,7 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
         title="TECH STACK"
         aside={
           isPreview ? (
-            <Link
-              href="/stack"
-              className="hidden sm:inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-            >
-              <span>SEE FULL STACK</span>
-              <span className="transition-transform group-hover:translate-x-1">→</span>
-            </Link>
+            <ArrowLink href="/stack" className="hidden sm:inline-flex">SEE FULL STACK</ArrowLink>
           ) : undefined
         }
       />
@@ -105,13 +99,7 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
 
       {isPreview && (
         <div className="mt-10 pt-4 border-t border-border/40 sm:hidden">
-          <Link
-            href="/stack"
-            className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-secondary hover:text-foreground transition-colors group"
-          >
-            <span>SEE FULL STACK</span>
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
+          <ArrowLink href="/stack">SEE FULL STACK</ArrowLink>
         </div>
       )}
     </section>
