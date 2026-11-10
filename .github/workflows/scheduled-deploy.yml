@@ -1,0 +1,25 @@
+name: Scheduled redeploy
+
+# The site is a static export, so build-time data (e.g. the GitHub contribution
+# snapshot used as a fallback) only refreshes when Cloudflare Pages rebuilds.
+# This triggers a rebuild every day. Live data (the contribution graph, visitor
+# counter) is fetched in the browser and does not depend on this.
+
+on:
+  schedule:
+    - cron: "0 22 * * *" # daily, 06:00 Philippines time
+  workflow_dispatch: {}
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages deploy hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "CLOUDFLARE_DEPLOY_HOOK_URL secret is not set" >&2
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST "$DEPLOY_HOOK_URL"
