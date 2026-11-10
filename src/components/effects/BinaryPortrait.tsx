@@ -1,24 +1,92 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useTheme } from "@/app/theme-provider";
 
+/**
+ * Binary particle portrait.
+ *
+ * The canvas is a fixed, full-viewport layer behind the page (portaled to <body>).
+ *  - At the top of the page the particles form the portrait inside the hero's placeholder box.
+ *  - As you scroll down, each particle (staggered) drifts to its own spot on the screen and
+ *    settles as a faint, slowly drifting binary background behind every section.
+ */
+
 interface CanvasParticle {
-  normX: number; // 0..1 normalized position relative to image
-  normY: number; // 0..1 normalized position relative to image
-  x: number; // current canvas x
-  y: number; // current canvas y
-  targetX: number; // calculated target canvas x
-  targetY: number; // calculated target canvas y
+  normX: number; // 0..1 position within the source image
+  normY: number;
+  homeX: number; // portrait position, relative to the hero container
+  homeY: number;
+  bgNX: number; // 0..1 background position within the viewport
+  bgNY: number;
+  phase: number; // drift phase
+  delay: number; // 0..1 scatter stagger
+  arc: number; // -1..1 swirl direction/size of the flight path
+  x: number; // current viewport x
+  y: number; // current viewport y
   vx: number;
   vy: number;
-  lum: number; // original 0..255 pixel luminance
-  r: number;
-  g: number;
-  b: number;
+  lum: number;
+  tone: number; // index into TONES
+  k: number; // per-particle spring multiplier
   char: "0" | "1";
   size: number;
 }
+
+// Portrait tone map by luminance bucket
+const TONES = [
+  { rgb: [85, 85, 85], alpha: 0.85 },
+  { rgb: [136, 136, 136], alpha: 0.9 },
+  { rgb: [230, 230, 230], alpha: 0.95 },
+  { rgb: [255, 255, 255], alpha: 0.98 },
+] as const;
+
+// Background-mode alpha per tone (dark pixels read a touch stronger)
+const BG_ALPHA = [0.2, 0.15, 0.11, 0.09] as const;
+// Background glyph colour = theme text colour
+const THEME_RGB = { light: [23, 23, 23], dark: [241, 241, 237] } as const;
+
+const BG_STRIDE = 3; // only every Nth particle stays visible in background mode
+const SPRING = 0.11;
+const DAMPING = 0.8;
+const MOUSE_RADIUS = 110;
+
+// Scatter pacing (tune these to taste)
+const SCATTER_SCROLL_VH = 1.6; // viewport heights of scroll to fully scatter (higher = slower)
+const SCATTER_EASE = 0.05; // per-frame smoothing of the scroll progress (lower = slower)
+const SCATTER_LAZINESS = 0.55; // 0..1, how much slower glyphs travel while scattering
+
+function toneFor(lum: number) {
+  if (lum < 40) return 0;
+  if (lum < 95) return 1;
+  if (lum < 150) return 2;
+  return 3;
+}
+
+// Pre-built colour ramp per theme: [tone][level] from portrait tone -> theme text colour
+const LEVELS = 8;
+const colorTables: Partial<Record<"light" | "dark", string[][]>> = {};
+function colorTable(theme: "light" | "dark") {
+  let table = colorTables[theme];
+  if (!table) {
+    const target = THEME_RGB[theme];
+    table = TONES.map(({ rgb }) =>
+      Array.from({ length: LEVELS }, (_, level) => {
+        const t = level / (LEVELS - 1);
+        return `rgb(${Math.round(lerp(rgb[0], target[0], t))},${Math.round(lerp(rgb[1], target[1], t))},${Math.round(
+          lerp(rgb[2], target[2], t)
+        )})`;
+      })
+    );
+    colorTables[theme] = table;
+  }
+  return table;
+}
+
+const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
+const smooth = (v: number) => v * v * (3 - 2 * v);
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 interface BinaryPortraitProps {
   src: string;
@@ -42,53 +110,41 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
-  const isRunningRef = useRef<boolean>(false);
 
+  const [mounted, setMounted] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const particlesRef = useRef<CanvasParticle[]>([]);
-  const silhouetteCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageSizeRef = useRef({ width: 1, height: 1 });
+  const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
+  const mixRef = useRef(0); // 0 = portrait, 1 = full background
+  const wakeRef = useRef<() => void>(() => {});
+  const mouseRef = useRef({ x: -9999, y: -9999, active: false });
 
-  const mouseRef = useRef<{ x: number; y: number; active: boolean }>({
-    x: -9999,
-    y: -9999,
-    active: false,
-  });
+  useEffect(() => setMounted(true), []);
 
-  // Pre-process image with high resolution sampling & subject silhouette backdrop
+  // Sample the source image into particles
   const processImage = useCallback((img: HTMLImageElement) => {
     const processCanvas = document.createElement("canvas");
-    const pctx = processCanvas.getContext("2d");
+    const pctx = processCanvas.getContext("2d", { willReadFrequently: true });
     if (!pctx) return [];
 
-    // High resolution grid sampling (360px width) for fine facial detail
     const sampleWidth = 360;
     const sampleHeight = Math.floor((img.naturalHeight / img.naturalWidth) * sampleWidth);
     processCanvas.width = sampleWidth;
     processCanvas.height = sampleHeight;
 
     pctx.drawImage(img, 0, 0, sampleWidth, sampleHeight);
-    const imageData = pctx.getImageData(0, 0, sampleWidth, sampleHeight);
-    const pixels = imageData.data;
-
+    const pixels = pctx.getImageData(0, 0, sampleWidth, sampleHeight).data;
     imageSizeRef.current = { width: sampleWidth, height: sampleHeight };
 
-    // Create subject-only dark silhouette mask (clipped strictly to head & body)
-    const silCanvas = document.createElement("canvas");
-    silCanvas.width = sampleWidth;
-    silCanvas.height = sampleHeight;
-    const sctx = silCanvas.getContext("2d");
-    const silImageData = sctx?.createImageData(sampleWidth, sampleHeight);
-    const silPixels = silImageData?.data;
-
     const particles: CanvasParticle[] = [];
-    const step = 3; // 3px sampling grid for crisp detail
+    const step = 3;
     const backgroundThreshold = 220;
 
-    for (let y = 0; y < sampleHeight; y++) {
-      for (let x = 0; x < sampleWidth; x++) {
+    for (let y = 0; y < sampleHeight; y += step) {
+      for (let x = 0; x < sampleWidth; x += step) {
         const idx = (y * sampleWidth + x) * 4;
         const r = pixels[idx];
         const g = pixels[idx + 1];
@@ -97,118 +153,94 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
 
         const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
         const isBackground = lum >= backgroundThreshold || (r > 200 && g > 200 && b > 200) || a < 50;
+        if (isBackground) continue;
 
-        // Build subject silhouette mask (fills whitespace gaps only inside subject body & head)
-        if (silPixels) {
-          if (isBackground) {
-            silPixels[idx + 3] = 0; // 100% transparent outside subject
-          } else {
-            silPixels[idx] = 17; // #111111 dark backdrop tone inside subject
-            silPixels[idx + 1] = 17;
-            silPixels[idx + 2] = 17;
-            silPixels[idx + 3] = 235; // Solid dark subject silhouette mask
-          }
-        }
+        const size = lum < 50 ? 11 : lum < 125 ? 10 : 9;
 
-        // Generate binary particles on step grid
-        if (!isBackground && y % step === 0 && x % step === 0) {
-          const normX = x / sampleWidth;
-          const normY = y / sampleHeight;
-
-          const char: "0" | "1" = lum < 125 ? "1" : "0";
-
-          let size = 9.5;
-          if (lum < 50) {
-            size = 11;
-          } else if (lum < 125) {
-            size = 10;
-          } else {
-            size = 9.0;
-          }
-
-          particles.push({
-            normX,
-            normY,
-            x: 0,
-            y: 0,
-            targetX: 0,
-            targetY: 0,
-            vx: 0,
-            vy: 0,
-            lum,
-            r,
-            g,
-            b,
-            char,
-            size,
-          });
-        }
+        particles.push({
+          normX: x / sampleWidth,
+          normY: y / sampleHeight,
+          homeX: 0,
+          homeY: 0,
+          bgNX: Math.random(),
+          bgNY: Math.random(),
+          phase: Math.random() * Math.PI * 2,
+          // The bottom of the portrait lets go first, so it dissolves upward like blown sand
+          delay: 0.65 * (1 - y / sampleHeight) + 0.35 * Math.random(),
+          arc: Math.random() * 2 - 1,
+          x: 0,
+          y: 0,
+          vx: 0,
+          vy: 0,
+          lum,
+          tone: toneFor(lum),
+          k: 0.9 + Math.random() * 0.25,
+          char: lum < 125 ? "1" : "0",
+          size,
+        });
       }
     }
 
-    if (sctx && silImageData) {
-      sctx.putImageData(silImageData, 0, 0);
-      silhouetteCanvasRef.current = silCanvas;
+    // Sort by size, then tone, so font/fill changes happen a handful of times per frame
+    particles.sort((a, b) => a.size - b.size || a.tone - b.tone);
+
+    // Visible background glyphs land on an R2 low-discrepancy sequence: evenly spread, no clumps or gaps
+    for (let i = 0, k = 0; i < particles.length; i += BG_STRIDE, k++) {
+      particles[i].bgNX = (0.5 + k * 0.7548776662) % 1;
+      particles[i].bgNY = (0.5 + k * 0.569840291) % 1;
     }
-
-    // Sort particles by size so font changes only happen 3 times per frame instead of 10,000 times!
-    particles.sort((a, b) => a.size - b.size);
-
     return particles;
   }, []);
 
-  // Update particle target coordinates when container size changes
-  const updateParticleTargets = useCallback((width: number, height: number) => {
+  // Portrait layout inside the container (container-relative). Also seeds initial scattered positions.
+  const updateHomeTargets = useCallback((width: number, height: number, originX: number, originY: number) => {
     const { width: imgW, height: imgH } = imageSizeRef.current;
-    if (imgW === 0 || imgH === 0) return;
+    if (imgW === 0 || imgH === 0 || width <= 0 || height <= 0) return;
 
     const padding = 10;
-    const availableWidth = width - padding * 2;
-    const availableHeight = height - padding * 2;
-
-    const scale = Math.min(availableWidth / imgW, availableHeight / imgH);
+    const scale = Math.min((width - padding * 2) / imgW, (height - padding * 2) / imgH);
     const renderW = imgW * scale;
     const renderH = imgH * scale;
-
     const offsetX = (width - renderW) / 2;
     const offsetY = (height - renderH) / 2;
 
-    particlesRef.current.forEach((p) => {
-      const tx = offsetX + p.normX * renderW;
-      const ty = offsetY + p.normY * renderH;
-
-      p.targetX = tx;
-      p.targetY = ty;
+    for (const p of particlesRef.current) {
+      p.homeX = offsetX + p.normX * renderW;
+      p.homeY = offsetY + p.normY * renderH;
 
       if (p.x === 0 && p.y === 0) {
-        p.x = tx + (Math.random() - 0.5) * 10;
-        p.y = ty + (Math.random() - 0.5) * 10;
+        // Born in place: the portrait is fully formed on load (no scatter-and-rebuild intro)
+        p.x = originX + p.homeX;
+        p.y = originY + p.homeY;
       }
-    });
+    }
   }, []);
 
-  // Load Image Once
+  // Load the image once; defer pixel processing until after first paint
   useEffect(() => {
     const container = containerRef.current;
-    const canvas = canvasRef.current;
-    if (!container || !canvas) return;
+    if (!container) return;
+
+    let cancelled = false;
+    let idleHandle: number | undefined;
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    img.decoding = "async";
     img.src = src;
 
-    img.onload = () => {
-      const particles = processImage(img);
-      particlesRef.current = particles;
-      setIsLoaded(true);
-
+    const process = () => {
+      if (cancelled) return;
+      particlesRef.current = processImage(img);
       const rect = container.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      updateHomeTargets(rect.width, rect.height, rect.left, rect.top);
+      setIsLoaded(true);
+    };
 
-      canvas.width = Math.floor(rect.width * dpr);
-      canvas.height = Math.floor(rect.height * dpr);
-
-      updateParticleTargets(rect.width, rect.height);
+    img.onload = () => {
+      const ric = (window as unknown as {
+        requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      }).requestIdleCallback;
+      idleHandle = ric ? ric(process, { timeout: 400 }) : window.setTimeout(process, 50);
     };
 
     img.onerror = () => {
@@ -217,228 +249,304 @@ export function BinaryPortrait({ src, className = "" }: BinaryPortraitProps) {
     };
 
     return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      cancelled = true;
+      if (idleHandle !== undefined) {
+        const cic = (window as unknown as { cancelIdleCallback?: (h: number) => void }).cancelIdleCallback;
+        if (cic) cic(idleHandle);
+        clearTimeout(idleHandle);
+      }
     };
-  }, [src, processImage, updateParticleTargets]);
+  }, [src, processImage, updateHomeTargets]);
 
-  // Main animation & physics loop - Bounded, crash-proof physics
+  // Render loop: sleeps whenever the portrait is fully settled at the top of the page
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || !mounted) return;
 
     const container = containerRef.current;
     const canvas = canvasRef.current;
     if (!container || !canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    isRunningRef.current = true;
-    const mouseRadius = 110;
-    const mouseRadiusSq = mouseRadius * mouseRadius;
-    const springStrength = 0.11;
-    const damping = 0.80;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const mouseRadiusSq = MOUSE_RADIUS * MOUSE_RADIUS;
 
-    let lastW = 0;
-    let lastH = 0;
+    let running = false;
+    let lastDraw = 0;
 
-    const render = () => {
-      if (!isRunningRef.current) return;
+    const render = (now: number) => {
+      if (!running) return;
+
+      // Scroll progress -> 0..1 "scatter" mix, eased toward its target for smoothness
+      const { w: vw, h: vh, dpr } = sizeRef.current;
+      const mixTarget = reduceMotion ? 0 : clamp01(window.scrollY / (vh * SCATTER_SCROLL_VH));
+      const prevMix = mixRef.current;
+      let mix = prevMix + (mixTarget - prevMix) * SCATTER_EASE;
+      if (Math.abs(mixTarget - mix) < 0.002) mix = mixTarget;
+      mixRef.current = mix;
+
+      // Background mode doesn't need 60fps; halve the work
+      if (mix > 0.5 && now - lastDraw < 32) {
+        animationRef.current = requestAnimationFrame(render);
+        return;
+      }
+      // Frame-rate independent physics: a slow frame (page load, hot reload, 30fps background mode)
+      // advances the simulation proportionally further instead of stretching the animation in real time.
+      const dt = lastDraw ? Math.min(2.5, (now - lastDraw) / 16.667) : 1;
+      const damp = Math.pow(DAMPING, dt);
+      lastDraw = now;
 
       const rect = container.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const targetW = Math.floor(rect.width * dpr);
-      const targetH = Math.floor(rect.height * dpr);
+      const ox = rect.left;
+      const oy = rect.top;
+      const { width: imgW, height: imgH } = imageSizeRef.current;
+      const portraitScale = Math.min((rect.width - 20) / imgW, (rect.height - 20) / imgH);
+      const cell = 3 * portraitScale * 1.15;
 
-      // Reallocate canvas buffer ONLY when container integer size changes
-      if (canvas.width !== targetW || canvas.height !== targetH) {
-        if (targetW > 0 && targetH > 0) {
-          canvas.width = targetW;
-          canvas.height = targetH;
-          lastW = rect.width;
-          lastH = rect.height;
-          updateParticleTargets(rect.width, rect.height);
-        }
-      } else if (lastW !== rect.width || lastH !== rect.height) {
-        lastW = rect.width;
-        lastH = rect.height;
-        updateParticleTargets(rect.width, rect.height);
-      }
-
-      ctx.save();
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, rect.width, rect.height);
+      const spring = SPRING;
 
       const mouse = mouseRef.current;
-      const particles = particlesRef.current;
+      const useMouse = !reduceMotion && mouse.active;
 
-      const { width: imgW, height: imgH } = imageSizeRef.current;
-      const padding = 10;
-      const availableWidth = rect.width - padding * 2;
-      const availableHeight = rect.height - padding * 2;
-      const scale = Math.min(availableWidth / imgW, availableHeight / imgH);
-      const renderW = imgW * scale;
-      const renderH = imgH * scale;
+      const table = colorTable(themeRef.current);
 
-      // Pre-calculate per-particle backing cell dimensions (step = 3px)
-      const cellW = (3 / imgW) * renderW * 1.15;
-      const cellH = (3 / imgH) * renderH * 1.15;
-
-      // Render Binary Characters ('0' and '1') over the canvas
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, vw, vh);
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
+      const particles = particlesRef.current;
       let lastFont = "";
+      let lastColor = -1;
+      let moving = mix > 0.002 || mix !== mixTarget; // background drift keeps the loop alive
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
+        const keep = i % BG_STRIDE === 0;
+        // Hidden in background mode: freeze (cheap) until we scroll back up
+        if (!keep && mix > 0.98) continue;
 
-        // Calculate smooth target mouse repulsion offset
-        let repelX = 0;
-        let repelY = 0;
+        // Staggered scatter progress for this particle
+        const m = smooth(clamp01(mix * 2 - p.delay));
+        const hx = ox + p.homeX;
+        const hy = oy + p.homeY;
+        let tx = hx;
+        let ty = hy;
+        if (m > 0) {
+          const bx = p.bgNX * vw + Math.sin(now * 0.0004 + p.phase) * 10;
+          const by = p.bgNY * vh + Math.cos(now * 0.00033 + p.phase * 1.3) * 10;
+          // Fly along an arc (perpendicular offset peaks mid-flight) so the scatter swirls
+          const dx = bx - hx;
+          const dy = by - hy;
+          const swirl = Math.sin(Math.PI * m) * p.arc * 0.28;
+          tx = hx + dx * m - dy * swirl;
+          ty = hy + dy * m + dx * swirl;
+        }
 
-        // Check prefers-reduced-motion preference for accessibility
-        const prefersReducedMotion =
-          typeof window !== "undefined" &&
-          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduceMotion) {
+          p.x = tx;
+          p.y = ty;
+          p.vx = 0;
+          p.vy = 0;
+        } else {
+          let repelX = 0;
+          let repelY = 0;
+          if (useMouse) {
+            const dx = p.x - mouse.x;
+            const dy = p.y - mouse.y;
+            const distSq = dx * dx + dy * dy;
+            if (distSq < mouseRadiusSq && distSq > 0.001) {
+              const dist = Math.sqrt(distSq);
+              const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+              const push = force * force * 35;
+              repelX = (dx / dist) * push;
+              repelY = (dy / dist) * push;
+            }
+          }
 
-        if (!prefersReducedMotion && mouse.active && !isNaN(mouse.x) && !isNaN(mouse.y)) {
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
-          const distSq = dx * dx + dy * dy;
+          const kk = spring * p.k * (1 - SCATTER_LAZINESS * m) * dt;
+          p.vx = (p.vx + (tx + repelX - p.x) * kk) * damp;
+          p.vy = (p.vy + (ty + repelY - p.y) * kk) * damp;
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
 
-          if (distSq < mouseRadiusSq && distSq > 0.001) {
-            const dist = Math.sqrt(distSq);
-            const force = (mouseRadius - dist) / mouseRadius;
-            const push = force * force * 35;
-            repelX = (dx / dist) * push;
-            repelY = (dy / dist) * push;
+          if (isNaN(p.x) || isNaN(p.y)) {
+            p.x = tx;
+            p.y = ty;
+            p.vx = 0;
+            p.vy = 0;
           }
         }
 
-        // Bounded target position (original target + mouse repulsion offset)
-        const desiredX = p.targetX + repelX;
-        const desiredY = p.targetY + repelY;
-
-        // Spring update towards desired position
-        p.vx = (p.vx + (desiredX - p.x) * springStrength) * damping;
-        p.vy = (p.vy + (desiredY - p.y) * springStrength) * damping;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // Coordinate sanity check
-        if (isNaN(p.x) || isNaN(p.y)) {
-          p.x = p.targetX;
-          p.y = p.targetY;
+        const ox2 = p.x - tx;
+        const oy2 = p.y - ty;
+        const offSq = ox2 * ox2 + oy2 * oy2;
+        // Close enough and slow enough: snap home and stop simulating this glyph. Without this,
+        // the spring only creeps toward its target and keeps the whole loop "moving" for seconds.
+        if (offSq < 0.25 && p.vx * p.vx + p.vy * p.vy < 0.01) {
+          p.x = tx;
+          p.y = ty;
           p.vx = 0;
           p.vy = 0;
+        } else {
+          moving = true;
         }
 
-        // Smooth quadratic fade for backing shape
-        const dx = p.x - p.targetX;
-        const dy = p.y - p.targetY;
-        const distSq = dx * dx + dy * dy;
+        // Skip drawing particles that are off-screen (e.g. the portrait scrolled out of view)
+        if (p.x < -20 || p.x > vw + 20 || p.y < -20 || p.y > vh + 20) continue;
 
-        if (distSq < 576) {
-          const distRatio = Math.sqrt(distSq) / 24;
-          const fade = (1 - distRatio) * (1 - distRatio);
-          const alpha = 0.92 * fade;
+        const fade = keep ? 1 : 1 - m;
 
+        // Dark backing cell (portrait only): fades with distance from home and as this glyph departs
+        if (m < 0.98 && offSq < 576) {
+          const f = 1 - Math.sqrt(offSq) / 24;
+          const alpha = 0.92 * f * f * (1 - m) * fade;
           if (alpha > 0.015) {
             ctx.fillStyle = "#111111";
             ctx.globalAlpha = alpha;
-            ctx.fillRect(p.x - cellW / 2, p.y - cellH / 2, cellW, cellH);
+            ctx.fillRect(p.x - cell / 2, p.y - cell / 2, cell, cell);
+            lastColor = -1;
           }
         }
 
-        // High-Definition Binary Particle Tone Mapping
-        let fillColor: string;
-        let fillAlpha: number;
+        // Each glyph fades and changes colour with ITS OWN flight progress, dimming mid-flight
+        // so scattering glyphs don't clutter the hero text.
+        const dip = 1 - 0.55 * Math.sin(Math.PI * m);
+        const glyphAlpha = lerp(TONES[p.tone].alpha, BG_ALPHA[p.tone], m) * fade * dip;
+        if (glyphAlpha < 0.01) continue;
 
-        if (p.lum < 40) {
-          fillColor = "#555555";
-          fillAlpha = 0.85;
-        } else if (p.lum < 95) {
-          fillColor = "#888888";
-          fillAlpha = 0.90;
-        } else if (p.lum < 150) {
-          fillColor = "#E6E6E6";
-          fillAlpha = 0.95;
-        } else {
-          fillColor = "#FFFFFF";
-          fillAlpha = 0.98;
+        const level = Math.round(m * (LEVELS - 1));
+        const colorKey = p.tone * LEVELS + level;
+        if (colorKey !== lastColor) {
+          ctx.fillStyle = table[p.tone][level];
+          lastColor = colorKey;
         }
+        ctx.globalAlpha = glyphAlpha;
 
-        // Cache canvas font setter (only set when font size changes)
         const fontStr = `bold ${p.size}px monospace`;
-        if (lastFont !== fontStr) {
+        if (fontStr !== lastFont) {
           ctx.font = fontStr;
           lastFont = fontStr;
         }
-
-        // Render particle glyph
-        ctx.fillStyle = fillColor;
-        ctx.globalAlpha = fillAlpha;
         ctx.fillText(p.char, p.x, p.y);
       }
 
-      ctx.restore();
+      ctx.globalAlpha = 1;
 
-      if (isRunningRef.current) {
+      if (moving) {
         animationRef.current = requestAnimationFrame(render);
+      } else {
+        running = false; // portrait fully settled at the top: stop until the next scroll/pointer event
       }
     };
 
-    render();
+    const wake = () => {
+      if (running) return;
+      running = true;
+      animationRef.current = requestAnimationFrame(render);
+    };
+    wakeRef.current = wake;
+
+    // Canvas covers the viewport
+    const applyViewport = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      sizeRef.current = { w, h, dpr };
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      wake();
+    };
+
+    const applyContainer = () => {
+      const rect = container.getBoundingClientRect();
+      updateHomeTargets(rect.width, rect.height, rect.left, rect.top);
+      wake();
+    };
+
+    // Pointer: window-level so the repel effect also works over the scattered background
+    const onMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY, active: true };
+      wake();
+    };
+    const onMouseLeave = () => {
+      mouseRef.current.active = false;
+      wake();
+    };
+    const onTouch = (e: TouchEvent) => {
+      if (e.touches.length === 0) return;
+      const t = e.touches[0];
+      const rect = container.getBoundingClientRect();
+      const inside = t.clientX >= rect.left && t.clientX <= rect.right && t.clientY >= rect.top && t.clientY <= rect.bottom;
+      // Only react to touches on the portrait itself so normal scrolling isn't disturbed
+      if (inside && mixRef.current < 0.3) {
+        mouseRef.current = { x: t.clientX, y: t.clientY, active: true };
+        wake();
+      }
+    };
+    const onTouchEnd = () => {
+      mouseRef.current.active = false;
+      wake();
+    };
+
+    applyViewport();
+    window.addEventListener("resize", applyViewport);
+    window.addEventListener("scroll", wake, { passive: true });
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    document.documentElement.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("touchstart", onTouch, { passive: true });
+    window.addEventListener("touchmove", onTouch, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+
+    const resizeObserver = new ResizeObserver(applyContainer);
+    resizeObserver.observe(container);
+
+    wake();
 
     return () => {
-      isRunningRef.current = false;
+      running = false;
+      wakeRef.current = () => {};
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", applyViewport);
+      window.removeEventListener("scroll", wake);
+      window.removeEventListener("mousemove", onMouseMove);
+      document.documentElement.removeEventListener("mouseleave", onMouseLeave);
+      window.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("touchmove", onTouch);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [isLoaded, updateParticleTargets]);
-
-  // Mouse / Touch event handlers - Safe, fast, 100% crash-proof
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const native = e.nativeEvent;
-    if (typeof native.offsetX === "number" && typeof native.offsetY === "number") {
-      mouseRef.current = {
-        x: native.offsetX,
-        y: native.offsetY,
-        active: true,
-      };
-    }
-  };
-
-  const handleMouseLeave = () => {
-    mouseRef.current.active = false;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (e.touches.length === 0 || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    mouseRef.current = {
-      x: e.touches[0].clientX - rect.left,
-      y: e.touches[0].clientY - rect.top,
-      active: true,
-    };
-  };
+  }, [isLoaded, mounted, updateHomeTargets]);
 
   return (
-    <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchMove}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleMouseLeave}
-      className={`relative w-full h-full min-h-[320px] sm:min-h-[450px] overflow-hidden select-none cursor-pointer bg-transparent ${className}`}
-    >
-      {hasError && (
-        <div className="flex items-center justify-center w-full h-full text-sm font-mono text-muted">
-          Failed to load portrait image
-        </div>
-      )}
-      <canvas ref={canvasRef} className="w-full h-full block" />
-    </div>
+    <>
+      {/* Layout placeholder for the portrait; the canvas itself lives in a fixed layer behind the page */}
+      <div
+        ref={containerRef}
+        className={`relative w-full h-full min-h-[320px] sm:min-h-[450px] select-none bg-transparent ${className}`}
+      >
+        {hasError && (
+          <div className="flex items-center justify-center w-full h-full text-sm font-mono text-muted">
+            Failed to load portrait image
+          </div>
+        )}
+      </div>
+
+      {mounted &&
+        createPortal(
+          <canvas
+            ref={canvasRef}
+            aria-hidden="true"
+            className={`fixed inset-0 -z-10 pointer-events-none transition-opacity duration-700 ${
+              isLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          />,
+          document.body
+        )}
+    </>
   );
 }
