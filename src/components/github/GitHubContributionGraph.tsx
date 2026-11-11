@@ -146,7 +146,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
       {/* Stats Row: 3 equal cells separated by vertical 1px hairlines */}
       <div className="grid grid-cols-3 border-b border-border bg-background/40 divide-x divide-border text-center sm:text-left">
         <div className="p-4 sm:p-5">
-          <div className="text-[11px] text-secondary uppercase tracking-wider mb-1 font-medium">
+          <div className="text-[10px] sm:text-[11px] leading-tight text-secondary uppercase tracking-wide sm:tracking-wider mb-1 font-medium">
             CONTRIBUTIONS
           </div>
           <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">
@@ -154,7 +154,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
           </div>
         </div>
         <div className="p-4 sm:p-5">
-          <div className="text-[11px] text-secondary uppercase tracking-wider mb-1 font-medium">
+          <div className="text-[10px] sm:text-[11px] leading-tight text-secondary uppercase tracking-wide sm:tracking-wider mb-1 font-medium">
             CURRENT STREAK
           </div>
           <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">
@@ -162,7 +162,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
           </div>
         </div>
         <div className="p-4 sm:p-5">
-          <div className="text-[11px] text-secondary uppercase tracking-wider mb-1 font-medium">
+          <div className="text-[10px] sm:text-[11px] leading-tight text-secondary uppercase tracking-wide sm:tracking-wider mb-1 font-medium">
             LONGEST STREAK
           </div>
           <div className="text-lg sm:text-[22px] font-mono font-bold text-foreground">

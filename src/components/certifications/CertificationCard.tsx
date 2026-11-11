@@ -15,8 +15,8 @@ export function CertificationCard({ cert, index, className = "" }: Certification
     <Card className={`p-5 sm:p-6 flex flex-col justify-between h-full ${className}`}>
       <div>
         {/* Top Bar: Index + Logo on Left, Status Badge on Right */}
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3 mb-4">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:gap-x-6">
             <CardIndex index={index} />
             {cert.logo && (
               <div className="flex items-center shrink-0">
@@ -26,7 +26,7 @@ export function CertificationCard({ cert, index, className = "" }: Certification
                   alt={cert.title}
                   width={200}
                   height={48}
-                  className="h-8 sm:h-10 md:h-12 w-auto max-w-[200px] sm:max-w-[260px] object-contain mix-blend-multiply grayscale opacity-80 group-hover:opacity-100 transition-all duration-300"
+                  className="h-8 sm:h-10 md:h-12 w-auto max-w-[160px] sm:max-w-[260px] object-contain mix-blend-multiply dark:mix-blend-screen dark:invert grayscale opacity-80 group-hover:opacity-100 transition-all duration-300"
                 />
               </div>
             )}

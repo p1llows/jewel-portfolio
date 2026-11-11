@@ -114,7 +114,7 @@ export function StackExplorer() {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => selectCategory(chip.id)}
-                  className={`shrink-0 border px-3 py-1.5 text-[11px] sm:text-xs font-mono uppercase tracking-wider transition-colors ${
+                  className={`shrink-0 border px-3 py-2.5 sm:py-1.5 text-[11px] sm:text-xs font-mono uppercase tracking-wider transition-colors ${
                     isActive
                       ? "bg-foreground text-background border-foreground"
                       : "bg-transparent text-secondary border-border hover:text-foreground hover:border-foreground"
@@ -135,18 +135,19 @@ export function StackExplorer() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search technologies..."
             aria-label="Search technologies"
-            className="w-full border border-border bg-background pl-9 pr-9 py-2 text-sm font-mono outline-none focus:border-foreground focus:ring-1 focus:ring-foreground transition-all placeholder:text-secondary/60 [&::-webkit-search-cancel-button]:hidden"
+            className="w-full border border-border bg-background pl-9 pr-9 py-2.5 text-base sm:text-sm font-mono outline-none focus:border-foreground focus:ring-1 focus:ring-foreground transition-all placeholder:text-secondary/60 [&::-webkit-search-cancel-button]:hidden"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-foreground"
+              className="absolute right-0 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center text-secondary hover:text-foreground"
             >
               <X className="w-4 h-4" />
             </button>
           )}
         </div>
+        <p className="text-[11px] font-mono text-muted">×N = number of projects that use the technology</p>
         <p className="sr-only" aria-live="polite">
           {shownCount} technologies shown
         </p>
@@ -211,7 +212,7 @@ export function StackExplorer() {
                           {used > 0 && (
                             <span
                               className="shrink-0 text-[11px] font-mono text-muted group-hover/tile:text-secondary"
-                              title={`Used in ${used} ${used === 1 ? "project" : "projects"}`}
+                              aria-label={`Used in ${used} ${used === 1 ? "project" : "projects"}`}
                             >
                               ×{used}
                             </span>
@@ -252,7 +253,7 @@ export function StackExplorer() {
                             <button
                               onClick={() => setSelected(null)}
                               aria-label="Close details"
-                              className="p-1 text-secondary hover:text-foreground"
+                              className="-my-2 -mr-2 flex h-11 w-11 items-center justify-center text-secondary hover:text-foreground"
                             >
                               <X className="w-4 h-4" />
                             </button>
