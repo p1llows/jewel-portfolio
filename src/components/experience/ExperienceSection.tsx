@@ -158,15 +158,10 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                   
                   {/* Node marker */}
                   <div className="absolute left-[15px] md:left-1/2 top-[21px] sm:top-[25px] md:top-1/2 transform -translate-x-1/2 md:-translate-y-1/2 z-10 flex items-center justify-center">
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true, margin: "-50px" }}
-                      transition={{ duration: 0.4, delay: 0.1 }}
-                      className="w-3.5 h-3.5 rounded-none border-2 border-foreground bg-background flex items-center justify-center"
-                    >
+                    {/* Static (no scale-from-0 entrance): a zero-area element never intersects, so it would stay hidden */}
+                    <div className="w-3.5 h-3.5 rounded-none border-2 border-foreground bg-background flex items-center justify-center">
                       {job.isCurrent && <div className="w-1.5 h-1.5 rounded-none bg-foreground" />}
-                    </motion.div>
+                    </div>
                   </div>
 
                   {/* Left side on Desktop */}
