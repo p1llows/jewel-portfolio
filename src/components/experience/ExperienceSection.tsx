@@ -157,7 +157,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                 <div key={job.id} className="relative flex flex-col md:flex-row justify-between items-center w-full">
                   
                   {/* Node marker */}
-                  <div className="absolute left-[15px] md:left-1/2 top-8 md:top-1/2 transform -translate-x-1/2 md:-translate-y-1/2 z-10 flex items-center justify-center">
+                  <div className="absolute left-[15px] md:left-1/2 top-[21px] sm:top-[25px] md:top-1/2 transform -translate-x-1/2 md:-translate-y-1/2 z-10 flex items-center justify-center">
                     <motion.div 
                       initial={{ opacity: 0, scale: 0 }}
                       whileInView={{ opacity: 1, scale: 1 }}
@@ -198,7 +198,7 @@ export function ExperienceSection({ isPreview = false }: ExperienceSectionProps)
                   </div>
 
                   {/* Mobile version (Always on right side of left-aligned line) */}
-                  <div className="md:hidden w-full pl-10 pr-2">
+                  <div className="md:hidden w-full pl-9">
                     <motion.div
                       initial={{ opacity: 0, x: 30 }}
                       whileInView={{ opacity: 1, x: 0 }}

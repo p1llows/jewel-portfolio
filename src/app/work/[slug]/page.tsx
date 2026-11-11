@@ -110,7 +110,7 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
           </section>
         </div>
 
-        <div className="lg:col-span-4 space-y-6">
+        <div className="order-first lg:order-none lg:col-span-4 space-y-6">
           <Card className="p-0">
             <div className="p-5 sm:p-6 space-y-3">
             <h3 className="font-medium text-xs uppercase font-mono tracking-wider text-foreground border-b border-border pb-2">Project Details</h3>

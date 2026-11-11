@@ -84,8 +84,8 @@ export function AboutSection({ isPreview = false }: AboutSectionProps) {
             </div>
           </div>
 
-          {/* Gallery Section */}
-          <div>
+          {/* Gallery Section (text-only placeholders, so hidden on phones until real photos exist) */}
+          <div className="hidden sm:block">
             <div className="mb-6 sm:mb-8 pb-4 border-b border-border flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground uppercase">VISUAL DIARY</h3>
