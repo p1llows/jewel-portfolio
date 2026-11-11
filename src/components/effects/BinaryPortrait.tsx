@@ -311,6 +311,7 @@ export function BinaryPortrait({ src, className = "", zoom = 1 }: BinaryPortrait
 
     let running = false;
     let lastDraw = 0;
+    let lastOrigin: { x: number; y: number } | null = null;
 
     const render = (now: number) => {
       if (!running) return;
@@ -347,6 +348,12 @@ export function BinaryPortrait({ src, className = "", zoom = 1 }: BinaryPortrait
 
       const ox = rect.left;
       const oy = rect.top;
+      // The portrait lives on the page but is drawn on a fixed canvas. Carry glyphs along with the page's
+      // scroll/layout movement (rigidly, so the spring doesn't have to "chase" it). Otherwise every scroll
+      // step leaves the portrait trailing its box and snapping back, which looks like jumping on touch scroll.
+      const shiftX = lastOrigin ? ox - lastOrigin.x : 0;
+      const shiftY = lastOrigin ? oy - lastOrigin.y : 0;
+      lastOrigin = { x: ox, y: oy };
       const { width: imgW, height: imgH } = imageSizeRef.current;
       const portraitScale = portraitFit(rect.width, rect.height, imgW, imgH, zoomRef.current);
       const cell = 3 * portraitScale * 1.15;
@@ -388,6 +395,11 @@ export function BinaryPortrait({ src, className = "", zoom = 1 }: BinaryPortrait
 
         // Staggered scatter progress for this particle
         const m = smooth(clamp01(mix * 2 - p.delay));
+        if (shiftX !== 0 || shiftY !== 0) {
+          // Glyphs still at home ride with the page; scattered ones are pinned to the viewport
+          p.x += shiftX * (1 - m);
+          p.y += shiftY * (1 - m);
+        }
         const hx = ox + p.homeX;
         const hy = oy + p.homeY;
         let tx = hx;
