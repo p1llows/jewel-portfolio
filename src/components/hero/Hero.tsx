@@ -16,7 +16,7 @@ const reveal = (delay: number, y = 24) => ({
 
 export function Hero() {
   return (
-    <section className="relative py-4 sm:py-6 lg:py-8 xl:py-10 min-h-[calc(100vh-4rem)] md:min-h-screen flex items-center overflow-hidden">
+    <section className="relative py-4 sm:py-6 lg:py-8 xl:py-10 min-h-[calc(100svh-4rem)] md:min-h-screen flex items-center overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
           {/* Left Column: Text & CTAs */}
@@ -139,7 +139,7 @@ export function Hero() {
 
           {/* Right Column: Interactive Binary Particle Portrait */}
           <div className="lg:col-span-5 relative z-20 flex justify-center lg:justify-end mt-4 lg:-mt-12 xl:-mt-16">
-            <div className="relative w-full max-w-[340px] sm:max-w-[480px] md:max-w-[560px] lg:max-w-[660px] xl:max-w-[740px] h-[360px] sm:h-[500px] md:h-[580px] lg:h-[680px] xl:h-[740px] min-h-[340px]">
+            <div className="relative w-full max-w-[340px] sm:max-w-[480px] md:max-w-[560px] lg:max-w-[660px] xl:max-w-[740px] h-[clamp(340px,50svh,520px)] sm:h-[500px] md:h-[580px] lg:h-[680px] xl:h-[740px] min-h-[340px]">
               <BinaryPortrait src="/images/portrait-source.jpg" zoom={1.45} />
             </div>
           </div>

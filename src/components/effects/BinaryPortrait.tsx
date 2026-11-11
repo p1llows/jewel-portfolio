@@ -65,6 +65,8 @@ const MOUSE_RADIUS = 110;
 
 // Scatter pacing (tune these to taste)
 const SCATTER_SCROLL_VH = 1.6; // viewport heights of scroll to fully scatter (higher = slower)
+const SCATTER_SCROLL_VH_MOBILE = 0.9; // same, for the stacked phone layout (measured from when the portrait is mid-screen)
+const STACKED_BELOW = 1024; // matches Tailwind `lg`, where the hero grid stacks
 const SCATTER_EASE = 0.05; // per-frame smoothing of the scroll progress (lower = slower)
 const SCATTER_LAZINESS = 0.55; // 0..1, how much slower glyphs travel while scattering
 
@@ -315,7 +317,18 @@ export function BinaryPortrait({ src, className = "", zoom = 1 }: BinaryPortrait
 
       // Scroll progress -> 0..1 "scatter" mix, eased toward its target for smoothness
       const { w: vw, h: vh, dpr } = sizeRef.current;
-      const mixTarget = reduceMotion ? 0 : clamp01(window.scrollY / (vh * SCATTER_SCROLL_VH));
+      const rect = container.getBoundingClientRect();
+      let mixTarget = 0;
+      if (!reduceMotion) {
+        if (vw < STACKED_BELOW) {
+          // Stacked (phone) layout: the portrait sits below the text, possibly far down a tall screen.
+          // Keep it formed while it is on screen; scatter once its centre has scrolled to the top third.
+          const start = rect.top + window.scrollY + rect.height * 0.5 - vh * 0.33;
+          mixTarget = clamp01((window.scrollY - Math.max(0, start)) / (vh * SCATTER_SCROLL_VH_MOBILE));
+        } else {
+          mixTarget = clamp01(window.scrollY / (vh * SCATTER_SCROLL_VH));
+        }
+      }
       const prevMix = mixRef.current;
       let mix = prevMix + (mixTarget - prevMix) * SCATTER_EASE;
       if (Math.abs(mixTarget - mix) < 0.002) mix = mixTarget;
@@ -332,7 +345,6 @@ export function BinaryPortrait({ src, className = "", zoom = 1 }: BinaryPortrait
       const damp = Math.pow(DAMPING, dt);
       lastDraw = now;
 
-      const rect = container.getBoundingClientRect();
       const ox = rect.left;
       const oy = rect.top;
       const { width: imgW, height: imgH } = imageSizeRef.current;
@@ -504,6 +516,13 @@ export function BinaryPortrait({ src, className = "", zoom = 1 }: BinaryPortrait
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const w = window.innerWidth;
       const h = window.innerHeight;
+      // Mobile browsers fire `resize` as the address bar collapses/expands during scroll (height-only,
+      // ~50-100px). Reallocating the canvas then clears it and rescales every background glyph mid-scroll,
+      // which reads as a flicker/jump. Keep the larger height instead of following those changes.
+      const prev = sizeRef.current;
+      if (prev.w === w && prev.h > 0 && Math.abs(h - prev.h) < 160) {
+        if (h <= prev.h) return;
+      }
       sizeRef.current = { w, h, dpr };
       canvas.width = Math.floor(w * dpr);
       canvas.height = Math.floor(h * dpr);
