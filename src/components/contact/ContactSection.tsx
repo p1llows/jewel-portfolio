@@ -1,5 +1,6 @@
 import { Mail, Linkedin, Facebook } from "lucide-react";
 import { SectionHeader } from "@/components/motion/SectionHeader";
+import { ContactForm } from "@/components/contact/ContactForm";
 
 interface ContactSectionProps {
   isPreview?: boolean;
@@ -47,31 +48,7 @@ export function ContactSection({ isPreview = false }: ContactSectionProps) {
         </div>
 
         <div className="lg:col-span-7">
-          <div className="space-y-8 pt-2 lg:pl-8">
-            <div className="space-y-6">
-              <input
-                type="text"
-                placeholder="Enter your Name"
-                className="w-full rounded-md border border-border/50 bg-background px-4 py-3 text-sm outline-none focus:border-foreground focus:ring-1 focus:ring-foreground transition-all placeholder:text-secondary/60"
-              />
-              <input
-                type="email"
-                placeholder="Enter a valid email address"
-                className="w-full rounded-md border border-border/50 bg-background px-4 py-3 text-sm outline-none focus:border-foreground focus:ring-1 focus:ring-foreground transition-all placeholder:text-secondary/60"
-              />
-              <textarea
-                rows={4}
-                placeholder="Enter your message"
-                className="w-full rounded-md border border-border/50 bg-background px-4 py-3 text-sm outline-none focus:border-foreground focus:ring-1 focus:ring-foreground transition-all resize-none placeholder:text-secondary/60"
-              />
-            </div>
-
-            <div className="pt-2">
-              <button className="flex items-center justify-center gap-2 w-full sm:w-auto rounded bg-foreground px-8 py-3.5 text-xs font-mono uppercase tracking-wider font-semibold text-background hover:opacity-90 transition-opacity">
-                <span>SUBMIT</span>
-              </button>
-            </div>
-          </div>
+          <ContactForm />
         </div>
       </div>
 
