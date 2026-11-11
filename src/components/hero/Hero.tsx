@@ -14,7 +14,8 @@ const MotionLink = motion.create(Link);
 const reveal = (delay: number, y = 24) => ({
   initial: { opacity: 0, y },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, delay, ease },
+  // Kept short: the hero is not visually complete (Speed Index) until the last element has finished fading in
+  transition: { duration: 0.5, delay: delay * 0.5, ease },
 });
 
 export function Hero() {
@@ -40,7 +41,7 @@ export function Hero() {
                 // Largest Contentful Paint element: slide only (no opacity fade), so it is painted at first render
                 initial={{ y: 36 }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease }}
+                transition={{ duration: 0.5, delay: 0.1, ease }}
                 className="mb-4 sm:mb-6 text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter text-foreground leading-[0.95]">
                 JEWEL
                 <br />
