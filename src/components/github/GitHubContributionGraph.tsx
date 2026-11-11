@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GitHubContributionData, ContributionDay } from "@/types/github";
 import { Card } from "@/components/ui/Card";
 import { CountUp } from "@/components/motion/CountUp";
@@ -22,6 +22,11 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
   const [hoveredDay, setHoveredDay] = useState<{ day: ContributionDay; x: number; y: number } | null>(null);
   // Heatmap columns wave in the first time the grid scrolls into view
   const [gridRef, gridInView] = useInViewOnce<HTMLDivElement>();
+
+  // Open the heatmap scrolled to the most recent weeks (it overflows sideways on phones)
+  const scrollToLatest = useCallback((el: HTMLDivElement | null) => {
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, []);
 
   useEffect(() => {
     const handle = username || "p1llows";
@@ -168,7 +173,7 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
 
       {/* Heatmap Section */}
       <div className="p-4 sm:p-6 space-y-4">
-        <div className="relative overflow-x-auto pb-2 scrollbar-thin">
+        <div ref={scrollToLatest} onScroll={() => setHoveredDay(null)} className="relative overflow-x-auto pb-2 scrollbar-thin">
           <div className="min-w-[820px] select-none">
             {/* Month Headers aligned with Week columns */}
             <div className="flex gap-2 mb-2">
@@ -227,6 +232,13 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
                           setHoveredDay({ day, x: rect.left + rect.width / 2, y: rect.top });
                         }}
                         onMouseLeave={() => setHoveredDay(null)}
+                        onClick={(e) => {
+                          // Touch has no hover: tap a day to show its tooltip; it hides on blur or scroll
+                          if (!day.date) return;
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setHoveredDay({ day, x: rect.left + rect.width / 2, y: rect.top });
+                        }}
+                        onBlur={() => setHoveredDay(null)}
                         className={`w-3 h-3 aspect-square rounded-none shrink-0 transition-all ${
                           day.date
                             ? "hover:outline hover:outline-1 hover:outline-foreground hover:z-10 focus:outline-none focus:ring-1 focus:ring-foreground"

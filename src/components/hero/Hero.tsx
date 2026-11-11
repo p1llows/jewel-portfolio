@@ -1,6 +1,8 @@
 "use client";
 
 import { BinaryPortrait } from "@/components/effects/BinaryPortrait";
+import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { TypeText } from "@/components/motion/TypeText";
 import { FileText, Github, Linkedin, Mail, Facebook } from "lucide-react";
@@ -8,6 +10,7 @@ import { FileText, Github, Linkedin, Mail, Facebook } from "lucide-react";
 // Staggered entrance. initial/animate render in the server HTML (no flash of unstyled text)
 // and run on the compositor (transform/opacity only).
 const ease = [0.22, 1, 0.36, 1] as const;
+const MotionLink = motion.create(Link);
 const reveal = (delay: number, y = 24) => ({
   initial: { opacity: 0, y },
   animate: { opacity: 1, y: 0 },
@@ -15,6 +18,8 @@ const reveal = (delay: number, y = 24) => ({
 });
 
 export function Hero() {
+  const [resumeSoon, setResumeSoon] = useState(false);
+
   return (
     <section className="relative py-4 sm:py-6 lg:py-8 xl:py-10 min-h-[calc(100svh-4rem)] md:min-h-screen flex items-center overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 md:px-12">
@@ -51,19 +56,20 @@ export function Hero() {
               </motion.p>
 
               <motion.div {...reveal(0.55)} className="flex flex-wrap items-center gap-3 sm:gap-4">
-                <motion.a
+                <MotionLink
                   href="/work"
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
                   className="w-full sm:w-auto text-center px-6 sm:px-8 py-3 bg-foreground text-background font-semibold rounded shadow transition-all"
                 >
                   VIEW WORK
-                </motion.a>
+                </MotionLink>
                 <motion.a
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    alert("Resume will be available soon!");
+                    setResumeSoon(true);
+                    window.setTimeout(() => setResumeSoon(false), 2500);
                   }}
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
@@ -76,7 +82,7 @@ export function Hero() {
                   />
                   <span className="relative flex items-center gap-2">
                     <FileText className="w-4 h-4" />
-                    RESUME
+                    {resumeSoon ? "COMING SOON" : "RESUME"}
                   </span>
                 </motion.a>
               </motion.div>
