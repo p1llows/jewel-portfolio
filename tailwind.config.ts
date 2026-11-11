@@ -66,4 +66,6 @@ module.exports = {
     },
   },
   plugins: [],
+  // Wrap hover:/group-hover: styles in @media (hover: hover) so they never stick after a tap on touch screens
+  future: { hoverOnlyWhenSupported: true },
 };

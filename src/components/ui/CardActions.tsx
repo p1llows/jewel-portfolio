@@ -48,7 +48,7 @@ interface CardActionProps {
 }
 
 const CELL =
-  "flex items-center justify-center gap-2 overflow-hidden px-3 py-3 text-[11px] font-mono font-medium tracking-widest uppercase";
+  "flex min-h-11 items-center justify-center gap-1.5 sm:gap-2 overflow-hidden px-2 sm:px-3 py-3 text-[11px] font-mono font-medium tracking-wider sm:tracking-widest uppercase";
 
 export function CardAction({ href, children, external, primary = false, disabled = false, back = false, ariaLabel }: CardActionProps) {
   const isExternal = external ?? /^https?:\/\//.test(href);
@@ -65,7 +65,7 @@ export function CardAction({ href, children, external, primary = false, disabled
 
   const classes = `group/act ${CELL} ${width} ${
     primary ? "text-foreground" : "text-secondary"
-  } transition-colors duration-200 hover:bg-background hover:text-foreground focus-visible:bg-background focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground motion-reduce:transition-none`;
+  } transition-colors duration-200 hover:bg-background hover:text-foreground active:bg-background active:text-foreground focus-visible:bg-background focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground motion-reduce:transition-none`;
 
   const arrow = (
     <span

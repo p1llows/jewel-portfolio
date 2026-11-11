@@ -50,7 +50,7 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
               title={tech}
               role="img"
               aria-label={tech}
-              className="text-secondary hover:text-foreground transition-colors flex items-center justify-center"
+              className="text-secondary cursor-default flex items-center justify-center"
             >
               <TechIcon name={tech} className="w-4 h-4" />
             </div>

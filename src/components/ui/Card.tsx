@@ -60,7 +60,7 @@ export function Card({
 }: CardProps) {
   return (
     <Component
-      className={`group relative bg-surface border border-border rounded-none transition-colors duration-200 hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background ${className}`}
+      className={`group relative bg-surface border border-border rounded-none transition-colors duration-200 hover:border-foreground active:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background ${className}`}
       {...props}
     >
       <CardHoverBar />

@@ -28,22 +28,42 @@ body {
   font-family: var(--font-sans);
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-color) var(--background-color);
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-*::-webkit-scrollbar {
-  width: 8px;
+/* Touch: no grey tap flash, no double-tap-zoom delay on controls */
+a,
+button,
+[role="button"],
+summary,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-*::-webkit-scrollbar-track {
-  background: var(--background-color);
-}
+/* Custom scrollbars only where there is a mouse; phones keep their native overlay scrollbars */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--background-color);
+  }
 
-*::-webkit-scrollbar-thumb {
-  background-color: var(--border-color);
-  border-radius: 4px;
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--background-color);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 4px;
+  }
 }
 
 /* Theme Switch Radial Wave View Transition */
