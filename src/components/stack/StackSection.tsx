@@ -74,7 +74,7 @@ export function StackSection({ isPreview = false }: StackSectionProps) {
                   return (
                     <div
                       key={`${groupIndex}-${tech}`}
-                      className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ease-in-out
+                      className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ease-in-out
                         ${isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"}
                       `}
                       aria-hidden={!isActive}

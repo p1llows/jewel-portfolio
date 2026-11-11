@@ -31,7 +31,12 @@ export function Hero() {
                 HELLO, I AM
               </motion.h1>
 
-              <motion.h2 {...reveal(0.2, 36)} className="mb-4 sm:mb-6 text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter text-foreground leading-[0.95]">
+              <motion.h2
+                // Largest Contentful Paint element: slide only (no opacity fade), so it is painted at first render
+                initial={{ y: 36 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, ease }}
+                className="mb-4 sm:mb-6 text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter text-foreground leading-[0.95]">
                 JEWEL
                 <br />
                 RAMIREZ
