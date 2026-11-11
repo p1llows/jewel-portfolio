@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "./theme-provider";
 import { AppLayout } from "@/components/AppLayout";
 import "./globals.css";
@@ -20,6 +20,16 @@ export const metadata: Metadata = {
     description: "Building modern web applications, APIs, integrations, and digital experiences.",
     creator: "@p1llows",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F4F4F2" },
+    { media: "(prefers-color-scheme: dark)", color: "#111111" },
+  ],
 };
 
 export default function RootLayout({

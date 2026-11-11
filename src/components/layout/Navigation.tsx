@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { navigationItems } from "@/data/navigation";
 import { NavLink } from "@/components/navigation/NavLink";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -12,7 +13,29 @@ import Link from "next/link";
 export function Navigation({ activePage = "home" }: { activePage?: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Close mobile menu on page navigation or window resize to desktop
+  const pathname = usePathname();
+
+  // Close the drawer whenever the route changes (covers navigation from the command palette)
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Lock page scroll behind the open drawer and let Escape close it
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [mobileMenuOpen]);
+
+  // Close mobile menu on window resize to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -26,7 +49,7 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
   return (
     <>
       {/* Mobile Fixed Header Bar (< md) */}
-      <header className="fixed top-0 left-0 right-0 h-16 border-b border-border/80 bg-surface/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between md:hidden z-40 select-none">
+      <header className="fixed top-0 left-0 right-0 h-[calc(4rem+env(safe-area-inset-top))] pt-[env(safe-area-inset-top)] pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] border-b border-border/80 bg-surface/90 backdrop-blur-md flex items-center justify-between md:hidden z-40 select-none">
         <Link
           href="/"
           className="flex flex-col"
@@ -40,8 +63,9 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
           <ThemeToggle />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-md border border-border/60 bg-background text-foreground hover:bg-surface transition-colors"
+            className="flex h-11 w-11 items-center justify-center rounded-md border border-border/60 bg-background text-foreground hover:bg-surface transition-colors"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -50,7 +74,7 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
 
       {/* Mobile Slide-Over Drawer Navigation (< md) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-16 bg-background/95 backdrop-blur-xl z-30 p-6 flex flex-col justify-between overflow-y-auto md:hidden animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="fixed inset-0 top-[calc(4rem+env(safe-area-inset-top))] bg-background/95 backdrop-blur-xl z-30 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] flex flex-col justify-between overflow-y-auto overscroll-contain md:hidden animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="space-y-6">
             <div className="pb-3 border-b border-border/60 flex items-center justify-between">
               <span className="text-xs font-mono text-secondary tracking-widest uppercase">
@@ -89,9 +113,7 @@ export function Navigation({ activePage = "home" }: { activePage?: string }) {
             </div>
 
             {/* Command Palette Trigger */}
-            <div onClick={() => setMobileMenuOpen(false)}>
-              <CommandPaletteTrigger />
-            </div>
+            <CommandPaletteTrigger />
           </div>
         </div>
       )}

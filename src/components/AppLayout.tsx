@@ -24,7 +24,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col md:flex-row min-h-screen text-foreground overflow-x-hidden">
       <ScrollRevealObserver />
       <Navigation activePage={getActivePage()} />
-      <main className="flex-1 ml-0 md:ml-64 w-full min-w-0 transition-all pt-16 md:pt-0">{children}</main>
+      <main className="flex-1 ml-0 md:ml-64 w-full min-w-0 transition-all pt-[calc(4rem+env(safe-area-inset-top))] md:pt-0">{children}</main>
     </div>
   );
 }

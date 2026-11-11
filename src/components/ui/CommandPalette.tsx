@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useTheme } from "@/app/theme-provider";
 import { navigationItems } from "@/data/navigation";
 
@@ -16,6 +17,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { theme, toggleTheme } = useTheme();
+  const router = useRouter();
 
   // Command items derived with useMemo (prevents infinite re-render loop)
   const actions: CommandItem[] = useMemo(() => {
@@ -24,7 +26,8 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       label: item.label,
       value: item.label,
       action: () => {
-        window.location.href = item.href;
+        router.push(item.href);
+        onClose();
       },
       section: "Navigation",
     }));
@@ -45,7 +48,8 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       label: "Open GitHub",
       value: "Open GitHub",
       action: () => {
-        window.open("https://github.com/p1llows", "_blank");
+        window.open("https://github.com/p1llows", "_blank", "noopener,noreferrer");
+        onClose();
       },
       section: "Actions",
     };
@@ -57,7 +61,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     return allItems.filter((item) =>
       item.label.toLowerCase().includes(query.toLowerCase())
     );
-  }, [query, theme, toggleTheme, onClose]);
+  }, [query, theme, toggleTheme, onClose, router]);
 
   // Reset selected index when query changes
   useEffect(() => {
@@ -102,7 +106,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   // Close on outside click
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: PointerEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
@@ -112,16 +116,16 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     };
 
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("pointerdown", handleClickOutside);
     }
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-32">
+    <div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-16 sm:pt-32">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" />
       <div
         ref={containerRef}
@@ -135,14 +139,14 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search or run a command..."
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted text-foreground font-medium"
+            className="flex-1 min-w-0 bg-transparent text-base sm:text-sm outline-none placeholder:text-muted text-foreground font-medium"
             aria-label="Command palette search"
           />
-          <div className="flex items-center gap-2 text-xs text-secondary font-mono">
-            <span className="hidden md:inline">↑↓</span>
-            <span className="hidden md:inline">navigate</span>
-            <span className="hidden md:inline">⏎</span>
-            <span className="hidden md:inline">select</span>
+          <div className="hidden sm:flex items-center gap-2 text-xs text-secondary font-mono">
+            <span>↑↓</span>
+            <span>navigate</span>
+            <span>⏎</span>
+            <span>select</span>
             <span className="ml-2 rounded border border-border/80 px-1.5 py-0.5 text-[10px] text-foreground bg-background font-semibold">
               ESC
             </span>
@@ -150,7 +154,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           </div>
         </div>
 
-        <div className="max-h-[60vh] overflow-y-auto p-2 space-y-1">
+        <div className="max-h-[50dvh] sm:max-h-[60dvh] overflow-y-auto p-2 space-y-1">
           {actions.length === 0 ? (
             <div className="px-4 py-8 text-center text-xs font-mono text-muted">
               No matches found
@@ -163,7 +167,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                   key={item.id}
                   onClick={item.action}
                   onMouseEnter={() => setSelectedIndex(index)}
-                  className={`w-full px-3.5 py-2.5 rounded-md text-left text-sm transition-colors duration-150 flex items-center justify-between group focus:outline-none ${
+                  className={`w-full px-3.5 py-3 sm:py-2.5 rounded-md text-left text-sm transition-colors duration-150 flex items-center justify-between group focus:outline-none ${
                     isSelected
                       ? "bg-foreground/10 text-foreground font-bold"
                       : "text-secondary"
@@ -195,7 +199,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
         <div className="border-t border-border/60 px-4 py-2.5 text-center text-xs font-mono text-secondary flex items-center justify-between">
           <span>{actions.length} COMMANDS AVAILABLE</span>
-          <div>
+          <div className="hidden sm:block">
             Press <span className="rounded border border-border/80 px-1.5 py-0.5 text-[10px] text-foreground bg-background font-semibold">Esc</span> to close
           </div>
         </div>
