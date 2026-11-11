@@ -43,12 +43,14 @@ interface CardActionProps {
   disabled?: boolean;
   /** Puts a ← before the label (slides left on hover) instead of a trailing arrow. */
   back?: boolean;
+  /** Longer accessible name (must contain the visible label) for links that would otherwise read identically. */
+  ariaLabel?: string;
 }
 
 const CELL =
   "flex items-center justify-center gap-2 overflow-hidden px-3 py-3 text-[11px] font-mono font-medium tracking-widest uppercase";
 
-export function CardAction({ href, children, external, primary = false, disabled = false, back = false }: CardActionProps) {
+export function CardAction({ href, children, external, primary = false, disabled = false, back = false, ariaLabel }: CardActionProps) {
   const isExternal = external ?? /^https?:\/\//.test(href);
   const width = primary ? "flex-[1.4]" : "flex-1";
 
@@ -97,7 +99,7 @@ export function CardAction({ href, children, external, primary = false, disabled
   }
 
   return (
-    <Link href={href} className={classes}>
+    <Link href={href} className={classes} aria-label={ariaLabel}>
       {content}
     </Link>
   );

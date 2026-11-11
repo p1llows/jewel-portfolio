@@ -48,6 +48,7 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
             <div
               key={tech}
               title={tech}
+              role="img"
               aria-label={tech}
               className="text-secondary hover:text-foreground transition-colors flex items-center justify-center"
             >
@@ -59,7 +60,7 @@ export function ProjectCard({ project, index, className = "" }: ProjectCardProps
 
       {/* Flush action bar along the card's bottom edge (no nested boxes) */}
       <CardActionBar>
-        <CardAction href={`/work/${project.id}`} primary>
+        <CardAction href={`/work/${project.id}`} primary ariaLabel={`Case study: ${project.title}`}>
           CASE STUDY
         </CardAction>
         {project.previewUrl && <CardAction href={project.previewUrl} external>PREVIEW</CardAction>}

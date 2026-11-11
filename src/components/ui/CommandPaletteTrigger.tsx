@@ -24,7 +24,7 @@ export function CommandPaletteTrigger() {
       <button
         onClick={() => setIsOpen(true)}
         className="w-full flex items-center justify-between rounded-md border border-border bg-background/50 px-3 py-2 text-xs text-secondary hover:text-foreground hover:bg-secondary/10 transition-colors"
-        aria-label="Open command palette"
+        aria-haspopup="dialog"
       >
         <span className="flex items-center gap-2">
           <span className="font-mono text-xs text-foreground font-semibold">/</span>

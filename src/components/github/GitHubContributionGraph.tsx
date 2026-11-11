@@ -203,10 +203,11 @@ export function GitHubContributionGraph({ username }: GitHubContributionGraphPro
               </div>
 
               {/* Heatmap Grid (7 rows) */}
-              <div ref={gridRef} className="flex gap-[2px] flex-1">
+              <div ref={gridRef} role="grid" aria-label="Contribution calendar" className="flex gap-[2px] flex-1">
                 {data.weeks.map((week, weekIdx) => (
                   <div
                     key={weekIdx}
+                    role="row"
                     style={gridInView ? { animationDelay: `${weekIdx * 14}ms` } : undefined}
                     className={`flex flex-col gap-[2px] origin-top ${
                       gridInView
