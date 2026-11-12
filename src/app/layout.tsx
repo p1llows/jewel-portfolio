@@ -6,7 +6,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Jewel Ramirez — Full-Stack Developer",
   description: "Jewel Ramirez is a full-stack developer who builds modern web applications, APIs, integrations, and digital experiences.",
-  metadataBase: new URL("https://jewelramirez.dev"),
+  metadataBase: new URL("https://jewel-portfolio.pages.dev"),
   // Favicons come from the file conventions in this folder: icon.svg, favicon.ico and apple-icon.png
   openGraph: {
     title: "Jewel Ramirez — Full-Stack Developer",

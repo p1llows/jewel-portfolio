@@ -1,5 +1,6 @@
 import { projects } from "@/data/projects";
 import { ProjectCard } from "@/components/work/ProjectCard";
+import { FeaturedProjectCard } from "@/components/work/FeaturedProjectCard";
 import { SectionHeader } from "@/components/motion/SectionHeader";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 
@@ -12,20 +13,20 @@ export function WorkSection({ isPreview = false }: WorkSectionProps) {
   const professionalProjects = projects.filter((p) => p.category === "professional");
 
   if (isPreview) {
-    // All 3 selected projects in 1 single row across 3 equal columns
+    // 3 selected projects, each with its own layout: full-width technical, then a 7/5 editorial + offset compact pair
     const selectedProjects = projects.slice(0, 3);
     return (
       <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-20">
         <SectionHeader label="02 / WORK" title="SELECTED PROJECTS" />
 
-        <div data-reveal className="grid gap-6 sm:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch">
-          {selectedProjects.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index + 1}
-            />
-          ))}
+        <div data-reveal className="grid gap-6 sm:gap-8 grid-cols-1 lg:grid-cols-12 items-stretch">
+          {selectedProjects.map((project, index) =>
+            project.featured ? (
+              <FeaturedProjectCard key={project.id} project={project} index={index + 1} />
+            ) : (
+              <ProjectCard key={project.id} project={project} index={index + 1} className="lg:col-span-4" />
+            )
+          )}
         </div>
 
         <div className="mt-10 pt-4 border-t border-border/40">

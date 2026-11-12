@@ -53,7 +53,7 @@ export function Hero() {
               </motion.p>
 
               <motion.p {...reveal(0.45)} className="mb-6 sm:mb-8 text-sm sm:text-base md:text-lg text-secondary max-w-2xl leading-relaxed">
-                I build high-performance web applications, resilient backend APIs, seamless integrations, and modern interactive digital experiences.
+                Building practical web applications, backend systems, and integrations with an emphasis on functionality, reliability, and thoughtful interfaces.
               </motion.p>
 
               <motion.div {...reveal(0.55)} className="flex flex-wrap items-center gap-3 sm:gap-4">
