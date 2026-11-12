@@ -84,7 +84,7 @@ export function FeaturedProjectCard({ project, index }: FeaturedProjectCardProps
           <p className="text-xs sm:text-sm text-secondary leading-relaxed mb-5 max-w-prose">{project.description}</p>
           <ul className="mb-5 border-t border-border">
             {highlights.map((item) => (
-              <li key={item} className="border-b border-border py-2 text-xs sm:text-sm font-medium text-foreground tracking-tight">
+              <li key={item} className="border-b border-border last:border-b-0 py-2 text-xs sm:text-sm font-medium text-foreground tracking-tight">
                 {item}
               </li>
             ))}
