@@ -4,7 +4,8 @@ import { useState, type FormEvent } from "react";
 
 const EMAIL = "jewelramirez.dev@gmail.com";
 const field =
-  "w-full rounded-md border border-border/50 bg-background px-4 py-3 text-base sm:text-sm outline-none focus:border-foreground focus:ring-1 focus:ring-foreground transition-all placeholder:text-secondary/60";
+  "w-full border border-border bg-background px-4 py-3 text-base sm:text-sm outline-none focus:border-foreground focus:ring-1 focus:ring-foreground transition-all placeholder:text-secondary/60";
+const label = "mb-2 block text-[11px] font-mono uppercase tracking-widest text-secondary";
 
 // No backend on a static export, so submitting opens the visitor's mail app with the message prefilled.
 export function ContactForm() {
@@ -23,32 +24,45 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-8 pt-2 lg:pl-8">
-      <div className="space-y-6">
-        <div>
-          <label htmlFor="contact-name" className="sr-only">Name</label>
-          <input id="contact-name" name="name" type="text" required autoComplete="name" placeholder="Enter your Name" className={field} />
-        </div>
-        <div>
-          <label htmlFor="contact-email" className="sr-only">Email address</label>
-          <input id="contact-email" name="email" type="email" required autoComplete="email" inputMode="email" placeholder="Enter a valid email address" className={field} />
-        </div>
-        <div>
-          <label htmlFor="contact-message" className="sr-only">Message</label>
-          <textarea id="contact-message" name="message" rows={4} required placeholder="Enter your message" className={`${field} resize-none`} />
-        </div>
+    <form onSubmit={onSubmit} className="space-y-6 pt-2 lg:pl-8" onChange={() => sent && setSent(false)}>
+      <div>
+        <label htmlFor="contact-name" className={label}>01 / Name</label>
+        <input id="contact-name" name="name" type="text" required autoComplete="name" placeholder="Your name" className={field} />
+      </div>
+      <div>
+        <label htmlFor="contact-email" className={label}>02 / Email</label>
+        <input id="contact-email" name="email" type="email" required autoComplete="email" inputMode="email" placeholder="you@example.com" className={field} />
+      </div>
+      <div>
+        <label htmlFor="contact-message" className={label}>03 / Message</label>
+        <textarea id="contact-message" name="message" rows={5} required placeholder="What are you building?" className={`${field} resize-none`} />
       </div>
 
       <div className="pt-2">
         <button
           type="submit"
-          className="flex items-center justify-center gap-2 w-full sm:w-auto rounded bg-foreground px-8 py-3.5 text-xs font-mono uppercase tracking-wider font-semibold text-background hover:opacity-90 transition-opacity"
+          className="group/btn relative flex w-full sm:w-auto items-center justify-center gap-2 overflow-hidden border border-border bg-background px-8 py-3.5 text-xs font-mono font-semibold uppercase tracking-widest text-foreground transition-colors duration-500 ease-out hover:border-foreground hover:text-background focus-visible:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
         >
-          <span>SUBMIT</span>
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 origin-left scale-x-0 bg-foreground transition-transform duration-500 ease-out group-hover/btn:scale-x-100 group-focus-visible/btn:scale-x-100 motion-reduce:transition-none"
+          />
+          <span className="relative">SEND MESSAGE</span>
+          <span aria-hidden="true" className="relative transition-transform duration-200 group-hover/btn:translate-x-1 motion-reduce:transition-none">→</span>
         </button>
-        <p role="status" className="mt-3 min-h-4 text-xs font-mono text-secondary">
-          {sent ? "Opening your email app to send this message…" : ""}
-        </p>
+
+        <div role="status" aria-live="polite" className="mt-4 min-h-[3.25rem]">
+          {sent && (
+            <p className="border border-border bg-surface px-4 py-3 text-xs font-mono leading-relaxed text-secondary">
+              <span className="text-foreground">Your email app should open with this message filled in.</span>{" "}
+              Nothing happened? Write to me directly at{" "}
+              <a href={`mailto:${EMAIL}`} className="text-foreground underline underline-offset-4 hover:no-underline">
+                {EMAIL}
+              </a>
+              .
+            </p>
+          )}
+        </div>
       </div>
     </form>
   );

@@ -27,7 +27,13 @@ export function ContactSection({ isPreview = false }: ContactSectionProps) {
             </div>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2 space-y-4">
+            <a
+              href="mailto:jewelramirez.dev@gmail.com"
+              className="inline-block border-b border-border pb-1 font-mono text-xs sm:text-sm text-foreground transition-colors hover:border-foreground"
+            >
+              jewelramirez.dev@gmail.com
+            </a>
             <div className="flex items-center gap-3">
               <a href="mailto:jewelramirez.dev@gmail.com" aria-label="Email" className="p-2.5 rounded-md border border-border bg-surface hover:bg-surface text-secondary hover:text-foreground grayscale transition-all hover:grayscale-0 hover:-translate-y-1">
                 <Mail className="w-5 h-5" />
