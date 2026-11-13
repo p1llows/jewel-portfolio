@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { caseStudyData } from "@/data/caseStudies";
 import { TechIcon } from "@/components/stack/TechIcon";
@@ -14,6 +15,16 @@ export function generateStaticParams() {
   return Object.keys(caseStudyData).map((slug) => ({
     slug,
   }));
+}
+
+export function generateMetadata({ params }: CaseStudyPageProps): Metadata {
+  const cs = caseStudyData[params.slug as keyof typeof caseStudyData];
+  if (!cs) return {};
+  return {
+    title: cs.title,
+    description: `${cs.title} — ${cs.subtitle}. A case study by Jewel Ramirez.`,
+    alternates: { canonical: `/work/${params.slug}` },
+  };
 }
 
 export default function CaseStudyPage({ params }: CaseStudyPageProps) {
