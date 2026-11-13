@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   creator: "Jewel Ramirez",
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
+  verification: { google: "H4rvneVvUVfGf28XF_6dWdDGJ9qXRRvehdMf2wiQ3xE" },
   // Favicons come from the file conventions in this folder: icon.svg, favicon.ico and apple-icon.png
   openGraph: {
     title: "Jewel Ramirez — Full-Stack Developer Portfolio",
